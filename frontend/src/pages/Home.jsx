@@ -84,6 +84,58 @@ const FAQS = [
   },
 ];
 
+const PHASES = [
+  "Market & Price Action Foundation",
+  "Smart Money Concepts",
+  "Risk & Trade Management",
+  "Strategy Building & Execution",
+  "Psychology, Journaling & Performance",
+];
+
+const MENTORS = [
+  {
+    name: "Aman Singh Negi",
+    role: "Chief Academic Officer",
+    bio: "Leads the online cohort experience, known for breaking down price action and market structure for beginners.",
+    stat: "750k+ on Instagram",
+  },
+  {
+    name: "Rajat Sharma",
+    role: "Founding Director",
+    bio: "Builds and leads One Stock Academy's trading community, translating market moves into content.",
+    stat: "150k+ traders on Instagram",
+  },
+  {
+    name: "Rishabh Mishra",
+    role: "Founding Director",
+    bio: "SEBI-registered trader and the driving force behind the academy's curriculum and mentorship philosophy. Leads flagship live sessions and 1:1 strategy audits.",
+    stat: "SEBI-Registered",
+  },
+];
+
+const REVIEWS = [
+  {
+    name: "Ankit K.",
+    place: "Delhi",
+    quote: "Before joining, I struggled with chart reading. The concepts are explained so clearly that my confidence in analyzing the market has improved a lot.",
+  },
+  {
+    name: "Pooja Singh",
+    place: "Uttar Pradesh",
+    quote: "Very useful for anyone serious about learning trading. The concepts are explained step by step and are easy to apply on live charts.",
+  },
+  {
+    name: "Ravi Kumar",
+    place: "Gurugram",
+    quote: "I learned how to read charts with much more clarity. The guidance on entries, stop-loss and risk management has been extremely helpful.",
+  },
+  {
+    name: "Arjun Singh",
+    place: "Offline Cohort, Punjab",
+    quote: "One of the best things about the academy is the focus on execution and discipline. It changed the way I look at trading.",
+  },
+];
+
 export default function Home() {
   useEffect(() => {
     const onScroll = () => {
@@ -133,9 +185,9 @@ export default function Home() {
               className="mt-6 text-base sm:text-lg text-paper/60 leading-relaxed max-w-xl"
               data-testid="hero-subhead"
             >
-              One Stock Academy teaches you to trade with structure — a complete curriculum,
-              practitioner mentors, and an uncompromising focus on risk. No tips, no signals,
-              no shortcuts. Just skill, built one session at a time.
+              One Stock Academy is the one-stop solution to every trading worry — outcome-oriented,
+              high-quality courses delivered by domain experts. Time-bound, practical-heavy,
+              well-curated sessions that help you realise your trading potential to the fullest.
             </motion.p>
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -215,19 +267,68 @@ export default function Home() {
         </div>
       </section>
 
+      {/* VISION & TRACK RECORD */}
+      <section id="vision" data-testid="vision-section" className="max-w-7xl mx-auto px-6 sm:px-10 py-24 sm:py-32">
+        <div className="grid md:grid-cols-2 gap-6 mb-6">
+          <motion.div {...fadeUp} className="bg-white/[0.04] backdrop-blur-xl border border-white/10 p-8 sm:p-12">
+            <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-zinc-500 mb-6">Founder's Vision</p>
+            <p className="font-display text-2xl sm:text-3xl font-bold text-white leading-snug">
+              Empower the youth of India with trading skills they can hold a strong command over the
+              financial economy with — and help India realise <span className="italic text-zinc-400">"Viksit Bharat @ 2047".</span>
+            </p>
+          </motion.div>
+          <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.1 }} className="bg-white/[0.04] backdrop-blur-xl border border-white/10 p-8 sm:p-12">
+            <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-zinc-500 mb-6">Mission Mode</p>
+            <p className="font-display text-2xl sm:text-3xl font-bold text-white leading-snug">
+              Relevant, curated course material delivered by trading experts in a time-bound manner —
+              quality learning, <span className="italic text-zinc-400">outcome oriented.</span>
+            </p>
+          </motion.div>
+        </div>
+        <motion.div
+          {...fadeUp}
+          transition={{ ...fadeUp.transition, delay: 0.15 }}
+          data-testid="track-record"
+          className="grid grid-cols-1 sm:grid-cols-3 border border-white/10 divide-y sm:divide-y-0 sm:divide-x divide-white/10 bg-black/30 backdrop-blur-sm"
+        >
+          {[
+            ["1.9M+", "Combined social community"],
+            ["SEBI", "Registered founder-led mentorship"],
+            ["3", "Market verticals covered"],
+          ].map(([stat, label]) => (
+            <div key={label} className="p-8 text-center">
+              <p className="font-display text-4xl sm:text-5xl font-bold text-white mb-2">{stat}</p>
+              <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-500">{label}</p>
+            </div>
+          ))}
+        </motion.div>
+      </section>
+
       {/* COURSES */}
       <section id="courses" data-testid="courses-section" className="border-y border-white/10 bg-black/40 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-6 sm:px-10 py-24 sm:py-32">
           <motion.div {...fadeUp} className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-16">
             <div className="max-w-xl">
-              <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-zinc-500 mb-4">Courses &amp; Pricing</p>
+              <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-zinc-500 mb-4">Our Learning Program</p>
               <h2 className="font-display text-4xl sm:text-5xl font-bold tracking-tight text-white leading-tight">
-                One curriculum. Two ways to learn it.
+                Buniyaad — the Foundation Mentorship Program
               </h2>
             </div>
             <p className="font-mono text-[11px] uppercase tracking-[0.15em] text-zinc-500">
               One-time payment · No subscriptions
             </p>
+          </motion.div>
+          <motion.div
+            {...fadeUp}
+            data-testid="fmp-phases"
+            className="grid grid-cols-1 sm:grid-cols-5 border border-white/10 divide-y sm:divide-y-0 sm:divide-x divide-white/10 bg-black/30 backdrop-blur-sm mb-16"
+          >
+            {PHASES.map((p, i) => (
+              <div key={p} className="p-6" data-testid={`phase-${i + 1}`}>
+                <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-green-500 mb-3">Phase 0{i + 1}</p>
+                <p className="font-display text-lg font-bold text-white leading-snug">{p}</p>
+              </div>
+            ))}
           </motion.div>
           <div className="grid md:grid-cols-2 gap-6 md:gap-8" style={{ perspective: 1400 }}>
             <TiltCard testId="course-card-online" className="bg-white/[0.05] backdrop-blur-2xl border border-white/10 text-white p-8 sm:p-12 group">
@@ -298,44 +399,64 @@ export default function Home() {
         </div>
       </section>
 
-      {/* MENTOR */}
+      {/* MENTORS */}
       <section id="mentor" data-testid="mentor-section" className="max-w-7xl mx-auto px-6 sm:px-10 py-24 sm:py-32">
-        <div className="grid lg:grid-cols-12 gap-12 items-start">
-          <motion.div {...fadeUp} className="lg:col-span-5">
-            <div className="relative">
-              <div className="absolute -top-4 -left-4 w-full h-full border border-white/20 pointer-events-none" />
-              <img
-                src="https://images.pexels.com/photos/38037330/pexels-photo-38037330.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-                alt="Founder and lead mentor of One Stock Academy"
-                data-testid="mentor-photo"
-                className="w-full aspect-[4/5] object-cover grayscale hover:grayscale-0 transition-all duration-700"
-              />
-            </div>
-          </motion.div>
-          <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.15 }} className="lg:col-span-7 lg:pl-8">
-            <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-zinc-500 mb-4">Your Mentor</p>
-            <blockquote className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white leading-tight mb-10" data-testid="mentor-quote">
-              "I don't teach people what to buy. I teach them how to <span className="italic text-zinc-400">think</span> — so the market stops being a gamble and starts being a craft."
-            </blockquote>
-            <p className="font-mono text-xs uppercase tracking-[0.2em] text-white mb-2" data-testid="mentor-name">
-              Founder &amp; Lead Mentor
-            </p>
-            <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-500 mb-8">
-              [ Mentor name &amp; photo to be added ]
-            </p>
-            <div className="space-y-5 text-zinc-400 text-sm leading-relaxed max-w-xl">
-              <p>
-                One Stock Academy was founded by an active market practitioner who spent years learning
-                the hard way — through real positions, real drawdowns, and real discipline — before
-                teaching a single class.
+        <motion.div {...fadeUp} className="max-w-2xl mb-16">
+          <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-zinc-500 mb-4">Your Mentors</p>
+          <h2 className="font-display text-4xl sm:text-5xl font-bold tracking-tight text-white leading-tight">
+            Practitioners the market <span className="italic text-zinc-400">already follows</span>
+          </h2>
+        </motion.div>
+        <div className="grid md:grid-cols-3 gap-6">
+          {MENTORS.map((m, i) => (
+            <motion.div
+              key={m.name}
+              {...fadeUp}
+              transition={{ ...fadeUp.transition, delay: i * 0.1 }}
+              data-testid={`mentor-card-${i}`}
+              className="group bg-white/[0.04] backdrop-blur-xl border border-white/10 p-8 sm:p-10 hover:bg-white/[0.08] hover:border-white/20 transition-colors"
+            >
+              <div className="w-14 h-14 rounded-full bg-white/10 border border-white/15 flex items-center justify-center mb-8">
+                <span className="font-display text-xl font-bold text-white">
+                  {m.name.split(" ").map((w) => w[0]).slice(0, 2).join("")}
+                </span>
+              </div>
+              <p className="font-display text-2xl font-bold text-white mb-1" data-testid={`mentor-name-${i}`}>{m.name}</p>
+              <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-500 mb-5">{m.role}</p>
+              <p className="text-zinc-400 text-sm leading-relaxed mb-6">{m.bio}</p>
+              <p className="font-mono text-[10px] uppercase tracking-[0.15em] text-green-500 flex items-center gap-2">
+                <span className="w-1.5 h-1.5 bg-green-500 rounded-full" />
+                {m.stat}
               </p>
-              <p>
-                That experience shapes everything here: lessons are taught against live market context,
-                losing trades are reviewed as openly as winning ones, and risk management is treated
-                as the core skill rather than a footnote.
-              </p>
-            </div>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* REVIEWS */}
+      <section id="reviews" data-testid="reviews-section" className="border-y border-white/10 bg-black/40 backdrop-blur-sm">
+        <div className="max-w-7xl mx-auto px-6 sm:px-10 py-24 sm:py-32">
+          <motion.div {...fadeUp} className="max-w-2xl mb-16">
+            <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-zinc-500 mb-4">Student Reviews</p>
+            <h2 className="font-display text-4xl sm:text-5xl font-bold tracking-tight text-white leading-tight">
+              In their own words
+            </h2>
           </motion.div>
+          <div className="grid md:grid-cols-2 gap-6">
+            {REVIEWS.map((r, i) => (
+              <motion.div
+                key={r.name}
+                {...fadeUp}
+                transition={{ ...fadeUp.transition, delay: i * 0.08 }}
+                data-testid={`review-card-${i}`}
+                className="bg-white/[0.04] backdrop-blur-xl border border-white/10 p-8 sm:p-10"
+              >
+                <p className="font-display text-xl sm:text-2xl text-white leading-snug mb-8">"{r.quote}"</p>
+                <p className="font-mono text-xs uppercase tracking-[0.2em] text-white">{r.name}</p>
+                <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-500 mt-1">{r.place}</p>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 

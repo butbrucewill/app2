@@ -18,7 +18,7 @@ export default function PageWipe({ children }) {
           animate={{ opacity: 0, transition: { delay: 0.35, duration: 0.25 } }}
           exit={{ opacity: 0, transition: { duration: 0.15 } }}
         >
-          One Stock Academy
+          <img src="/logo-white.png" alt="" className="h-8 w-auto invert opacity-60" />
         </motion.span>
       </motion.div>
       <motion.div

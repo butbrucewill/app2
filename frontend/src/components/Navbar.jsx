@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { TrendingUp } from "lucide-react";
 import Magnetic from "./Magnetic";
 
 export default function Navbar() {
@@ -9,13 +8,8 @@ export default function Navbar() {
       className="sticky top-0 z-50 bg-[#050505]/85 backdrop-blur-md text-paper border-b border-white/10"
     >
       <div className="max-w-7xl mx-auto px-6 sm:px-10 h-16 flex items-center justify-between">
-        <Link to="/" data-testid="nav-logo" className="flex items-center gap-2.5">
-          <span className="w-8 h-8 bg-paper text-ink flex items-center justify-center">
-            <TrendingUp className="w-4 h-4" />
-          </span>
-          <span className="font-display text-xl font-semibold tracking-tight text-paper">
-            One Stock Academy
-          </span>
+        <Link to="/" data-testid="nav-logo" className="flex items-center">
+          <img src="/logo-white.png" alt="One Stock Academy" className="h-7 w-auto invert" />
         </Link>
         <nav className="hidden md:flex items-center gap-8 font-mono text-[11px] uppercase tracking-[0.18em] text-paper/60">
           <a href="/#why" data-testid="nav-link-why" className="hover:text-paper transition-colors">Why Us</a>

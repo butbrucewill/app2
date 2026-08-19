@@ -1,4 +1,3 @@
-import { TrendingUp } from "lucide-react";
 import TickerTape from "./TickerTape";
 
 export default function Footer() {
@@ -8,14 +7,12 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-6 sm:px-10 py-16">
         <div className="grid md:grid-cols-3 gap-12">
           <div>
-            <div className="flex items-center gap-2.5 mb-4">
-              <span className="w-8 h-8 bg-paper text-ink flex items-center justify-center">
-                <TrendingUp className="w-4 h-4" />
-              </span>
-              <span className="font-display text-xl font-semibold tracking-tight">One Stock Academy</span>
+            <div className="mb-4">
+              <img src="/logo-white.png" alt="One Stock Academy" className="h-8 w-auto invert" />
             </div>
             <p className="text-sm text-paper/60 leading-relaxed">
-              Trading education, online and in the classroom. Process over predictions, skill over shortcuts.
+              The one-stop solution to every trading worry — outcome-oriented, high-quality
+              courses delivered by domain experts, online and in the classroom.
             </p>
           </div>
           <div>
