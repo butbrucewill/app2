@@ -1,117 +1,115 @@
 {
-  "theme": "light",
-  "typography": {
-    "headings": {
-      "font_family": "Cormorant Garamond, serif",
-      "weights": ["400", "500", "600"],
-      "usage": "H1, H2, H3, prominent quotes",
-      "style": "tracking-tight leading-none"
+  "design_system": {
+    "theme": "Dark Mode Only",
+    "archetype": "Swiss & High-Contrast mixed with Web3/Terminal",
+    "typography": {
+      "headings": {
+        "family": "Bodoni Moda, serif",
+        "weights": ["400", "700", "900"],
+        "usage": "Use for all massive hero text and section titles. Creates the 'Masters' Union' Old-Money Authority feel."
+      },
+      "body_and_data": {
+        "family": "JetBrains Mono, monospace",
+        "weights": ["400", "600"],
+        "usage": "Use for body text, ticker tapes, price metrics, and UI labels. Brings the 'Trading Terminal' precision."
+      },
+      "rules": [
+        "H1 up to text-5xl md:text-6xl+ with tracking-tighter.",
+        "Metrics and labels must use uppercase with tracking-[0.2em]."
+      ]
     },
-    "body": {
-      "font_family": "Manrope, sans-serif",
-      "weights": ["300", "400", "500"],
-      "usage": "Paragraphs, lists, standard UI text",
-      "style": "leading-relaxed text-[#0B1021]/80"
+    "colors": {
+      "background": "#050505",
+      "surface_glass": "rgba(255, 255, 255, 0.03)",
+      "surface_border": "rgba(255, 255, 255, 0.1)",
+      "text_primary": "#FFFFFF",
+      "text_secondary": "#A1A1AA",
+      "bull_green": "#22c55e",
+      "bear_red": "#ef4444",
+      "rules": [
+        "No full-screen gradients. Only use black and white structurally.",
+        "Green and Red are reserved strictly for 3D market elements and market data accents."
+      ]
     },
-    "monospace": {
-      "font_family": "IBM Plex Mono, monospace",
-      "weights": ["400", "500"],
-      "usage": "Prices, ticker symbols, data points, risk disclosure",
-      "style": "tracking-tight text-sm uppercase"
-    },
-    "hierarchy": {
-      "h1": "text-5xl sm:text-6xl lg:text-7xl font-medium tracking-tighter text-[#0B1021]",
-      "h2": "text-4xl sm:text-5xl lg:text-5xl font-medium tracking-tight text-[#0B1021]",
-      "h3": "text-2xl sm:text-3xl font-medium tracking-tight text-[#0B1021]",
-      "body": "text-base sm:text-lg text-[#0B1021]/80",
-      "label": "text-xs font-mono tracking-[0.2em] uppercase text-[#0B1021]/60"
+    "visual_enhancers": {
+      "glassmorphism": "backdrop-blur-2xl bg-black/40 border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.5)]",
+      "noise_texture": "Use a fixed SVG noise overlay (mix-blend-overlay, opacity 20%) to kill digital flatness.",
+      "magnetic_buttons": "Framer motion scale and translate on hover with a 1px border-white/20."
     }
   },
-  "colors": {
-    "background": {
-      "primary": "#F7F5F2",
-      "secondary": "#EFEBE5",
-      "paper": "#FFFFFF"
+  "3d_architecture": {
+    "libraries": [
+      "@react-three/fiber",
+      "@react-three/drei",
+      "three",
+      "framer-motion",
+      "framer-motion-3d"
+    ],
+    "setup": "Use a fixed full-screen R3F <Canvas> wrapping <ScrollControls pages={6} damping={0.2}>. Put HTML content inside <Scroll html style={{width: '100vw'}}> and 3D scenes alongside it inside the canvas. The canvas should be fixed in the background (z-[-1]).",
+    "lighting": "Use <Environment preset='city' /> for realistic reflections on candlesticks. Add low-intensity ambient light.",
+    "scroll_choreography": {
+      "0_to_20_Hero": "Camera glides through a dense 'forest' of floating red and green 3D candlesticks. Candlesticks have meshStandardMaterial with high metalness.",
+      "20_to_40_Why": "Camera rotates downwards 90 degrees to view a glowing market grid terrain (wireframe plane).",
+      "40_to_60_Courses": "Two massive glass-like price pillars rise from the grid, camera orbits them slowly.",
+      "60_to_80_Mentor": "Candlesticks morph and spiral into an abstract data ring surrounding the mentor section.",
+      "80_to_100_FAQ_CTA": "Camera pulls way back, elements dissolve into a minimalist glowing sphere or logo."
     },
-    "text": {
-      "primary": "#0B1021",
-      "secondary": "#333A52",
-      "muted": "#64748B"
-    },
-    "accent": {
-      "green": "#166534",
-      "gold": "#D97706",
-      "chart_red": "#DC2626",
-      "chart_green": "#16A34A"
-    }
+    "implementation_rule": "Use useScroll() from @react-three/drei. Update camera positions and object rotations inside useFrame() based on scroll.offset."
   },
-  "visual_enhancers": {
-    "textures": "Use soft noise/grain overlay (opacity 2-3%) on the main background to enhance the 'paper/editorial' feel.",
-    "borders": "1px solid border-[#0B1021]/10 for cards and dividers. No heavy drop shadows. Rely on structural grid lines.",
-    "shapes": "Sharp corners or very minimal rounded corners (rounded-none or rounded-sm). Avoid pill-shaped buttons except for specific call-outs; stick to sharp, editorial rectangles."
-  },
-  "layouts": {
-    "grid_system": "Swiss grid. 12-column foundation. Use generous spacing (p-8, p-12, p-24).",
-    "bento_grid": "For 'Why One Stock Academy' and 'Courses', use architectural bento layouts with 1px borders dividing the sections.",
-    "spacing": "Use py-24 or py-32 for section padding. Negative space is a primary design tool here."
-  },
-  "motion": {
-    "scrolling": "Lenis smooth scroll for momentum.",
-    "ticker_tape": "Use react-fast-marquee for the continuous financial ticker. Monospace font, uppercase, separated by distinct dots or arrows. Subtle opacity so it doesn't overpower the hero.",
-    "entrance": "Staggered fade-up for text elements. Framer Motion for the animated candlestick chart in the hero (bars growing, wicks extending).",
-    "hover_states": "Buttons have a subtle background color shift. Cards have a 1px border color change to gold or green."
-  },
-  "accessibility": {
-    "contrast": "Ensure deep ink text on off-white background exceeds 4.5:1 WCAG.",
-    "focus": "Focus rings must use the green accent.",
-    "aria": "Add aria-hidden to the decorative ticker tape."
-  },
-  "components": {
-    "Hero": "Deep ink/navy heading. A stylized, non-cliché candlestick chart visual (built with Framer Motion or pure SVG/CSS) integrated into the layout. A scrolling ticker tape at the bottom or top of the hero using react-fast-marquee.",
-    "ValueProps": "4 bento-style cards. Clean iconography (lucide-react). Monospace numbering (01, 02).",
-    "PricingCards": "Editorial table/card hybrid. Online vs Offline. Emphasize the ₹49,000 and ₹99,000 in IBM Plex Mono. Use the gold/amber accent for the 'Most Popular' or 'Offline' highlights.",
-    "MentorProfile": "Editorial magazine layout. Image of the mentor, deep serif quote, clean sans body.",
-    "BuyCourseFlow": "Clean, distraction-free checkout interface mimicking a hosted gateway. Form uses HTML/Tailwind inputs customized to remove the default look (sharp corners, ink borders)."
+  "layouts_and_grids": {
+    "general": "Padding: Generous use of p-12, py-24, py-32. Content constrained to max-w-7xl.",
+    "why_section": "Bento Grid (Tetris Mode): grid-cols-1 md:grid-cols-12 gap-8. Mix col-span-8, col-span-4 to avoid perfect symmetry.",
+    "courses_section": "2-Column Grid for pricing cards. Apply 3D tilt effect on hover via framer-motion (useMotionValue, useTransform).",
+    "mentor_section": "Asymmetric layout. Mentor image left (grayscale), massive Bodoni typography right."
   },
   "media": {
-    "image_urls": [
-      {
-        "url": "https://images.unsplash.com/photo-1612538498613-35c5c8d675c4?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxODd8MHwxfHNlYXJjaHwyfHxlbGVnYW50JTIwYWJzdHJhY3QlMjBwYXBlciUyMHRleHR1cmUlMjBvZmYlMjB3aGl0ZXxlbnwwfHx8fDE3ODcxMjY3NTV8MA&ixlib=rb-4.1.0&q=85",
-        "category": "background",
-        "description": "Subtle off-white paper canvas texture to layer under the background with low opacity."
+    "image_urls": {
+      "mentor_portrait": {
+        "url": "https://images.pexels.com/photos/38037330/pexels-photo-38037330.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        "description": "Black and white portrait of mentor. Use in Mentor section."
       },
-      {
-        "url": "https://images.unsplash.com/photo-1601655781320-205e34c94eb1?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1MDZ8MHwxfHNlYXJjaHwzfHxwcm9mZXNzaW9uYWwlMjB0ZWFjaGVyJTIwcG9ydHJhaXR8ZW58MHx8fHwxNzg3MTI2NzU1fDA&ixlib=rb-4.1.0&q=85",
-        "category": "mentor_profile",
-        "description": "Professional practitioner mentor portrait (Man in gray suit holding notebook)."
+      "offline_classroom": {
+        "url": "https://images.unsplash.com/photo-1544531585-f14f463149ec?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NzV8MHwxfHNlYXJjaHwzfHxtb2Rlcm4lMjBsZWN0dXJlJTIwaGFsbCUyMGJ1c2luZXNzJTIwc2Nob29sfGVufDB8fHx8MTc4NzEzMzY1M3ww&ixlib=rb-4.1.0&q=85",
+        "description": "Modern business school classroom. Use as background for offline course card."
       },
-      {
-        "url": "https://images.pexels.com/photos/9159042/pexels-photo-9159042.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-        "category": "classroom",
-        "description": "Modern classroom students learning."
+      "market_texture": {
+        "url": "https://images.unsplash.com/photo-1645226880663-81561dcab0ae?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NTJ8MHwxfHNlYXJjaHwxfHxzdG9jayUyMG1hcmtldCUyMGdyYXBoJTIwYWJzdHJhY3R8ZW58MHx8fHwxNzg3MTMzNjUzfDA&ixlib=rb-4.1.0&q=85",
+        "description": "Stock market abstract texture. Use sparingly in overlays or footer."
       }
-    ]
+    }
   },
-  "3d_libraries": {
-    "strategy": "No 3D needed. Focus on 2D motion graphics (Framer Motion) for the candlestick chart to maintain the flat, editorial print design aesthetic."
+  "components": {
+    "ticker_tape": "Use react-fast-marquee. 'Editorial Ribbon' style: JetBrains Mono text-sm, pale text on void background, gap-24, very slow smooth drift.",
+    "accordion_faq": "Minimalist borders. border-b border-white/10 only. No backgrounds. Expands with framer-motion AnimatePresence.",
+    "pricing_cards": "Use 'Glassmorphism (Crystal Variant)'. backdrop-blur-2xl bg-white/5 border border-white/10. Add 3D Tilt."
+  },
+  "accessibility_and_performance": {
+    "testing": "All interactive elements (Enroll buttons, FAQ toggles) MUST include data-testid attributes (e.g., data-testid='enroll-online-button').",
+    "contrast": "Ensure text over 3D scenes is readable. Apply text-shadow or a glass scrim layer behind text blocks. DO NOT use completely transparent backgrounds for overlays.",
+    "performance": "Limit the number of 3D objects (candlesticks). Use InstancedMesh in R3F if rendering >100 candles. Wrap 3D components in React.Suspense."
   },
   "instructions_to_main_agent": [
-    "Install `lucide-react`, `framer-motion`, `react-fast-marquee`, `clsx`, `tailwind-merge`.",
-    "Set the Tailwind config to include the fonts: 'Cormorant Garamond', 'Manrope', 'IBM Plex Mono'. Fetch these from Google Fonts in your index.css",
-    "Implement the 'Swiss High-Contrast' archetype but softened with the warm off-white (#F7F5F2) and deep ink (#0B1021) colors. DO NOT use generic Vercel/Stripe styles.",
-    "The Hero MUST contain an animated candlestick chart constructed using div/svg and Framer Motion. DO NOT make it look like a typical dark terminal. Use the off-white background with crisp green and red candlesticks.",
-    "Use react-fast-marquee for a live-style scrolling ticker tape (e.g. NIFTY 50 \u25B2 22,453.20 | BANKNIFTY \u25BC 48,123.50).",
-    "In the pricing section, format the prices cleanly (\u20B949,000) using the monospace font and highlight with gold/amber.",
-    "Risk disclosure footer must be muted, monospace, and explicitly state that this is education, not investment advice.",
-    "For the Buy Course page, create a hosted checkout redirect feel. Remove header navigation elements on this page to maximize conversion focus."
+    "Use .js/.jsx extensions for all files, not .tsx.",
+    "Checkout pages (BuyCourse / Payment Result) MUST NOT BREAK. Do not inject heavy 3D canvases into the checkout flow. Keep it clean and readable.",
+    "Use Framer Motion for UI animations (magnetic buttons, page transitions, entering cards).",
+    "Use pure Tailwind CSS for structural grid layouts; Shadcn for complex interactives (like FAQ) but heavily customized with Tailwind to remove default Vercel look.",
+    "Ensure HTML overlays in ScrollControls are properly styled with pointer-events: auto where clicks are needed.",
+    "CRITICAL: The checkout and enrollment flows must remain untouched conceptually, just styled consistently."
   ],
-  "UNIVERSAL GUIDELINES FOR MAIN AGENT": [
-    "You tend to converge toward generic, 'on distribution' outputs. Avoid this: make creative, distinctive frontends that surprise and delight.",
-    "Use 2-3x more spacing than feels comfortable. Cramped designs look cheap. Padding sizes should jump from p-8 to p-16 to p-24.",
-    "Every interaction needs micro-animations - hover states, transitions, entrance animations. Static = dead.",
-    "Create depth through layered design elements with z-index hierarchy, NOT heavy drop shadows. Use 1px borders for the editorial look.",
-    "All interactive and key informational elements MUST include a `data-testid` attribute.",
-    "DO NOT use complete `transparent` background in header, overlays, any surface that has content under it.",
-    "Never use AI assistant Emoji characters like \ud83e\udd16\ud83e\udde0\ud83d\udcad\ud83d\udca1\ud83d\udd2e\ud83c\udfaf etc for icons."
+  "UNIVERSAL_GUIDELINES_FOR_MAIN_AGENT": [
+    "You tend to converge toward generic, 'on distribution' outputs. In frontend design, this creates what users call the 'AI slop' aesthetic. Avoid this: make creative, distinctive frontends that surprise and delight.",
+    "Dark colors look good when used independently without gradients. DO NOT use dark colors as gradients.",
+    "Don't make generic centered layouts, simplistic gradients, and uniform styling.",
+    "Create depth through layered design elements with z-index hierarchy.",
+    "Use glass-morphism effects with backdrop filters (12-24px blur).",
+    "You MUST NOT apply universal transition. Eg: transition: all. Always add transitions for specific interactive elements.",
+    "You MUST NOT center align the app container, ie do not add .App { text-align: center; } in the css file.",
+    "Always use modern button styles like pill-shaped, or sharp button with interaction animations & color relevant to the app style.",
+    "NEVER use AI assistant Emoji characters for icons.",
+    "Every interaction needs micro-animations - hover states, transitions, parallax effects, and entrance animations.",
+    "Use 2-3x more spacing than feels comfortable. Cramped designs look cheap.",
+    "Subtle grain textures, noise overlays, custom cursors, selection states, and loading animations: separates good from extraordinary.",
+    "Use sonner for toasts.",
+    "Prioritize using pre-existing components from src/components/ui when applicable."
   ]
 }

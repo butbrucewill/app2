@@ -27,10 +27,10 @@ export default function PaymentResult() {
   const success = status === "success" && enrollment?.status === "paid";
 
   return (
-    <div className="paper-noise bg-paper min-h-screen flex flex-col">
-      <header className="border-b border-ink/10 bg-paper/95">
+    <div className="bg-[#050505] text-zinc-200 min-h-screen flex flex-col">
+      <header className="border-b border-white/10 bg-[#050505]/90 backdrop-blur">
         <div className="max-w-6xl mx-auto px-6 sm:px-10 h-16 flex items-center">
-          <Link to="/" data-testid="result-home-link" className="font-display text-xl font-semibold tracking-tight text-ink">
+          <Link to="/" data-testid="result-home-link" className="font-display text-xl font-bold tracking-tight text-white">
             One Stock Academy
           </Link>
         </div>
@@ -46,34 +46,34 @@ export default function PaymentResult() {
           data-testid="payment-result-card"
         >
           {loading ? (
-            <div className="flex items-center justify-center gap-3 text-ink-muted" data-testid="result-loading">
+            <div className="flex items-center justify-center gap-3 text-zinc-500" data-testid="result-loading">
               <Loader2 className="w-5 h-5 animate-spin" />
               <span className="font-mono text-xs uppercase tracking-[0.18em]">Checking enrollment…</span>
             </div>
           ) : success ? (
-            <div className="bg-white border border-ink/15 p-8 sm:p-12" data-testid="payment-success-panel">
-              <CheckCircle2 className="w-12 h-12 text-chart-green mb-6" strokeWidth={1.5} />
-              <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-bull mb-3">
+            <div className="bg-white/[0.04] backdrop-blur-xl border border-white/10 p-8 sm:p-12" data-testid="payment-success-panel">
+              <CheckCircle2 className="w-12 h-12 text-green-500 mb-6" strokeWidth={1.5} />
+              <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-green-500 mb-3">
                 Payment verified · Enrollment confirmed
               </p>
-              <h1 className="font-display text-4xl sm:text-5xl font-medium tracking-tight text-ink mb-6">
+              <h1 className="font-display text-4xl sm:text-5xl font-bold tracking-tight text-white mb-6">
                 Welcome aboard, {enrollment.name.split(" ")[0]}.
               </h1>
-              <div className="border border-ink/10 bg-paper p-5 space-y-3 font-mono text-sm mb-8">
+              <div className="border border-white/10 bg-white/5 p-5 space-y-3 font-mono text-sm mb-8">
                 <div className="flex justify-between">
-                  <span className="text-ink/50">Reference</span>
-                  <span className="text-ink" data-testid="enrollment-ref">{enrollment.order_ref}</span>
+                  <span className="text-zinc-500">Reference</span>
+                  <span className="text-white" data-testid="enrollment-ref">{enrollment.order_ref}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-ink/50">Course</span>
-                  <span className="text-ink text-right">{enrollment.course_name}</span>
+                  <span className="text-zinc-500">Course</span>
+                  <span className="text-white text-right">{enrollment.course_name}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-ink/50">Paid</span>
-                  <span className="text-gold font-medium" data-testid="enrollment-amount">{inr(enrollment.amount_inr)}</span>
+                  <span className="text-zinc-500">Paid</span>
+                  <span className="text-white font-semibold" data-testid="enrollment-amount">{inr(enrollment.amount_inr)}</span>
                 </div>
               </div>
-              <p className="text-ink/70 leading-relaxed mb-8">
+              <p className="text-zinc-400 text-sm leading-relaxed mb-8">
                 {enrollment.course_id === "online"
                   ? "Your batch schedule and student portal access details will be sent to your email shortly."
                   : "Your classroom batch details and start date will be sent to your email shortly."}
@@ -81,22 +81,22 @@ export default function PaymentResult() {
               <Link
                 to="/"
                 data-testid="success-home-btn"
-                className="group inline-flex items-center gap-2 bg-bull text-white font-mono text-xs uppercase tracking-[0.18em] px-8 py-4 hover:bg-ink transition-colors"
+                className="group inline-flex items-center gap-2 bg-white text-black font-mono text-xs uppercase tracking-[0.18em] px-8 py-4 hover:bg-zinc-200 transition-colors"
               >
                 Back to home
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
           ) : (
-            <div className="bg-white border border-ink/15 p-8 sm:p-12" data-testid="payment-failed-panel">
-              <XCircle className="w-12 h-12 text-chart-red mb-6" strokeWidth={1.5} />
-              <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-chart-red mb-3">
+            <div className="bg-white/[0.04] backdrop-blur-xl border border-white/10 p-8 sm:p-12" data-testid="payment-failed-panel">
+              <XCircle className="w-12 h-12 text-red-500 mb-6" strokeWidth={1.5} />
+              <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-red-500 mb-3">
                 Payment not completed
               </p>
-              <h1 className="font-display text-4xl sm:text-5xl font-medium tracking-tight text-ink mb-6">
+              <h1 className="font-display text-4xl sm:text-5xl font-bold tracking-tight text-white mb-6">
                 No charge went through.
               </h1>
-              <p className="text-ink/70 leading-relaxed mb-8">
+              <p className="text-zinc-400 text-sm leading-relaxed mb-8">
                 The payment could not be verified, so no enrollment was created and no money has been
                 captured for a failed order. If an amount was debited, gateways typically auto-reverse
                 it within a few working days.
@@ -105,7 +105,7 @@ export default function PaymentResult() {
                 <Link
                   to="/enroll"
                   data-testid="retry-payment-btn"
-                  className="inline-flex items-center gap-2 bg-bull text-white font-mono text-xs uppercase tracking-[0.18em] px-8 py-4 hover:bg-ink transition-colors"
+                  className="inline-flex items-center gap-2 bg-white text-black font-mono text-xs uppercase tracking-[0.18em] px-8 py-4 hover:bg-zinc-200 transition-colors"
                 >
                   <RotateCcw className="w-4 h-4" />
                   Try again
@@ -113,7 +113,7 @@ export default function PaymentResult() {
                 <Link
                   to="/"
                   data-testid="failed-home-btn"
-                  className="inline-flex items-center gap-2 border border-ink/20 text-ink font-mono text-xs uppercase tracking-[0.18em] px-8 py-4 hover:border-ink transition-colors"
+                  className="inline-flex items-center gap-2 border border-white/20 text-white font-mono text-xs uppercase tracking-[0.18em] px-8 py-4 hover:border-white transition-colors"
                 >
                   Back to home
                 </Link>
@@ -123,8 +123,8 @@ export default function PaymentResult() {
         </motion.div>
       </main>
 
-      <footer className="border-t border-ink/10 py-6">
-        <p className="text-center font-mono text-[10px] uppercase tracking-[0.2em] text-ink-muted px-6">
+      <footer className="border-t border-white/10 py-6">
+        <p className="text-center font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-500 px-6">
           Trading involves risk · Education only, not investment advice
         </p>
       </footer>

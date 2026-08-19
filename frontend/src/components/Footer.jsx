@@ -3,7 +3,7 @@ import TickerTape from "./TickerTape";
 
 export default function Footer() {
   return (
-    <footer data-testid="site-footer" className="bg-ink text-paper">
+    <footer data-testid="site-footer" className="bg-[#050505] text-paper border-t border-white/10">
       <TickerTape dark />
       <div className="max-w-7xl mx-auto px-6 sm:px-10 py-16">
         <div className="grid md:grid-cols-3 gap-12">

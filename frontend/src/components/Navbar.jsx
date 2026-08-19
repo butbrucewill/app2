@@ -6,7 +6,7 @@ export default function Navbar() {
   return (
     <header
       data-testid="site-navbar"
-      className="sticky top-0 z-50 bg-ink text-paper border-b border-paper/10"
+      className="sticky top-0 z-50 bg-[#050505]/85 backdrop-blur-md text-paper border-b border-white/10"
     >
       <div className="max-w-7xl mx-auto px-6 sm:px-10 h-16 flex items-center justify-between">
         <Link to="/" data-testid="nav-logo" className="flex items-center gap-2.5">

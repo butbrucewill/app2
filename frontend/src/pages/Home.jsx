@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
@@ -12,7 +13,7 @@ import {
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import TickerTape from "@/components/TickerTape";
-import HeroScene from "@/components/HeroScene";
+import ScrollExperience, { scrollState } from "@/components/ScrollExperience";
 import TiltCard from "@/components/TiltCard";
 import Magnetic from "@/components/Magnetic";
 import {
@@ -84,19 +85,27 @@ const FAQS = [
 ];
 
 export default function Home() {
+  useEffect(() => {
+    const onScroll = () => {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      scrollState.p = max > 0 ? Math.min(Math.max(window.scrollY / max, 0), 1) : 0;
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
-    <div className="paper-noise bg-paper min-h-screen">
+    <div className="relative bg-[#050505] text-white min-h-screen">
+      <ScrollExperience />
+      <div className="relative z-10">
       <Navbar />
 
       {/* HERO */}
-      <section data-testid="hero-section" className="relative bg-ink text-paper overflow-hidden">
-        <div className="absolute inset-0 z-0">
-          <HeroScene />
-        </div>
-        <div className="absolute inset-0 z-[1] pointer-events-none bg-gradient-to-b from-ink/50 via-transparent to-ink" />
-        <div className="absolute inset-0 z-[1] pointer-events-none bg-[radial-gradient(ellipse_at_center,transparent_35%,#0B1021_100%)]" />
-        <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-10 min-h-[92vh] flex flex-col justify-center py-24">
-          <div className="max-w-3xl">
+      <section data-testid="hero-section" className="relative overflow-hidden">
+        <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-10 min-h-screen flex flex-col justify-center py-24">
+          <div className="max-w-3xl relative">
+            <div className="absolute -inset-10 -z-10 bg-[radial-gradient(closest-side,rgba(5,5,5,0.88),transparent)] pointer-events-none" />
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -110,12 +119,12 @@ export default function Home() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.35 }}
-              className="font-display text-5xl sm:text-6xl lg:text-7xl font-medium tracking-tighter leading-[0.95] text-paper"
+              className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tighter leading-[0.95] text-white [text-shadow:0_2px_40px_rgba(0,0,0,0.9)]"
               data-testid="hero-headline"
             >
               Learn the market.
               <br />
-              <span className="italic text-paper/50">Master the process.</span>
+              <span className="italic text-zinc-400">Master the process.</span>
             </motion.h1>
             <motion.p
               initial={{ opacity: 0, y: 30 }}
@@ -167,8 +176,8 @@ export default function Home() {
             <span>Beginner Friendly</span>
           </motion.div>
         </div>
-        <p className="absolute bottom-5 right-6 sm:right-10 z-10 font-mono text-[10px] uppercase tracking-[0.2em] text-paper/30">
-          Live 3D render · move your cursor
+        <p className="absolute bottom-5 right-6 sm:right-10 z-10 font-mono text-[10px] uppercase tracking-[0.2em] text-white/30">
+          Scroll — the market moves with you
         </p>
       </section>
 
@@ -177,62 +186,64 @@ export default function Home() {
       {/* WHY */}
       <section id="why" data-testid="why-section" className="max-w-7xl mx-auto px-6 sm:px-10 py-24 sm:py-32">
         <motion.div {...fadeUp} className="max-w-2xl mb-16">
-          <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-bull mb-4">Why One Stock Academy</p>
-          <h2 className="font-display text-4xl sm:text-5xl font-medium tracking-tight text-ink leading-tight">
-            Built for people who want to trade <span className="italic">properly</span>
+          <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-zinc-500 mb-4">Why One Stock Academy</p>
+          <h2 className="font-display text-4xl sm:text-5xl font-bold tracking-tight text-white leading-tight">
+            Built for people who want to trade <span className="italic text-zinc-400">properly</span>
           </h2>
         </motion.div>
-        <div className="grid sm:grid-cols-2 border-t border-l border-ink/10">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
           {VALUE_PROPS.map((v, i) => (
             <motion.div
               key={v.n}
               {...fadeUp}
               transition={{ ...fadeUp.transition, delay: i * 0.08 }}
               data-testid={`value-prop-${v.n}`}
-              className="group border-b border-r border-ink/10 p-8 sm:p-12 hover:bg-white transition-colors"
+              className={`group bg-white/[0.04] backdrop-blur-xl border border-white/10 p-8 sm:p-12 hover:bg-white/[0.08] hover:border-white/20 transition-colors ${
+                i === 0 || i === 3 ? "md:col-span-7" : "md:col-span-5"
+              }`}
             >
               <div className="flex items-start justify-between mb-8">
-                <span className="font-mono text-sm text-gold">{v.n}</span>
-                <v.icon className="w-6 h-6 text-ink/30 group-hover:text-bull transition-colors" strokeWidth={1.5} />
+                <span className="font-mono text-sm text-zinc-500">{v.n}</span>
+                <v.icon className="w-6 h-6 text-zinc-600 group-hover:text-white transition-colors" strokeWidth={1.5} />
               </div>
-              <h3 className="font-display text-2xl sm:text-3xl font-medium tracking-tight text-ink mb-4">
+              <h3 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-white mb-4">
                 {v.title}
               </h3>
-              <p className="text-ink/70 leading-relaxed">{v.body}</p>
+              <p className="text-zinc-400 leading-relaxed text-sm">{v.body}</p>
             </motion.div>
           ))}
         </div>
       </section>
 
       {/* COURSES */}
-      <section id="courses" data-testid="courses-section" className="bg-paper-deep/50 border-y border-ink/10">
+      <section id="courses" data-testid="courses-section" className="border-y border-white/10 bg-black/40 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-6 sm:px-10 py-24 sm:py-32">
           <motion.div {...fadeUp} className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-16">
             <div className="max-w-xl">
-              <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-bull mb-4">Courses &amp; Pricing</p>
-              <h2 className="font-display text-4xl sm:text-5xl font-medium tracking-tight text-ink leading-tight">
+              <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-zinc-500 mb-4">Courses &amp; Pricing</p>
+              <h2 className="font-display text-4xl sm:text-5xl font-bold tracking-tight text-white leading-tight">
                 One curriculum. Two ways to learn it.
               </h2>
             </div>
-            <p className="font-mono text-[11px] uppercase tracking-[0.15em] text-ink-muted">
+            <p className="font-mono text-[11px] uppercase tracking-[0.15em] text-zinc-500">
               One-time payment · No subscriptions
             </p>
           </motion.div>
           <div className="grid md:grid-cols-2 gap-6 md:gap-8" style={{ perspective: 1400 }}>
-            <TiltCard testId="course-card-online" className="bg-white border border-ink/10 p-8 sm:p-12 group">
+            <TiltCard testId="course-card-online" className="bg-white/[0.05] backdrop-blur-2xl border border-white/10 text-white p-8 sm:p-12 group">
               <div className="flex items-center gap-3 mb-8">
-                <Monitor className="w-5 h-5 text-bull" strokeWidth={1.5} />
-                <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-ink-muted">Live Virtual Classes</span>
+                <Monitor className="w-5 h-5 text-green-500" strokeWidth={1.5} />
+                <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-zinc-500">Live Virtual Classes</span>
               </div>
-              <h3 className="font-display text-3xl sm:text-4xl font-medium tracking-tight text-ink mb-2">Online Batch</h3>
-              <p className="font-mono text-4xl sm:text-5xl font-medium text-ink mt-6 mb-2" data-testid="price-online">
+              <h3 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-white mb-2">Online Batch</h3>
+              <p className="font-mono text-4xl sm:text-5xl font-semibold text-white mt-6 mb-2" data-testid="price-online">
                 ₹49,000
               </p>
-              <p className="font-mono text-[11px] uppercase tracking-[0.15em] text-ink-muted mb-10">One-time · Attend from anywhere</p>
-              <ul className="space-y-3 text-ink/70 mb-12">
+              <p className="font-mono text-[11px] uppercase tracking-[0.15em] text-zinc-500 mb-10">One-time · Attend from anywhere</p>
+              <ul className="space-y-3 text-zinc-400 text-sm mb-12">
                 {["Live interactive virtual classes", "Full structured curriculum", "Doubt-clearing with practitioner mentors", "Batch schedule + student portal access"].map((f) => (
                   <li key={f} className="flex gap-3">
-                    <span className="text-chart-green mt-1">—</span>
+                    <span className="text-green-500 mt-1">—</span>
                     <span>{f}</span>
                   </li>
                 ))}
@@ -241,7 +252,7 @@ export default function Home() {
                 <Link
                   to="/enroll?course=online"
                   data-testid="enroll-online-btn"
-                  className="group/btn inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.18em] text-ink border border-ink/20 px-8 py-4 hover:border-bull hover:text-bull transition-colors"
+                  className="group/btn inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.18em] text-white border border-white/25 px-8 py-4 hover:border-white hover:bg-white/5 transition-colors"
                 >
                   Enroll — Online
                   <ArrowUpRight className="w-4 h-4 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform" />
@@ -250,24 +261,24 @@ export default function Home() {
             </TiltCard>
             <TiltCard
               testId="course-card-offline"
-              className="bg-ink text-paper p-8 sm:p-12 relative"
+              className="bg-white/[0.07] backdrop-blur-2xl border border-white/15 text-white p-8 sm:p-12 relative"
             >
-              <span className="absolute top-0 right-0 bg-gold text-ink font-mono text-[10px] uppercase tracking-[0.2em] px-4 py-2" data-testid="offline-highlight-badge">
+              <span className="absolute top-0 right-0 bg-white text-black font-mono text-[10px] uppercase tracking-[0.2em] px-4 py-2" data-testid="offline-highlight-badge">
                 Classroom Experience
               </span>
               <div className="flex items-center gap-3 mb-8">
-                <MapPin className="w-5 h-5 text-gold" strokeWidth={1.5} />
-                <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-paper/50">In-Person Classroom</span>
+                <MapPin className="w-5 h-5 text-green-500" strokeWidth={1.5} />
+                <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-zinc-500">In-Person Classroom</span>
               </div>
-              <h3 className="font-display text-3xl sm:text-4xl font-medium tracking-tight mb-2">Offline Batch</h3>
-              <p className="font-mono text-4xl sm:text-5xl font-medium text-gold mt-6 mb-2" data-testid="price-offline">
+              <h3 className="font-display text-3xl sm:text-4xl font-bold tracking-tight mb-2">Offline Batch</h3>
+              <p className="font-mono text-4xl sm:text-5xl font-semibold text-white mt-6 mb-2" data-testid="price-offline">
                 ₹99,000
               </p>
-              <p className="font-mono text-[11px] uppercase tracking-[0.15em] text-paper/50 mb-10">One-time · In-person classroom</p>
-              <ul className="space-y-3 text-paper/70 mb-12">
+              <p className="font-mono text-[11px] uppercase tracking-[0.15em] text-zinc-500 mb-10">One-time · In-person classroom</p>
+              <ul className="space-y-3 text-zinc-400 text-sm mb-12">
                 {["Face-to-face classroom sessions", "On-desk practice with live market context", "Direct mentor access in the room", "Full structured curriculum + batch details"].map((f) => (
                   <li key={f} className="flex gap-3">
-                    <span className="text-gold mt-1">—</span>
+                    <span className="text-green-500 mt-1">—</span>
                     <span>{f}</span>
                   </li>
                 ))}
@@ -276,7 +287,7 @@ export default function Home() {
                 <Link
                   to="/enroll?course=offline"
                   data-testid="enroll-offline-btn"
-                  className="group/btn inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.18em] bg-gold text-ink px-8 py-4 hover:bg-paper transition-colors"
+                  className="group/btn inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.18em] bg-white text-black px-8 py-4 hover:bg-zinc-200 transition-colors"
                 >
                   Enroll — Offline
                   <ArrowUpRight className="w-4 h-4 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform" />
@@ -292,9 +303,9 @@ export default function Home() {
         <div className="grid lg:grid-cols-12 gap-12 items-start">
           <motion.div {...fadeUp} className="lg:col-span-5">
             <div className="relative">
-              <div className="absolute -top-4 -left-4 w-full h-full border border-gold/40 pointer-events-none" />
+              <div className="absolute -top-4 -left-4 w-full h-full border border-white/20 pointer-events-none" />
               <img
-                src="https://images.unsplash.com/photo-1601655781320-205e34c94eb1?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1MDZ8MHwxfHNlYXJjaHwzfHxwcm9mZXNzaW9uYWwlMjB0ZWFjaGVyJTIwcG9ydHJhaXR8ZW58MHx8fHwxNzg3MTI2NzU1fDA&ixlib=rb-4.1.0&q=85"
+                src="https://images.pexels.com/photos/38037330/pexels-photo-38037330.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
                 alt="Founder and lead mentor of One Stock Academy"
                 data-testid="mentor-photo"
                 className="w-full aspect-[4/5] object-cover grayscale hover:grayscale-0 transition-all duration-700"
@@ -302,17 +313,17 @@ export default function Home() {
             </div>
           </motion.div>
           <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.15 }} className="lg:col-span-7 lg:pl-8">
-            <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-bull mb-4">Your Mentor</p>
-            <blockquote className="font-display text-3xl sm:text-4xl lg:text-5xl font-medium tracking-tight text-ink leading-tight mb-10" data-testid="mentor-quote">
-              "I don't teach people what to buy. I teach them how to <span className="italic text-gold">think</span> — so the market stops being a gamble and starts being a craft."
+            <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-zinc-500 mb-4">Your Mentor</p>
+            <blockquote className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white leading-tight mb-10" data-testid="mentor-quote">
+              "I don't teach people what to buy. I teach them how to <span className="italic text-zinc-400">think</span> — so the market stops being a gamble and starts being a craft."
             </blockquote>
-            <p className="font-mono text-xs uppercase tracking-[0.2em] text-ink mb-2" data-testid="mentor-name">
+            <p className="font-mono text-xs uppercase tracking-[0.2em] text-white mb-2" data-testid="mentor-name">
               Founder &amp; Lead Mentor
             </p>
-            <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-ink-muted mb-8">
+            <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-500 mb-8">
               [ Mentor name &amp; photo to be added ]
             </p>
-            <div className="space-y-5 text-ink/70 leading-relaxed max-w-xl">
+            <div className="space-y-5 text-zinc-400 text-sm leading-relaxed max-w-xl">
               <p>
                 One Stock Academy was founded by an active market practitioner who spent years learning
                 the hard way — through real positions, real drawdowns, and real discipline — before
@@ -329,27 +340,27 @@ export default function Home() {
       </section>
 
       {/* FAQ */}
-      <section id="faq" data-testid="faq-section" className="bg-paper-deep/50 border-y border-ink/10">
+      <section id="faq" data-testid="faq-section" className="border-y border-white/10 bg-black/40 backdrop-blur-sm">
         <div className="max-w-4xl mx-auto px-6 sm:px-10 py-24 sm:py-32">
           <motion.div {...fadeUp} className="mb-14">
-            <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-bull mb-4">Questions</p>
-            <h2 className="font-display text-4xl sm:text-5xl font-medium tracking-tight text-ink">
+            <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-zinc-500 mb-4">Questions</p>
+            <h2 className="font-display text-4xl sm:text-5xl font-bold tracking-tight text-white">
               Before you enroll
             </h2>
           </motion.div>
           <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.1 }}>
-            <Accordion type="single" collapsible className="border-t border-ink/10" data-testid="faq-accordion">
+            <Accordion type="single" collapsible className="border-t border-white/10" data-testid="faq-accordion">
               {FAQS.map((f, i) => (
-                <AccordionItem key={i} value={`faq-${i}`} className="border-b border-ink/10">
+                <AccordionItem key={i} value={`faq-${i}`} className="border-b border-white/10">
                   <AccordionTrigger
                     data-testid={`faq-question-${i}`}
-                    className="text-left font-display text-xl sm:text-2xl font-medium text-ink hover:text-bull py-6 hover:no-underline"
+                    className="text-left font-display text-xl sm:text-2xl font-bold text-white hover:text-zinc-300 py-6 hover:no-underline"
                   >
                     {f.q}
                   </AccordionTrigger>
                   <AccordionContent
                     data-testid={`faq-answer-${i}`}
-                    className="text-ink/70 leading-relaxed pb-6 max-w-2xl"
+                    className="text-zinc-400 text-sm leading-relaxed pb-6 max-w-2xl"
                   >
                     {f.a}
                   </AccordionContent>
@@ -362,20 +373,19 @@ export default function Home() {
 
       {/* FINAL CTA */}
       <section data-testid="final-cta-section" className="max-w-7xl mx-auto px-6 sm:px-10 py-24 sm:py-32">
-        <motion.div {...fadeUp} className="relative bg-ink text-paper p-10 sm:p-20 chart-grid-bg overflow-hidden">
-          <div className="absolute inset-0 bg-ink/95" />
+        <motion.div {...fadeUp} className="relative bg-white/[0.05] backdrop-blur-2xl border border-white/10 text-white p-10 sm:p-20 overflow-hidden">
           <div className="relative max-w-2xl">
-            <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-gold mb-6">Seats are batch-limited</p>
-            <h2 className="font-display text-4xl sm:text-6xl font-medium tracking-tight leading-[1.02] mb-8">
+            <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-zinc-400 mb-6">Seats are batch-limited</p>
+            <h2 className="font-display text-4xl sm:text-6xl font-bold tracking-tight leading-[1.02] mb-8">
               Stop watching the market.
               <br />
-              <span className="italic text-paper/70">Start reading it.</span>
+              <span className="italic text-zinc-400">Start reading it.</span>
             </h2>
             <Magnetic>
               <Link
                 to="/enroll"
                 data-testid="final-cta-btn"
-                className="group inline-flex items-center gap-2 bg-paper text-ink font-mono text-xs uppercase tracking-[0.18em] px-8 py-4 hover:bg-white transition-colors"
+                className="group inline-flex items-center gap-2 bg-white text-black font-mono text-xs uppercase tracking-[0.18em] px-8 py-4 hover:bg-zinc-200 transition-colors"
               >
                 Enroll Now
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -386,6 +396,7 @@ export default function Home() {
       </section>
 
       <Footer />
+      </div>
     </div>
   );
 }

@@ -19,7 +19,7 @@ export default function TickerTape({ dark = false }) {
       aria-hidden="true"
       data-testid="ticker-tape"
       className={`border-y border-ink/10 py-2.5 overflow-hidden ${
-        dark ? "bg-ink text-paper" : "bg-paper-deep/60 text-ink"
+        dark ? "bg-black/70 backdrop-blur text-paper" : "bg-paper-deep/60 text-ink"
       }`}
     >
       <Marquee speed={40} gradient={false} pauseOnHover>

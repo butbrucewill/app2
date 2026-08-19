@@ -129,13 +129,13 @@ export default function BuyCourse() {
   };
 
   return (
-    <div className="paper-noise bg-paper min-h-screen flex flex-col">
-      <header className="border-b border-ink/10 bg-paper/95" data-testid="enroll-header">
+    <div className="bg-[#050505] text-zinc-200 min-h-screen flex flex-col">
+      <header className="border-b border-white/10 bg-[#050505]/90 backdrop-blur" data-testid="enroll-header">
         <div className="max-w-6xl mx-auto px-6 sm:px-10 h-16 flex items-center justify-between">
-          <Link to="/" data-testid="enroll-back-link" className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.18em] text-ink-soft hover:text-ink transition-colors">
+          <Link to="/" data-testid="enroll-back-link" className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.18em] text-zinc-400 hover:text-white transition-colors">
             <ArrowLeft className="w-4 h-4" /> One Stock Academy
           </Link>
-          <span className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.18em] text-ink-muted">
+          <span className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.18em] text-zinc-500">
             <Lock className="w-3.5 h-3.5" /> Secure checkout
           </span>
         </div>
@@ -143,8 +143,8 @@ export default function BuyCourse() {
 
       <main className="flex-1 max-w-6xl mx-auto w-full px-6 sm:px-10 py-14 sm:py-20">
         <div className="mb-12">
-          <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-bull mb-3">Enrollment</p>
-          <h1 className="font-display text-4xl sm:text-5xl font-medium tracking-tight text-ink" data-testid="enroll-title">
+          <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-zinc-500 mb-3">Enrollment</p>
+          <h1 className="font-display text-4xl sm:text-5xl font-bold tracking-tight text-white" data-testid="enroll-title">
             Choose your batch
           </h1>
         </div>
@@ -159,29 +159,29 @@ export default function BuyCourse() {
                   onClick={() => setCourseId(c.id)}
                   className={`text-left border p-6 transition-colors cursor-pointer ${
                     courseId === c.id
-                      ? "border-bull bg-white"
-                      : "border-ink/15 bg-transparent hover:border-ink/40"
+                      ? "border-white/60 bg-white/10 backdrop-blur-xl"
+                      : "border-white/10 bg-white/[0.03] hover:border-white/30"
                   }`}
                 >
                   <div className="flex items-center justify-between mb-4">
-                    <c.icon className={`w-5 h-5 ${courseId === c.id ? "text-bull" : "text-ink/40"}`} strokeWidth={1.5} />
+                    <c.icon className={`w-5 h-5 ${courseId === c.id ? "text-white" : "text-zinc-500"}`} strokeWidth={1.5} />
                     <span
                       className={`w-4 h-4 border rounded-full flex items-center justify-center ${
-                        courseId === c.id ? "border-bull" : "border-ink/30"
+                        courseId === c.id ? "border-white" : "border-zinc-600"
                       }`}
                     >
-                      {courseId === c.id && <span className="w-2 h-2 bg-bull rounded-full" />}
+                      {courseId === c.id && <span className="w-2 h-2 bg-white rounded-full" />}
                     </span>
                   </div>
-                  <p className="font-display text-2xl font-medium text-ink">{c.name}</p>
-                  <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-ink-muted mt-1">{c.format}</p>
-                  <p className={`font-mono text-xl font-medium mt-4 ${c.id === "offline" ? "text-gold" : "text-ink"}`}>
+                  <p className="font-display text-2xl font-bold text-white">{c.name}</p>
+                  <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-zinc-500 mt-1">{c.format}</p>
+                  <p className="font-mono text-xl font-semibold mt-4 text-white">
                     {inr(c.price)}
                   </p>
                   <ul className="mt-4 space-y-1.5">
                     {c.points.map((p) => (
-                      <li key={p} className="text-sm text-ink/60 flex gap-2">
-                        <span className="text-chart-green">—</span> {p}
+                      <li key={p} className="text-sm text-zinc-400 flex gap-2">
+                        <span className="text-green-500">—</span> {p}
                       </li>
                     ))}
                   </ul>
@@ -189,22 +189,22 @@ export default function BuyCourse() {
               ))}
             </div>
 
-            <div className="border border-ink/15 bg-white p-6 sm:p-8" data-testid="student-details-form">
-              <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-ink-muted mb-6">Your details</p>
+            <div className="border border-white/10 bg-white/[0.04] backdrop-blur-xl p-6 sm:p-8" data-testid="student-details-form">
+              <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-zinc-500 mb-6">Your details</p>
               <div className="grid sm:grid-cols-2 gap-5">
                 <label className="block">
-                  <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-ink-soft">Full name</span>
+                  <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-zinc-400">Full name</span>
                   <input
                     data-testid="input-name"
                     value={form.name}
                     onChange={set("name")}
                     required
                     placeholder="Your full name"
-                    className="mt-2 w-full border border-ink/20 bg-paper px-4 py-3 text-ink placeholder:text-ink/30 focus:outline-none focus:border-bull rounded-none"
+                    className="mt-2 w-full border border-white/15 bg-white/5 px-4 py-3 text-white placeholder:text-zinc-600 focus:outline-none focus:border-white/60 rounded-none"
                   />
                 </label>
                 <label className="block">
-                  <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-ink-soft">Phone</span>
+                  <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-zinc-400">Phone</span>
                   <input
                     data-testid="input-phone"
                     value={form.phone}
@@ -212,11 +212,11 @@ export default function BuyCourse() {
                     required
                     type="tel"
                     placeholder="10-digit mobile"
-                    className="mt-2 w-full border border-ink/20 bg-paper px-4 py-3 text-ink placeholder:text-ink/30 focus:outline-none focus:border-bull rounded-none"
+                    className="mt-2 w-full border border-white/15 bg-white/5 px-4 py-3 text-white placeholder:text-zinc-600 focus:outline-none focus:border-white/60 rounded-none"
                   />
                 </label>
                 <label className="block sm:col-span-2">
-                  <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-ink-soft">Email</span>
+                  <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-zinc-400">Email</span>
                   <input
                     data-testid="input-email"
                     value={form.email}
@@ -224,7 +224,7 @@ export default function BuyCourse() {
                     required
                     type="email"
                     placeholder="you@example.com"
-                    className="mt-2 w-full border border-ink/20 bg-paper px-4 py-3 text-ink placeholder:text-ink/30 focus:outline-none focus:border-bull rounded-none"
+                    className="mt-2 w-full border border-white/15 bg-white/5 px-4 py-3 text-white placeholder:text-zinc-600 focus:outline-none focus:border-white/60 rounded-none"
                   />
                 </label>
               </div>
@@ -232,36 +232,36 @@ export default function BuyCourse() {
           </div>
 
           <div className="lg:col-span-5">
-            <div className="border border-ink/15 bg-ink text-paper p-6 sm:p-8 sticky top-8" data-testid="order-summary">
-              <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-paper/50 mb-6">Order summary</p>
+            <div className="border border-white/10 bg-white/[0.05] backdrop-blur-xl text-white p-6 sm:p-8 sticky top-8" data-testid="order-summary">
+              <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-zinc-500 mb-6">Order summary</p>
               <div className="flex justify-between items-baseline mb-2">
                 <span className="font-display text-2xl font-medium">{course.name}</span>
               </div>
-              <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-paper/50 mb-8">{course.format}</p>
-              <div className="border-t border-paper/15 pt-6 space-y-3 font-mono text-sm">
-                <div className="flex justify-between text-paper/70">
+              <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-zinc-500 mb-8">{course.format}</p>
+              <div className="border-t border-white/10 pt-6 space-y-3 font-mono text-sm">
+                <div className="flex justify-between text-zinc-400">
                   <span>Course fee</span>
                   <span data-testid="summary-fee">{inr(orderSummary.total)}</span>
                 </div>
-                <div className="flex justify-between text-paper/70">
+                <div className="flex justify-between text-zinc-400">
                   <span>Billing</span>
                   <span>One-time</span>
                 </div>
-                <div className="flex justify-between text-lg pt-3 border-t border-paper/15">
+                <div className="flex justify-between text-lg pt-3 border-t border-white/10">
                   <span>Total</span>
-                  <span className="text-gold font-medium" data-testid="summary-total">{inr(orderSummary.total)}</span>
+                  <span className="text-white font-semibold" data-testid="summary-total">{inr(orderSummary.total)}</span>
                 </div>
               </div>
               <button
                 type="submit"
                 data-testid="pay-now-btn"
                 disabled={loading}
-                className="mt-8 w-full bg-paper text-ink font-mono text-xs uppercase tracking-[0.18em] px-6 py-4 hover:bg-white transition-colors disabled:opacity-60 flex items-center justify-center gap-2"
+                className="mt-8 w-full bg-white text-black font-mono text-xs uppercase tracking-[0.18em] px-6 py-4 hover:bg-zinc-200 transition-colors disabled:opacity-60 flex items-center justify-center gap-2"
               >
                 {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Lock className="w-4 h-4" />}
                 {loading ? "Preparing payment…" : `Pay ${inr(orderSummary.total)}`}
               </button>
-              <p className="mt-5 flex items-start gap-2 text-[11px] leading-relaxed text-paper/50 font-mono">
+              <p className="mt-5 flex items-start gap-2 text-[11px] leading-relaxed text-zinc-500 font-mono">
                 <ShieldCheck className="w-4 h-4 shrink-0 mt-0.5" />
                 You will complete payment on the secure gateway page (UPI, cards, netbanking). Enrollment is
                 confirmed only after payment verification.
@@ -283,30 +283,30 @@ export default function BuyCourse() {
             <motion.div
               initial={{ y: 24, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
-              className="bg-white border border-ink/15 max-w-md w-full p-8"
+              className="bg-[#0a0a0a] border border-white/10 max-w-md w-full p-8"
             >
-              <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-gold mb-2">Demo mode — gateway keys pending</p>
-              <h2 className="font-display text-3xl font-medium text-ink mb-2">Simulated hosted checkout</h2>
-              <p className="text-ink/70 text-sm leading-relaxed mb-6">
+              <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-500 mb-2">Demo mode — gateway keys pending</p>
+              <h2 className="font-display text-3xl font-bold text-white mb-2">Simulated hosted checkout</h2>
+              <p className="text-zinc-400 text-sm leading-relaxed mb-6">
                 Razorpay keys from Apex IT Solutions are not configured yet, so this is a simulation of the
                 hosted payment page. The server-side verification step runs exactly as it will in production.
               </p>
-              <div className="border border-ink/10 bg-paper p-4 mb-6 font-mono text-sm flex justify-between">
-                <span className="text-ink/60">{demoOrder.course.name}</span>
-                <span className="font-medium text-ink">{inr(demoOrder.amount_paise / 100)}</span>
+              <div className="border border-white/10 bg-white/5 p-4 mb-6 font-mono text-sm flex justify-between">
+                <span className="text-zinc-400">{demoOrder.course.name}</span>
+                <span className="font-medium text-white">{inr(demoOrder.amount_paise / 100)}</span>
               </div>
               <div className="flex gap-3">
                 <button
                   data-testid="demo-pay-success-btn"
                   onClick={() => verifyAndRoute({ order_ref: demoOrder.order_ref, demo_outcome: "success" })}
-                  className="flex-1 bg-bull text-white font-mono text-xs uppercase tracking-[0.18em] px-4 py-3.5 hover:bg-ink transition-colors"
+                  className="flex-1 bg-white text-black font-mono text-xs uppercase tracking-[0.18em] px-4 py-3.5 hover:bg-zinc-200 transition-colors"
                 >
                   Simulate success
                 </button>
                 <button
                   data-testid="demo-pay-fail-btn"
                   onClick={() => verifyAndRoute({ order_ref: demoOrder.order_ref, demo_outcome: "failure" })}
-                  className="flex-1 border border-ink/20 text-ink font-mono text-xs uppercase tracking-[0.18em] px-4 py-3.5 hover:border-chart-red hover:text-chart-red transition-colors"
+                  className="flex-1 border border-white/20 text-white font-mono text-xs uppercase tracking-[0.18em] px-4 py-3.5 hover:border-red-500 hover:text-red-500 transition-colors"
                 >
                   Simulate failure
                 </button>
@@ -314,7 +314,7 @@ export default function BuyCourse() {
               <button
                 data-testid="demo-checkout-close-btn"
                 onClick={() => setDemoOrder(null)}
-                className="mt-4 w-full font-mono text-[10px] uppercase tracking-[0.18em] text-ink-muted hover:text-ink transition-colors"
+                className="mt-4 w-full font-mono text-[10px] uppercase tracking-[0.18em] text-zinc-500 hover:text-white transition-colors"
               >
                 Cancel
               </button>
