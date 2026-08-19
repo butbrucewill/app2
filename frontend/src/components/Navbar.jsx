@@ -9,7 +9,7 @@ export default function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-6 sm:px-10 h-16 flex items-center justify-between">
         <Link to="/" data-testid="nav-logo" className="flex items-center">
-          <img src="/logo-white.png" alt="One Stock Academy" className="h-7 w-auto invert" />
+          <img src="/logo-white.png" alt="One Stock Academy" className="h-10 w-auto invert" />
         </Link>
         <nav className="hidden md:flex items-center gap-8 font-mono text-[11px] uppercase tracking-[0.18em] text-paper/60">
           <a href="/#why" data-testid="nav-link-why" className="hover:text-paper transition-colors">Why Us</a>
