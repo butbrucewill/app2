@@ -13,6 +13,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import TickerTape from "@/components/TickerTape";
 import HeroScene from "@/components/HeroScene";
+import TiltCard from "@/components/TiltCard";
 import {
   Accordion,
   AccordionContent,
@@ -21,10 +22,10 @@ import {
 } from "@/components/ui/accordion";
 
 const fadeUp = {
-  initial: { opacity: 0, y: 24 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, margin: "-60px" },
-  transition: { duration: 0.6, ease: "easeOut" },
+  initial: { opacity: 0, y: 36, filter: "blur(6px)" },
+  whileInView: { opacity: 1, y: 0, filter: "blur(0px)" },
+  viewport: { once: true, margin: "-80px" },
+  transition: { duration: 0.85, ease: [0.22, 1, 0.36, 1] },
 };
 
 const VALUE_PROPS = [
@@ -214,8 +215,8 @@ export default function Home() {
               One-time payment · No subscriptions
             </p>
           </motion.div>
-          <div className="grid md:grid-cols-2 gap-px bg-ink/10 border border-ink/10">
-            <motion.div {...fadeUp} data-testid="course-card-online" className="bg-white p-8 sm:p-12 group hover:bg-paper transition-colors">
+          <div className="grid md:grid-cols-2 gap-6 md:gap-8" style={{ perspective: 1400 }}>
+            <TiltCard testId="course-card-online" className="bg-white border border-ink/10 p-8 sm:p-12 group">
               <div className="flex items-center gap-3 mb-8">
                 <Monitor className="w-5 h-5 text-bull" strokeWidth={1.5} />
                 <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-ink-muted">Live Virtual Classes</span>
@@ -241,11 +242,9 @@ export default function Home() {
                 Enroll — Online
                 <ArrowUpRight className="w-4 h-4 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform" />
               </Link>
-            </motion.div>
-            <motion.div
-              {...fadeUp}
-              transition={{ ...fadeUp.transition, delay: 0.1 }}
-              data-testid="course-card-offline"
+            </TiltCard>
+            <TiltCard
+              testId="course-card-offline"
               className="bg-ink text-paper p-8 sm:p-12 relative"
             >
               <span className="absolute top-0 right-0 bg-gold text-ink font-mono text-[10px] uppercase tracking-[0.2em] px-4 py-2" data-testid="offline-highlight-badge">
@@ -276,7 +275,7 @@ export default function Home() {
                 Enroll — Offline
                 <ArrowUpRight className="w-4 h-4 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform" />
               </Link>
-            </motion.div>
+            </TiltCard>
           </div>
         </div>
       </section>
