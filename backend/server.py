@@ -7,6 +7,12 @@ import logging
 import uuid
 import hmac
 import hashlib
+import re
+import ipaddress
+import httpx
+from html import escape
+from html.parser import HTMLParser
+from urllib.parse import urlparse
 from pathlib import Path
 from pydantic import BaseModel, Field, EmailStr
 from typing import Optional
@@ -27,6 +33,135 @@ rzp_client = None
 if RAZORPAY_CONFIGURED:
     import razorpay
     rzp_client = razorpay.Client(auth=(RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET))
+
+EMAIL_BASE_URL = "https://integrations.emergentagent.com"
+EMAIL_KEY = os.environ.get("EMERGENT_EMAIL_KEY", "")
+EMAIL_FROM_NAME = os.environ.get("EMAIL_FROM_NAME", "")
+SITE_URL = os.environ.get("SITE_URL", "").rstrip("/")
+
+_SHORTENERS = ("bit.ly", "tinyurl.com", "t.co", "is.gd", "cutt.ly", "goo.gl", "rebrand.ly")
+_CRED_ASK = ("reply with your password", "reply with the code", "send your password", "cvv",
+             "send us your password", "enter your password below", "confirm your card number",
+             "your full card number", "seed phrase", "recovery phrase", "verify your card",
+             "social security number", "confirm your bank details")
+_HOSTISH = re.compile(r"\b(?:https?://)?((?:[a-z0-9-]+\.)+[a-z]{2,})", re.I)
+
+
+def _host_ok(host: str) -> bool:
+    if not host or "xn--" in host:
+        return False
+    try:
+        ipaddress.ip_address(host)
+        return False
+    except ValueError:
+        pass
+    return not any(host == s or host.endswith("." + s) for s in _SHORTENERS)
+
+
+def _same_site(shown: str, real: str) -> bool:
+    return shown == real or real.endswith("." + shown) or shown.endswith("." + real)
+
+
+class _EmailScan(HTMLParser):
+    def __init__(self):
+        super().__init__()
+        self.tags, self.urls, self.anchors = set(), [], []
+        self._href, self._text = None, []
+    def handle_starttag(self, tag, attrs):
+        self.tags.add(tag.lower())
+        self.urls += [v for k, v in attrs if k.lower() in ("href", "src") and v]
+        if tag.lower() == "a":
+            self._href = dict((k.lower(), v) for k, v in attrs).get("href")
+            self._text = []
+    def handle_data(self, data):
+        if self._href is not None:
+            self._text.append(data)
+    def handle_endtag(self, tag):
+        if tag.lower() == "a" and self._href is not None:
+            self.anchors.append((self._href, "".join(self._text)))
+            self._href, self._text = None, []
+
+
+def _assert_safe_email(subject: str, html: str) -> None:
+    scan = _EmailScan(); scan.feed(html)
+    if scan.tags & {"form", "input", "textarea", "select"}:
+        raise ValueError("No forms or input fields in email (G2)")
+    body = f"{subject}\n{html}".lower()
+    for p in _CRED_ASK:
+        if p in body:
+            raise ValueError(f"Email asks the recipient for credentials: {p!r} (G2)")
+    for url in scan.urls:
+        low = url.strip().lower()
+        if low.startswith(("mailto:", "tel:", "cid:", "#")):
+            continue
+        if not low.startswith("https://"):
+            raise ValueError(f"Email links/assets must be absolute https: {url!r} (G3)")
+        host = urlparse(low).hostname or ""
+        if not _host_ok(host) or urlparse(low).username is not None:
+            raise ValueError(f"Shortened, numeric-host or credential-bearing URL: {url!r} (G3)")
+    for href, text in scan.anchors:
+        real = urlparse(href.strip().lower()).hostname or ""
+        if not real:
+            continue
+        for m in _HOSTISH.finditer(text):
+            if not _same_site(m.group(1).lower(), real):
+                raise ValueError(f"Anchor text {m.group(1)!r} != real link host {real!r} (G3)")
+
+
+async def send_email(*, to: str, subject: str, html: str) -> str | None:
+    _assert_safe_email(subject, html)
+    payload = {"to": [to], "subject": subject, "html": html, "from_name": EMAIL_FROM_NAME}
+    async with httpx.AsyncClient(timeout=30) as client:
+        resp = await client.post(
+            f"{EMAIL_BASE_URL}/api/v1/email/send",
+            headers={"X-Email-Key": EMAIL_KEY},
+            json=payload,
+        )
+    resp.raise_for_status()
+    return resp.json().get("id")
+
+
+def enrollment_email_html(doc):
+    course = COURSES[doc["course_id"]]
+    first_name = escape(doc["name"].split()[0])
+    if doc["course_id"] == "online":
+        next_steps = ("Your batch schedule and student portal access details will reach this "
+                      "inbox before your first live session.")
+    else:
+        next_steps = ("Your classroom batch details, venue, and start date will reach this "
+                      "inbox before your first session.")
+    link_html = ""
+    if SITE_URL:
+        link_html = (f'<p style="margin:24px 0"><a href="{SITE_URL}/payment/result?status=success&amp;ref={doc["order_ref"]}" '
+                     f'style="background:#0B1021;color:#ffffff;padding:12px 24px;text-decoration:none;'
+                     f'font-family:monospace;font-size:12px;letter-spacing:2px;text-transform:uppercase">'
+                     f'View your enrollment</a></p>')
+    return (
+        '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" '
+        'style="background:#f4f4f3;padding:32px 0"><tr><td align="center">'
+        '<table role="presentation" width="560" cellpadding="0" cellspacing="0" '
+        'style="background:#ffffff;border:1px solid #e5e5e5;padding:40px;font-family:Arial,sans-serif">'
+        f'<tr><td><p style="font-family:monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;'
+        f'color:#64748b;margin:0 0 8px">Payment verified · Enrollment confirmed</p>'
+        f'<h1 style="font-family:Georgia,serif;font-size:32px;font-weight:500;color:#0B1021;margin:0 0 16px">'
+        f'Welcome aboard, {first_name}.</h1>'
+        f'<p style="color:#333a52;font-size:15px;line-height:1.6;margin:0 0 24px">'
+        f'Your seat in the <strong>{escape(course["name"])}</strong> at One Stock Academy is confirmed. '
+        f'{next_steps}</p>'
+        f'<table role="presentation" width="100%" cellpadding="8" cellspacing="0" '
+        f'style="background:#f4f4f3;font-family:monospace;font-size:13px;color:#0B1021;margin:0 0 8px">'
+        f'<tr><td style="color:#64748b">Reference</td><td align="right">{escape(doc["order_ref"])}</td></tr>'
+        f'<tr><td style="color:#64748b">Course</td><td align="right">{escape(course["name"])}</td></tr>'
+        f'<tr><td style="color:#64748b">Amount paid</td><td align="right">₹{doc["amount_inr"]:,}</td></tr>'
+        f'</table>'
+        f'{link_html}'
+        f'<p style="font-size:11px;color:#94a3b8;line-height:1.6;margin:24px 0 0">'
+        f'Trading involves substantial risk of loss. One Stock Academy provides education only — '
+        f'nothing in our classes is investment advice or a promise of returns. '
+        f'Sent by {escape(EMAIL_FROM_NAME)}. We never ask for your password or card details by email.</p>'
+        '</td></tr></table></td></tr></table>'
+    )
+
 
 app = FastAPI()
 api_router = APIRouter(prefix="/api")
@@ -164,7 +299,21 @@ async def verify_payment(payload: PaymentVerify):
         update["razorpay_payment_id"] = payload.razorpay_payment_id
     await db.enrollments.update_one({"order_ref": payload.order_ref}, {"$set": update})
     doc = await db.enrollments.find_one({"order_ref": payload.order_ref}, {"_id": 0})
-    return {"status": "success", "enrollment": public_enrollment(doc)}
+
+    email_status = "skipped"
+    if EMAIL_KEY and EMAIL_FROM_NAME:
+        try:
+            subject = f"Enrollment confirmed — {COURSES[doc['course_id']]['name']}"
+            email_id = await send_email(to=doc["email"], subject=subject, html=enrollment_email_html(doc))
+            await db.enrollments.update_one(
+                {"order_ref": payload.order_ref}, {"$set": {"confirmation_email_id": email_id}}
+            )
+            email_status = "sent"
+        except Exception as e:
+            logger.error(f"Confirmation email failed for {payload.order_ref}: {e}")
+            email_status = "failed"
+
+    return {"status": "success", "enrollment": public_enrollment(doc), "email": email_status}
 
 
 @api_router.get("/orders/{order_ref}")
