@@ -16,6 +16,7 @@ import TickerTape from "@/components/TickerTape";
 import ScrollExperience, { scrollState } from "@/components/ScrollExperience";
 import EditorialMarquee from "@/components/EditorialMarquee";
 import CustomCursor from "@/components/CustomCursor";
+import MentorCard from "@/components/MentorCard";
 import TiltCard from "@/components/TiltCard";
 import Magnetic from "@/components/Magnetic";
 import {
@@ -426,28 +427,9 @@ export default function Home() {
             Practitioners the market <span className="italic text-zinc-400">already follows</span>
           </h2>
         </motion.div>
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-3 gap-6" style={{ perspective: 1600 }}>
           {MENTORS.map((m, i) => (
-            <motion.div
-              key={m.name}
-              {...fadeUp}
-              transition={{ ...fadeUp.transition, delay: i * 0.1 }}
-              data-testid={`mentor-card-${i}`}
-              className="group bg-white/[0.04] backdrop-blur-xl border border-white/10 p-8 sm:p-10 hover:bg-white/[0.08] hover:border-white/20 transition-colors"
-            >
-              <div className="w-14 h-14 rounded-full bg-white/10 border border-white/15 flex items-center justify-center mb-8">
-                <span className="font-display text-xl font-bold text-white">
-                  {m.name.split(" ").map((w) => w[0]).slice(0, 2).join("")}
-                </span>
-              </div>
-              <p className="font-display text-2xl font-bold text-white mb-1" data-testid={`mentor-name-${i}`}>{m.name}</p>
-              <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-500 mb-5">{m.role}</p>
-              <p className="text-zinc-400 text-sm leading-relaxed mb-6">{m.bio}</p>
-              <p className="font-mono text-[10px] uppercase tracking-[0.15em] text-green-500 flex items-center gap-2">
-                <span className="w-1.5 h-1.5 bg-green-500 rounded-full" />
-                {m.stat}
-              </p>
-            </motion.div>
+            <MentorCard key={m.name} m={m} i={i} />
           ))}
         </div>
       </section>
