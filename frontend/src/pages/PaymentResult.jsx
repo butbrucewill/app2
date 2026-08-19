@@ -3,6 +3,7 @@ import { Link, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import { motion } from "framer-motion";
 import { CheckCircle2, XCircle, ArrowRight, RotateCcw, Loader2 } from "lucide-react";
+import Confetti from "@/components/Confetti";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 const inr = (n) => "₹" + Number(n).toLocaleString("en-IN");
@@ -36,6 +37,7 @@ export default function PaymentResult() {
       </header>
 
       <main className="flex-1 flex items-center justify-center px-6 py-20">
+        {!loading && success && <Confetti />}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
