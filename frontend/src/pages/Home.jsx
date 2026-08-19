@@ -101,6 +101,7 @@ const MENTORS = [
     role: "Chief Academic Officer",
     bio: "Leads the online cohort experience, known for breaking down price action and market structure for beginners.",
     stat: "750k+ on Instagram",
+    photo: "/mentor-aman.jpg",
   },
   {
     name: "Rajat Sharma",

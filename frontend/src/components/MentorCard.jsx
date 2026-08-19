@@ -76,8 +76,17 @@ export default function MentorCard({ m, i }) {
         >
           <div className="absolute -inset-2 rounded-full border border-white/10" />
           <div className="absolute -inset-2 rounded-full border-t border-green-500/40 animate-[spin_8s_linear_infinite]" />
-          <div className="w-28 h-28 rounded-full bg-black border border-white/25 flex items-center justify-center shadow-[0_0_50px_rgba(34,197,94,0.15)]">
-            <span className="font-display text-4xl font-bold text-white">{initials}</span>
+          <div className="w-28 h-28 rounded-full bg-black border border-white/25 overflow-hidden shadow-[0_0_50px_rgba(34,197,94,0.15)]">
+            {m.photo ? (
+              <img
+                src={m.photo}
+                alt={m.name}
+                data-testid={`mentor-photo-${i}`}
+                className="w-full h-full object-cover object-[45%_62%] grayscale hover:grayscale-0 transition-all duration-500"
+              />
+            ) : (
+              <span className="w-full h-full flex items-center justify-center font-display text-4xl font-bold text-white">{initials}</span>
+            )}
           </div>
         </motion.div>
 
