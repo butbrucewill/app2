@@ -30,7 +30,7 @@ export default function TickerTape({ dark = false }) {
           <span key={t.s} className="font-mono text-[11px] uppercase tracking-wider mx-5 whitespace-nowrap">
             <span className="opacity-70">{t.s}</span>{" "}
             <span className="font-medium">{t.p}</span>{" "}
-            <span className={t.up ? (dark ? "text-paper" : "text-ink") : dark ? "text-paper/50" : "text-ink/40"}>
+            <span className={t.up ? "text-green-500" : "text-red-500"}>
               {t.up ? "▲" : "▼"} {t.c}
             </span>
             <span className="opacity-30 ml-5">·</span>
