@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { motion, useMotionValue, useSpring, useTransform, useMotionTemplate } from "framer-motion";
 
-export default function TiltCard({ children, className = "", testId }) {
+export default function TiltCard({ children, className = "", testId, onClick }) {
   const ref = useRef(null);
   const mx = useMotionValue(0.5);
   const my = useMotionValue(0.5);
@@ -26,6 +26,7 @@ export default function TiltCard({ children, className = "", testId }) {
     <motion.div
       ref={ref}
       data-testid={testId}
+      onClick={onClick}
       onMouseMove={onMove}
       onMouseLeave={onLeave}
       style={{ rotateX, rotateY, transformPerspective: 1000, transformStyle: "preserve-3d" }}

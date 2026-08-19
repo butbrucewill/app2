@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { TrendingUp } from "lucide-react";
+import Magnetic from "./Magnetic";
 
 export default function Navbar() {
   return (
@@ -22,13 +23,15 @@ export default function Navbar() {
           <a href="/#mentor" data-testid="nav-link-mentor" className="hover:text-paper transition-colors">Mentor</a>
           <a href="/#faq" data-testid="nav-link-faq" className="hover:text-paper transition-colors">FAQ</a>
         </nav>
-        <Link
-          to="/enroll"
-          data-testid="nav-enroll-btn"
-          className="bg-paper text-ink font-mono text-[11px] uppercase tracking-[0.18em] px-5 py-2.5 hover:bg-white transition-colors"
-        >
-          Enroll Now
-        </Link>
+        <Magnetic strength={0.3}>
+          <Link
+            to="/enroll"
+            data-testid="nav-enroll-btn"
+            className="block bg-paper text-ink font-mono text-[11px] uppercase tracking-[0.18em] px-5 py-2.5 hover:bg-white transition-colors"
+          >
+            Enroll Now
+          </Link>
+        </Magnetic>
       </div>
     </header>
   );

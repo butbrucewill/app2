@@ -14,6 +14,7 @@ import Footer from "@/components/Footer";
 import TickerTape from "@/components/TickerTape";
 import HeroScene from "@/components/HeroScene";
 import TiltCard from "@/components/TiltCard";
+import Magnetic from "@/components/Magnetic";
 import {
   Accordion,
   AccordionContent,
@@ -133,14 +134,16 @@ export default function Home() {
               transition={{ duration: 0.8, delay: 0.65 }}
               className="mt-10 flex flex-wrap items-center gap-4"
             >
-              <Link
-                to="/enroll"
-                data-testid="hero-enroll-btn"
-                className="group bg-paper text-ink font-mono text-xs uppercase tracking-[0.18em] px-8 py-4 flex items-center gap-2 hover:bg-white transition-colors"
-              >
-                Enroll Now
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </Link>
+              <Magnetic>
+                <Link
+                  to="/enroll"
+                  data-testid="hero-enroll-btn"
+                  className="group bg-paper text-ink font-mono text-xs uppercase tracking-[0.18em] px-8 py-4 flex items-center gap-2 hover:bg-white transition-colors"
+                >
+                  Enroll Now
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </Link>
+              </Magnetic>
               <a
                 href="#courses"
                 data-testid="hero-courses-link"
@@ -234,14 +237,16 @@ export default function Home() {
                   </li>
                 ))}
               </ul>
-              <Link
-                to="/enroll?course=online"
-                data-testid="enroll-online-btn"
-                className="group/btn inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.18em] text-ink border border-ink/20 px-8 py-4 hover:border-bull hover:text-bull transition-colors"
-              >
-                Enroll — Online
-                <ArrowUpRight className="w-4 h-4 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform" />
-              </Link>
+              <Magnetic>
+                <Link
+                  to="/enroll?course=online"
+                  data-testid="enroll-online-btn"
+                  className="group/btn inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.18em] text-ink border border-ink/20 px-8 py-4 hover:border-bull hover:text-bull transition-colors"
+                >
+                  Enroll — Online
+                  <ArrowUpRight className="w-4 h-4 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform" />
+                </Link>
+              </Magnetic>
             </TiltCard>
             <TiltCard
               testId="course-card-offline"
@@ -267,14 +272,16 @@ export default function Home() {
                   </li>
                 ))}
               </ul>
-              <Link
-                to="/enroll?course=offline"
-                data-testid="enroll-offline-btn"
-                className="group/btn inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.18em] bg-gold text-ink px-8 py-4 hover:bg-paper transition-colors"
-              >
-                Enroll — Offline
-                <ArrowUpRight className="w-4 h-4 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform" />
-              </Link>
+              <Magnetic>
+                <Link
+                  to="/enroll?course=offline"
+                  data-testid="enroll-offline-btn"
+                  className="group/btn inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.18em] bg-gold text-ink px-8 py-4 hover:bg-paper transition-colors"
+                >
+                  Enroll — Offline
+                  <ArrowUpRight className="w-4 h-4 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform" />
+                </Link>
+              </Magnetic>
             </TiltCard>
           </div>
         </div>
@@ -364,14 +371,16 @@ export default function Home() {
               <br />
               <span className="italic text-paper/70">Start reading it.</span>
             </h2>
-            <Link
-              to="/enroll"
-              data-testid="final-cta-btn"
-              className="group inline-flex items-center gap-2 bg-paper text-ink font-mono text-xs uppercase tracking-[0.18em] px-8 py-4 hover:bg-white transition-colors"
-            >
-              Enroll Now
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </Link>
+            <Magnetic>
+              <Link
+                to="/enroll"
+                data-testid="final-cta-btn"
+                className="group inline-flex items-center gap-2 bg-paper text-ink font-mono text-xs uppercase tracking-[0.18em] px-8 py-4 hover:bg-white transition-colors"
+              >
+                Enroll Now
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </Link>
+            </Magnetic>
           </div>
         </motion.div>
       </section>

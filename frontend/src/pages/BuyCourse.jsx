@@ -4,6 +4,7 @@ import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
 import { Monitor, MapPin, ShieldCheck, Lock, ArrowLeft, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import TiltCard from "@/components/TiltCard";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
@@ -150,14 +151,13 @@ export default function BuyCourse() {
 
         <form onSubmit={handlePay} className="grid lg:grid-cols-12 gap-10">
           <div className="lg:col-span-7 space-y-8">
-            <div className="grid sm:grid-cols-2 gap-4" data-testid="course-selector">
+            <div className="grid sm:grid-cols-2 gap-4" style={{ perspective: 1200 }} data-testid="course-selector">
               {Object.values(COURSES).map((c) => (
-                <button
-                  type="button"
+                <TiltCard
                   key={c.id}
-                  data-testid={`select-course-${c.id}`}
+                  testId={`select-course-${c.id}`}
                   onClick={() => setCourseId(c.id)}
-                  className={`text-left border p-6 transition-colors ${
+                  className={`text-left border p-6 transition-colors cursor-pointer ${
                     courseId === c.id
                       ? "border-bull bg-white"
                       : "border-ink/15 bg-transparent hover:border-ink/40"
@@ -185,7 +185,7 @@ export default function BuyCourse() {
                       </li>
                     ))}
                   </ul>
-                </button>
+                </TiltCard>
               ))}
             </div>
 
