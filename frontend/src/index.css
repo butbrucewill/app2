@@ -74,4 +74,7 @@
     [data-debug-wrapper="true"] {
         display: contents !important;
     }
+    .hide-native-cursor, .hide-native-cursor * {
+        cursor: none !important;
+    }
 }

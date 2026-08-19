@@ -15,6 +15,7 @@ import Footer from "@/components/Footer";
 import TickerTape from "@/components/TickerTape";
 import ScrollExperience, { scrollState } from "@/components/ScrollExperience";
 import EditorialMarquee from "@/components/EditorialMarquee";
+import CustomCursor from "@/components/CustomCursor";
 import TiltCard from "@/components/TiltCard";
 import Magnetic from "@/components/Magnetic";
 import {
@@ -149,8 +150,9 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="relative bg-[#050505] text-white min-h-screen">
+    <div className="relative bg-[#050505] text-white min-h-screen hide-native-cursor">
       <ScrollExperience />
+      <CustomCursor />
       <div className="relative z-10">
       <Navbar />
 
