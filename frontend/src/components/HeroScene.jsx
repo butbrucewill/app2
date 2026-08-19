@@ -43,16 +43,20 @@ function Candle({ d, i }) {
       <mesh position={[0, (bodyTop + bodyBot) / 2, 0]}>
         <boxGeometry args={[0.34, bodyH, 0.34]} />
         <meshStandardMaterial
-          color={up ? "#ececec" : "#232838"}
-          emissive={up ? "#ffffff" : "#3a4160"}
-          emissiveIntensity={up ? 0.35 : 0.25}
+          color={up ? "#16A34A" : "#DC2626"}
+          emissive={up ? "#22C55E" : "#EF4444"}
+          emissiveIntensity={0.35}
           metalness={0.4}
           roughness={0.3}
         />
       </mesh>
       <mesh position={[0, (wickTop + wickBot) / 2, 0]}>
         <boxGeometry args={[0.05, wickTop - wickBot, 0.05]} />
-        <meshStandardMaterial color="#aab2c8" emissive="#aab2c8" emissiveIntensity={0.35} />
+        <meshStandardMaterial
+          color={up ? "#4ADE80" : "#F87171"}
+          emissive={up ? "#4ADE80" : "#F87171"}
+          emissiveIntensity={0.35}
+        />
       </mesh>
     </group>
   );
