@@ -1,4 +1,4 @@
-from fastapi import FastAPI, APIRouter, HTTPException
+from fastapi import FastAPI, APIRouter, HTTPException, Request
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -10,13 +10,14 @@ import hashlib
 import re
 import ipaddress
 import httpx
+import jwt
 from html import escape
 from html.parser import HTMLParser
 from urllib.parse import urlparse
 from pathlib import Path
 from pydantic import BaseModel, Field, EmailStr
 from typing import Optional
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -322,6 +323,44 @@ async def get_order(order_ref: str):
     if not doc:
         raise HTTPException(status_code=404, detail="Order not found")
     return {"enrollment": public_enrollment(doc), "payment_mode": "live" if RAZORPAY_CONFIGURED else "demo"}
+
+
+JWT_SECRET = os.environ.get("JWT_SECRET", "")
+ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "")
+
+
+class AdminLogin(BaseModel):
+    password: str
+
+
+def require_admin(request: Request):
+    auth = request.headers.get("Authorization", "")
+    token = auth[7:] if auth.startswith("Bearer ") else ""
+    if not token or not JWT_SECRET:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    try:
+        jwt.decode(token, JWT_SECRET, algorithms=["HS256"])
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Invalid or expired token")
+
+
+@api_router.post("/admin/login")
+async def admin_login(payload: AdminLogin):
+    if not ADMIN_PASSWORD or payload.password != ADMIN_PASSWORD:
+        raise HTTPException(status_code=401, detail="Invalid password")
+    token = jwt.encode(
+        {"sub": "admin", "exp": datetime.now(timezone.utc) + timedelta(hours=12)},
+        JWT_SECRET,
+        algorithm="HS256",
+    )
+    return {"token": token}
+
+
+@api_router.get("/admin/enrollments")
+async def admin_enrollments(request: Request):
+    require_admin(request)
+    docs = await db.enrollments.find({}, {"_id": 0}).sort("created_at", -1).to_list(500)
+    return {"enrollments": [{**public_enrollment(d), "phone": d.get("phone", "")} for d in docs]}
 
 
 app.include_router(api_router)
