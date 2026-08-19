@@ -36,7 +36,7 @@ export default function MentorCard({ m, i }) {
       onMouseMove={onMove}
       onMouseLeave={onLeave}
       style={{ rotateX, rotateY, transformPerspective: 1100, transformStyle: "preserve-3d" }}
-      className="relative bg-gradient-to-b from-white/[0.08] to-white/[0.02] backdrop-blur-xl border border-white/10 hover:border-white/25 transition-colors p-8 overflow-hidden"
+      className="relative bg-gradient-to-b from-white/[0.08] to-white/[0.02] backdrop-blur-xl border border-white/10 hover:border-white/25 transition-colors overflow-hidden"
     >
       {/* deep background chart layer */}
       <div className="absolute inset-0 opacity-[0.13] pointer-events-none" style={{ transform: "translateZ(-40px)" }}>
@@ -61,40 +61,34 @@ export default function MentorCard({ m, i }) {
         style={{ background: glare }}
       />
 
-      <div style={{ transform: "translateZ(30px)", transformStyle: "preserve-3d" }}>
-        <div className="flex items-center justify-between font-mono text-[9px] uppercase tracking-[0.25em] text-zinc-500 mb-8">
-          <span>One Stock Academy</span>
-          <span>Mentor No. 0{i + 1}</span>
+      <div className="flex flex-col md:flex-row" style={{ transformStyle: "preserve-3d" }}>
+        {/* large portrait panel */}
+        <div className="relative md:w-2/5 h-72 md:h-auto md:min-h-[340px] overflow-hidden shrink-0" style={{ transform: "translateZ(35px)" }}>
+          {m.photo ? (
+            <img
+              src={m.photo}
+              alt={m.name}
+              data-testid={`mentor-photo-${i}`}
+              className="absolute inset-0 w-full h-full object-cover object-[45%_62%] grayscale hover:grayscale-0 transition-all duration-700"
+            />
+          ) : (
+            <div className="absolute inset-0 flex items-center justify-center bg-black/40">
+              <span className="font-display text-7xl font-bold text-white/80">{initials}</span>
+            </div>
+          )}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
+          <span className="absolute top-4 left-4 bg-black/70 backdrop-blur border border-white/15 font-mono text-[9px] uppercase tracking-[0.25em] text-zinc-400 px-3 py-1.5">
+            Mentor No. 0{i + 1}
+          </span>
         </div>
 
-        {/* floating portrait medallion */}
-        <motion.div
-          className="relative mx-auto w-28 h-28 mb-8"
-          style={{ transform: "translateZ(55px)" }}
-          animate={{ y: [0, -6, 0] }}
-          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: i * 0.6 }}
-        >
-          <div className="absolute -inset-2 rounded-full border border-white/10" />
-          <div className="absolute -inset-2 rounded-full border-t border-green-500/40 animate-[spin_8s_linear_infinite]" />
-          <div className="w-28 h-28 rounded-full bg-black border border-white/25 overflow-hidden shadow-[0_0_50px_rgba(34,197,94,0.15)]">
-            {m.photo ? (
-              <img
-                src={m.photo}
-                alt={m.name}
-                data-testid={`mentor-photo-${i}`}
-                className="w-full h-full object-cover object-[45%_62%] grayscale hover:grayscale-0 transition-all duration-500"
-              />
-            ) : (
-              <span className="w-full h-full flex items-center justify-center font-display text-4xl font-bold text-white">{initials}</span>
-            )}
-          </div>
-        </motion.div>
-
-        <div className="text-center" style={{ transform: "translateZ(45px)" }}>
-          <p className="font-display text-2xl font-bold text-white mb-1" data-testid={`mentor-name-${i}`}>{m.name}</p>
+        {/* details */}
+        <div className="flex-1 p-8 sm:p-10 flex flex-col justify-center" style={{ transform: "translateZ(50px)" }}>
+          <p className="font-mono text-[9px] uppercase tracking-[0.25em] text-zinc-500 mb-4">One Stock Academy</p>
+          <p className="font-display text-3xl sm:text-4xl font-bold text-white mb-1" data-testid={`mentor-name-${i}`}>{m.name}</p>
           <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-500 mb-5">{m.role}</p>
-          <p className="text-zinc-400 text-sm leading-relaxed mb-6 min-h-[60px]">{m.bio}</p>
-          <div className="inline-flex items-center gap-2 border border-green-500/30 bg-green-500/5 px-4 py-2">
+          <p className="text-zinc-400 text-sm leading-relaxed mb-8">{m.bio}</p>
+          <div className="inline-flex items-center gap-2 self-start border border-green-500/30 bg-green-500/5 px-4 py-2">
             <span className="w-1.5 h-1.5 bg-green-500 rounded-full" />
             <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-green-500">{m.stat}</span>
           </div>

@@ -428,7 +428,7 @@ export default function Home() {
             Practitioners the market <span className="italic text-zinc-400">already follows</span>
           </h2>
         </motion.div>
-        <div className="grid md:grid-cols-3 gap-6" style={{ perspective: 1600 }}>
+        <div className="flex flex-col gap-8 max-w-4xl mx-auto" style={{ perspective: 1600 }}>
           {MENTORS.map((m, i) => (
             <MentorCard key={m.name} m={m} i={i} />
           ))}
