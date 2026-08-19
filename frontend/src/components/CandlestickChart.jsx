@@ -57,7 +57,7 @@ export default function CandlestickChart() {
         ))}
         {CANDLES.map((cd, i) => {
           const up = cd.c >= cd.o;
-          const color = up ? "#16A34A" : "#DC2626";
+          const color = up ? "#111111" : "#9CA3AF";
           const x = i * bw + bw / 2;
           const bodyY = y(Math.max(cd.o, cd.c));
           const bodyH = Math.max(Math.abs(y(cd.o) - y(cd.c)), 3);
@@ -78,7 +78,7 @@ export default function CandlestickChart() {
         <motion.path
           d={`M ${CANDLES.map((cd, i) => `${i * bw + bw / 2},${y((cd.o + cd.c) / 2)}`).join(" L ")}`}
           fill="none"
-          stroke="#D97706"
+          stroke="#737373"
           strokeWidth="1.5"
           strokeDasharray="4 4"
           initial={{ pathLength: 0 }}

@@ -12,7 +12,7 @@ import {
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import TickerTape from "@/components/TickerTape";
-import CandlestickChart from "@/components/CandlestickChart";
+import HeroScene from "@/components/HeroScene";
 import {
   Accordion,
   AccordionContent,
@@ -87,30 +87,39 @@ export default function Home() {
       <Navbar />
 
       {/* HERO */}
-      <section data-testid="hero-section" className="max-w-7xl mx-auto px-6 sm:px-10 pt-16 sm:pt-24 pb-20">
-        <div className="grid lg:grid-cols-12 gap-12 lg:gap-8 items-center">
-          <div className="lg:col-span-6">
+      <section data-testid="hero-section" className="relative bg-ink text-paper overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <HeroScene />
+        </div>
+        <div className="absolute inset-0 z-[1] pointer-events-none bg-gradient-to-b from-ink/50 via-transparent to-ink" />
+        <div className="absolute inset-0 z-[1] pointer-events-none bg-[radial-gradient(ellipse_at_center,transparent_35%,#0B1021_100%)]" />
+        <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-10 min-h-[92vh] flex flex-col justify-center py-24">
+          <div className="max-w-3xl">
             <motion.p
-              {...fadeUp}
-              className="font-mono text-[11px] uppercase tracking-[0.25em] text-bull mb-6"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.2 }}
+              className="font-mono text-[11px] uppercase tracking-[0.25em] text-paper/50 mb-6"
               data-testid="hero-eyebrow"
             >
               Trading Education · Online &amp; Offline
             </motion.p>
             <motion.h1
-              {...fadeUp}
-              transition={{ ...fadeUp.transition, delay: 0.1 }}
-              className="font-display text-5xl sm:text-6xl lg:text-7xl font-medium tracking-tighter leading-[0.95] text-ink"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.35 }}
+              className="font-display text-5xl sm:text-6xl lg:text-7xl font-medium tracking-tighter leading-[0.95] text-paper"
               data-testid="hero-headline"
             >
               Learn the market.
               <br />
-              <span className="italic text-ink-soft">Master the process.</span>
+              <span className="italic text-paper/50">Master the process.</span>
             </motion.h1>
             <motion.p
-              {...fadeUp}
-              transition={{ ...fadeUp.transition, delay: 0.2 }}
-              className="mt-6 text-base sm:text-lg text-ink/70 leading-relaxed max-w-xl"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.5 }}
+              className="mt-6 text-base sm:text-lg text-paper/60 leading-relaxed max-w-xl"
               data-testid="hero-subhead"
             >
               One Stock Academy teaches you to trade with structure — a complete curriculum,
@@ -118,14 +127,15 @@ export default function Home() {
               no shortcuts. Just skill, built one session at a time.
             </motion.p>
             <motion.div
-              {...fadeUp}
-              transition={{ ...fadeUp.transition, delay: 0.3 }}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.65 }}
               className="mt-10 flex flex-wrap items-center gap-4"
             >
               <Link
                 to="/enroll"
                 data-testid="hero-enroll-btn"
-                className="group bg-bull text-white font-mono text-xs uppercase tracking-[0.18em] px-8 py-4 flex items-center gap-2 hover:bg-ink transition-colors"
+                className="group bg-paper text-ink font-mono text-xs uppercase tracking-[0.18em] px-8 py-4 flex items-center gap-2 hover:bg-white transition-colors"
               >
                 Enroll Now
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -133,31 +143,32 @@ export default function Home() {
               <a
                 href="#courses"
                 data-testid="hero-courses-link"
-                className="font-mono text-xs uppercase tracking-[0.18em] text-ink border border-ink/20 px-8 py-4 hover:border-gold hover:text-gold transition-colors"
+                className="font-mono text-xs uppercase tracking-[0.18em] text-paper border border-paper/25 px-8 py-4 hover:border-paper hover:bg-paper/5 transition-colors"
               >
                 View Courses
               </a>
             </motion.div>
-            <motion.div
-              {...fadeUp}
-              transition={{ ...fadeUp.transition, delay: 0.4 }}
-              className="mt-12 flex flex-wrap gap-x-10 gap-y-4 font-mono text-[11px] uppercase tracking-[0.15em] text-ink-muted"
-              data-testid="hero-facts"
-            >
-              <span>Live Classes</span>
-              <span className="text-ink/20">/</span>
-              <span>One-Time Fee</span>
-              <span className="text-ink/20">/</span>
-              <span>Beginner Friendly</span>
-            </motion.div>
           </div>
-          <div className="lg:col-span-6">
-            <CandlestickChart />
-          </div>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 1 }}
+            className="mt-16 flex flex-wrap gap-x-10 gap-y-4 font-mono text-[11px] uppercase tracking-[0.15em] text-paper/40"
+            data-testid="hero-facts"
+          >
+            <span>Live Classes</span>
+            <span className="text-paper/15">/</span>
+            <span>One-Time Fee</span>
+            <span className="text-paper/15">/</span>
+            <span>Beginner Friendly</span>
+          </motion.div>
         </div>
+        <p className="absolute bottom-5 right-6 sm:right-10 z-10 font-mono text-[10px] uppercase tracking-[0.2em] text-paper/30">
+          Live 3D render · move your cursor
+        </p>
       </section>
 
-      <TickerTape />
+      <TickerTape dark />
 
       {/* WHY */}
       <section id="why" data-testid="why-section" className="max-w-7xl mx-auto px-6 sm:px-10 py-24 sm:py-32">
@@ -357,7 +368,7 @@ export default function Home() {
             <Link
               to="/enroll"
               data-testid="final-cta-btn"
-              className="group inline-flex items-center gap-2 bg-bull text-white font-mono text-xs uppercase tracking-[0.18em] px-8 py-4 hover:bg-gold hover:text-ink transition-colors"
+              className="group inline-flex items-center gap-2 bg-paper text-ink font-mono text-xs uppercase tracking-[0.18em] px-8 py-4 hover:bg-white transition-colors"
             >
               Enroll Now
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />

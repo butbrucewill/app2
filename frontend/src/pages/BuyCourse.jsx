@@ -256,7 +256,7 @@ export default function BuyCourse() {
                 type="submit"
                 data-testid="pay-now-btn"
                 disabled={loading}
-                className="mt-8 w-full bg-bull text-white font-mono text-xs uppercase tracking-[0.18em] px-6 py-4 hover:bg-gold hover:text-ink transition-colors disabled:opacity-60 flex items-center justify-center gap-2"
+                className="mt-8 w-full bg-paper text-ink font-mono text-xs uppercase tracking-[0.18em] px-6 py-4 hover:bg-white transition-colors disabled:opacity-60 flex items-center justify-center gap-2"
               >
                 {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Lock className="w-4 h-4" />}
                 {loading ? "Preparing payment…" : `Pay ${inr(orderSummary.total)}`}

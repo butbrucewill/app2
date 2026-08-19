@@ -15,17 +15,17 @@ module.exports = {
       colors: {
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
-        paper: '#F7F5F2',
-        'paper-deep': '#EFEBE5',
+        paper: '#FFFFFF',
+        'paper-deep': '#F4F4F3',
         ink: {
           DEFAULT: '#0B1021',
           soft: '#333A52',
           muted: '#64748B',
         },
-        bull: '#166534',
-        'chart-green': '#16A34A',
-        'chart-red': '#DC2626',
-        gold: '#D97706',
+        bull: '#0A0A0A',
+        'chart-green': '#111111',
+        'chart-red': '#9CA3AF',
+        gold: '#A3A3A3',
         card: {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))'

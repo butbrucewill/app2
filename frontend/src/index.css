@@ -6,7 +6,7 @@
 
 @layer base {
     :root {
-        --background: 37 23% 96%;
+        --background: 0 0% 100%;
         --foreground: 232 51% 8%;
         --card: 0 0% 100%;
         --card-foreground: 232 51% 8%;
@@ -24,13 +24,13 @@
         --destructive-foreground: 0 0% 98%;
         --border: 232 51% 8% / 0.1;
         --input: 232 30% 80%;
-        --ring: 142 64% 24%;
+        --ring: 0 0% 4%;
         --radius: 0.125rem;
-        --paper: 37 23% 96%;
-        --paper-deep: 34 22% 91%;
+        --paper: 0 0% 100%;
+        --paper-deep: 0 0% 96%;
         --ink: 232 51% 8%;
-        --bull: 142 64% 24%;
-        --gold: 38 92% 44%;
+        --bull: 0 0% 4%;
+        --gold: 0 0% 64%;
     }
 }
 

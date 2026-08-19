@@ -20,6 +20,7 @@ Build a 2-page website for One Stock Academy, a trading education company (onlin
 - Enrollments stored in `enrollments` collection with status created → paid / failed.
 
 ## Implemented (2026-08-19)
+- Redesign v2 (2026-08-19): black-and-white monochrome theme per user feedback, then v3 3D hero per user feedback — full-viewport dark hero with a live React Three Fiber scene: 3D candlestick chart rising from a glowing grid floor, star particle field, fog depth, staggered candle grow-in animation, cursor parallax. Dark navbar + ticker. Rest of page stays light monochrome editorial.
 - Home page: hero with animated Framer Motion candlestick chart, react-fast-marquee ticker tape, Why OSA bento grid, pricing cards (mono prices, gold offline highlight), mentor section (PLACEHOLDER name/photo/bio — founder details not provided), FAQ accordion, final CTA banner, ink footer with monospace risk disclosure.
 - Buy Course page (/enroll, ?course=online|offline): format selector, student details form, order summary, pay button → Razorpay checkout (live) or demo modal (keys absent).
 - Payment result page (/payment/result): verifies enrollment server-side; success panel (reference, course, amount, next steps) and failure panel with retry.
