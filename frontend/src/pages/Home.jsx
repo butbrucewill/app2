@@ -102,18 +102,23 @@ const MENTORS = [
     bio: "Leads the online cohort experience, known for breaking down price action and market structure for beginners.",
     stat: "750k+ on Instagram",
     photo: "/mentor-aman.jpg",
+    focus: "45% 62%",
   },
   {
     name: "Rajat Sharma",
     role: "Founding Director",
     bio: "Builds and leads One Stock Academy's trading community, translating market moves into content.",
     stat: "150k+ traders on Instagram",
+    photo: "/mentor-rajat.jpg",
+    focus: "50% 28%",
   },
   {
     name: "Rishabh Mishra",
     role: "Founding Director",
     bio: "SEBI-registered trader and the driving force behind the academy's curriculum and mentorship philosophy. Leads flagship live sessions and 1:1 strategy audits.",
     stat: "SEBI-Registered",
+    photo: "/mentor-rishabh.jpg",
+    focus: "50% 32%",
   },
 ];
 
