@@ -1,0 +1,117 @@
+{
+  "theme": "light",
+  "typography": {
+    "headings": {
+      "font_family": "Cormorant Garamond, serif",
+      "weights": ["400", "500", "600"],
+      "usage": "H1, H2, H3, prominent quotes",
+      "style": "tracking-tight leading-none"
+    },
+    "body": {
+      "font_family": "Manrope, sans-serif",
+      "weights": ["300", "400", "500"],
+      "usage": "Paragraphs, lists, standard UI text",
+      "style": "leading-relaxed text-[#0B1021]/80"
+    },
+    "monospace": {
+      "font_family": "IBM Plex Mono, monospace",
+      "weights": ["400", "500"],
+      "usage": "Prices, ticker symbols, data points, risk disclosure",
+      "style": "tracking-tight text-sm uppercase"
+    },
+    "hierarchy": {
+      "h1": "text-5xl sm:text-6xl lg:text-7xl font-medium tracking-tighter text-[#0B1021]",
+      "h2": "text-4xl sm:text-5xl lg:text-5xl font-medium tracking-tight text-[#0B1021]",
+      "h3": "text-2xl sm:text-3xl font-medium tracking-tight text-[#0B1021]",
+      "body": "text-base sm:text-lg text-[#0B1021]/80",
+      "label": "text-xs font-mono tracking-[0.2em] uppercase text-[#0B1021]/60"
+    }
+  },
+  "colors": {
+    "background": {
+      "primary": "#F7F5F2",
+      "secondary": "#EFEBE5",
+      "paper": "#FFFFFF"
+    },
+    "text": {
+      "primary": "#0B1021",
+      "secondary": "#333A52",
+      "muted": "#64748B"
+    },
+    "accent": {
+      "green": "#166534",
+      "gold": "#D97706",
+      "chart_red": "#DC2626",
+      "chart_green": "#16A34A"
+    }
+  },
+  "visual_enhancers": {
+    "textures": "Use soft noise/grain overlay (opacity 2-3%) on the main background to enhance the 'paper/editorial' feel.",
+    "borders": "1px solid border-[#0B1021]/10 for cards and dividers. No heavy drop shadows. Rely on structural grid lines.",
+    "shapes": "Sharp corners or very minimal rounded corners (rounded-none or rounded-sm). Avoid pill-shaped buttons except for specific call-outs; stick to sharp, editorial rectangles."
+  },
+  "layouts": {
+    "grid_system": "Swiss grid. 12-column foundation. Use generous spacing (p-8, p-12, p-24).",
+    "bento_grid": "For 'Why One Stock Academy' and 'Courses', use architectural bento layouts with 1px borders dividing the sections.",
+    "spacing": "Use py-24 or py-32 for section padding. Negative space is a primary design tool here."
+  },
+  "motion": {
+    "scrolling": "Lenis smooth scroll for momentum.",
+    "ticker_tape": "Use react-fast-marquee for the continuous financial ticker. Monospace font, uppercase, separated by distinct dots or arrows. Subtle opacity so it doesn't overpower the hero.",
+    "entrance": "Staggered fade-up for text elements. Framer Motion for the animated candlestick chart in the hero (bars growing, wicks extending).",
+    "hover_states": "Buttons have a subtle background color shift. Cards have a 1px border color change to gold or green."
+  },
+  "accessibility": {
+    "contrast": "Ensure deep ink text on off-white background exceeds 4.5:1 WCAG.",
+    "focus": "Focus rings must use the green accent.",
+    "aria": "Add aria-hidden to the decorative ticker tape."
+  },
+  "components": {
+    "Hero": "Deep ink/navy heading. A stylized, non-cliché candlestick chart visual (built with Framer Motion or pure SVG/CSS) integrated into the layout. A scrolling ticker tape at the bottom or top of the hero using react-fast-marquee.",
+    "ValueProps": "4 bento-style cards. Clean iconography (lucide-react). Monospace numbering (01, 02).",
+    "PricingCards": "Editorial table/card hybrid. Online vs Offline. Emphasize the ₹49,000 and ₹99,000 in IBM Plex Mono. Use the gold/amber accent for the 'Most Popular' or 'Offline' highlights.",
+    "MentorProfile": "Editorial magazine layout. Image of the mentor, deep serif quote, clean sans body.",
+    "BuyCourseFlow": "Clean, distraction-free checkout interface mimicking a hosted gateway. Form uses HTML/Tailwind inputs customized to remove the default look (sharp corners, ink borders)."
+  },
+  "media": {
+    "image_urls": [
+      {
+        "url": "https://images.unsplash.com/photo-1612538498613-35c5c8d675c4?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxODd8MHwxfHNlYXJjaHwyfHxlbGVnYW50JTIwYWJzdHJhY3QlMjBwYXBlciUyMHRleHR1cmUlMjBvZmYlMjB3aGl0ZXxlbnwwfHx8fDE3ODcxMjY3NTV8MA&ixlib=rb-4.1.0&q=85",
+        "category": "background",
+        "description": "Subtle off-white paper canvas texture to layer under the background with low opacity."
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1601655781320-205e34c94eb1?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1MDZ8MHwxfHNlYXJjaHwzfHxwcm9mZXNzaW9uYWwlMjB0ZWFjaGVyJTIwcG9ydHJhaXR8ZW58MHx8fHwxNzg3MTI2NzU1fDA&ixlib=rb-4.1.0&q=85",
+        "category": "mentor_profile",
+        "description": "Professional practitioner mentor portrait (Man in gray suit holding notebook)."
+      },
+      {
+        "url": "https://images.pexels.com/photos/9159042/pexels-photo-9159042.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        "category": "classroom",
+        "description": "Modern classroom students learning."
+      }
+    ]
+  },
+  "3d_libraries": {
+    "strategy": "No 3D needed. Focus on 2D motion graphics (Framer Motion) for the candlestick chart to maintain the flat, editorial print design aesthetic."
+  },
+  "instructions_to_main_agent": [
+    "Install `lucide-react`, `framer-motion`, `react-fast-marquee`, `clsx`, `tailwind-merge`.",
+    "Set the Tailwind config to include the fonts: 'Cormorant Garamond', 'Manrope', 'IBM Plex Mono'. Fetch these from Google Fonts in your index.css",
+    "Implement the 'Swiss High-Contrast' archetype but softened with the warm off-white (#F7F5F2) and deep ink (#0B1021) colors. DO NOT use generic Vercel/Stripe styles.",
+    "The Hero MUST contain an animated candlestick chart constructed using div/svg and Framer Motion. DO NOT make it look like a typical dark terminal. Use the off-white background with crisp green and red candlesticks.",
+    "Use react-fast-marquee for a live-style scrolling ticker tape (e.g. NIFTY 50 \u25B2 22,453.20 | BANKNIFTY \u25BC 48,123.50).",
+    "In the pricing section, format the prices cleanly (\u20B949,000) using the monospace font and highlight with gold/amber.",
+    "Risk disclosure footer must be muted, monospace, and explicitly state that this is education, not investment advice.",
+    "For the Buy Course page, create a hosted checkout redirect feel. Remove header navigation elements on this page to maximize conversion focus."
+  ],
+  "UNIVERSAL GUIDELINES FOR MAIN AGENT": [
+    "You tend to converge toward generic, 'on distribution' outputs. Avoid this: make creative, distinctive frontends that surprise and delight.",
+    "Use 2-3x more spacing than feels comfortable. Cramped designs look cheap. Padding sizes should jump from p-8 to p-16 to p-24.",
+    "Every interaction needs micro-animations - hover states, transitions, entrance animations. Static = dead.",
+    "Create depth through layered design elements with z-index hierarchy, NOT heavy drop shadows. Use 1px borders for the editorial look.",
+    "All interactive and key informational elements MUST include a `data-testid` attribute.",
+    "DO NOT use complete `transparent` background in header, overlays, any surface that has content under it.",
+    "Never use AI assistant Emoji characters like \ud83e\udd16\ud83e\udde0\ud83d\udcad\ud83d\udca1\ud83d\udd2e\ud83c\udfaf etc for icons."
+  ]
+}
