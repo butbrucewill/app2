@@ -40,20 +40,26 @@ export default function CustomCursor() {
   if (!enabled) return null;
 
   return (
-    <div className="fixed inset-0 z-[70] pointer-events-none mix-blend-difference" data-testid="custom-cursor" aria-hidden="true">
-      <motion.div className="absolute top-0 bottom-0 w-px bg-white/20" style={{ left: lineX }} />
-      <motion.div className="absolute left-0 right-0 h-px bg-white/20" style={{ top: lineY }} />
+    <>
+      <div className="fixed inset-0 z-[70] pointer-events-none mix-blend-difference" data-testid="custom-cursor" aria-hidden="true">
+        <motion.div className="absolute top-0 bottom-0 w-px bg-white/20" style={{ left: lineX }} />
+        <motion.div className="absolute left-0 right-0 h-px bg-white/20" style={{ top: lineY }} />
+        <motion.div
+          className="absolute w-8 h-8 -ml-4 -mt-4 border border-white/50 rounded-full"
+          style={{ left: ringX, top: ringY }}
+        />
+        <motion.div className="absolute w-1.5 h-1.5 -ml-[3px] -mt-[3px] bg-white" style={{ left: lineX, top: lineY }} />
+      </div>
       <motion.div
-        className="absolute w-8 h-8 -ml-4 -mt-4 border border-white/50 rounded-full"
-        style={{ left: ringX, top: ringY }}
-      />
-      <motion.div className="absolute w-1.5 h-1.5 -ml-[3px] -mt-[3px] bg-white" style={{ left: lineX, top: lineY }} />
-      <motion.div
-        className="absolute ml-4 mt-3 font-mono text-[10px] tracking-wider text-white/70 whitespace-nowrap"
+        className="fixed z-[70] pointer-events-none ml-4 mt-3 font-mono text-[10px] tracking-wider whitespace-nowrap"
         style={{ left: lineX, top: lineY }}
+        aria-hidden="true"
       >
-        OSA {label.p} <span className={label.up ? "text-white" : "text-white/50"}>{label.up ? "▲" : "▼"}</span>
+        <span className="text-white/60">OSA </span>
+        <span className={label.up ? "text-green-500" : "text-red-500"}>
+          {label.p} {label.up ? "▲" : "▼"}
+        </span>
       </motion.div>
-    </div>
+    </>
   );
 }
