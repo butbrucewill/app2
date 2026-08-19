@@ -297,14 +297,14 @@ export default function Home() {
       {/* VISION & TRACK RECORD */}
       <section id="vision" data-testid="vision-section" className="max-w-7xl mx-auto px-6 sm:px-10 py-24 sm:py-32">
         <div className="grid md:grid-cols-2 gap-6 mb-6">
-          <motion.div {...fadeUp} className="bg-white/[0.04] backdrop-blur-xl border border-white/10 p-8 sm:p-12">
+          <motion.div {...fadeUp} className="bg-black/70 md:bg-white/[0.04] backdrop-blur-xl border border-white/10 p-8 sm:p-12">
             <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-zinc-500 mb-6">Founder's Vision</p>
             <p className="font-display text-2xl sm:text-3xl font-bold text-white leading-snug">
               Empower the youth of India with trading skills they can hold a strong command over the
               financial economy with — and help India realise <span className="italic text-zinc-400">"Viksit Bharat @ 2047".</span>
             </p>
           </motion.div>
-          <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.1 }} className="bg-white/[0.04] backdrop-blur-xl border border-white/10 p-8 sm:p-12">
+          <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.1 }} className="bg-black/70 md:bg-white/[0.04] backdrop-blur-xl border border-white/10 p-8 sm:p-12">
             <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-zinc-500 mb-6">Mission Mode</p>
             <p className="font-display text-2xl sm:text-3xl font-bold text-white leading-snug">
               Relevant, curated course material delivered by trading experts in a time-bound manner —
@@ -316,7 +316,7 @@ export default function Home() {
           {...fadeUp}
           transition={{ ...fadeUp.transition, delay: 0.15 }}
           data-testid="track-record"
-          className="grid grid-cols-1 sm:grid-cols-3 border border-white/10 divide-y sm:divide-y-0 sm:divide-x divide-white/10 bg-black/30 backdrop-blur-sm"
+          className="grid grid-cols-1 sm:grid-cols-3 border border-white/10 divide-y sm:divide-y-0 sm:divide-x divide-white/10 bg-black/70 md:bg-black/30 backdrop-blur-sm"
         >
           {[
             ["1.9M+", "Combined social community"],
@@ -348,7 +348,7 @@ export default function Home() {
           <motion.div
             {...fadeUp}
             data-testid="fmp-phases"
-            className="grid grid-cols-1 sm:grid-cols-5 border border-white/10 divide-y sm:divide-y-0 sm:divide-x divide-white/10 bg-black/30 backdrop-blur-sm mb-16"
+            className="grid grid-cols-1 sm:grid-cols-5 border border-white/10 divide-y sm:divide-y-0 sm:divide-x divide-white/10 bg-black/70 md:bg-black/30 backdrop-blur-sm mb-16"
           >
             {PHASES.map((p, i) => (
               <div key={p} className="p-6" data-testid={`phase-${i + 1}`}>
