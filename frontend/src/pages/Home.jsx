@@ -102,7 +102,7 @@ const MENTORS = [
     bio: "Leads the online cohort experience, known for breaking down price action and market structure for beginners.",
     stat: "750k+ on Instagram",
     photo: "/mentor-aman.jpg",
-    focus: "45% 62%",
+    focus: "52% 58%",
   },
   {
     name: "Rajat Sharma",
@@ -110,7 +110,7 @@ const MENTORS = [
     bio: "Builds and leads One Stock Academy's trading community, translating market moves into content.",
     stat: "150k+ traders on Instagram",
     photo: "/mentor-rajat.jpg",
-    focus: "50% 28%",
+    focus: "50% 18%",
   },
   {
     name: "Rishabh Mishra",
