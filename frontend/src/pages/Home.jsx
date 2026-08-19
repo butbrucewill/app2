@@ -14,6 +14,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import TickerTape from "@/components/TickerTape";
 import ScrollExperience, { scrollState } from "@/components/ScrollExperience";
+import EditorialMarquee from "@/components/EditorialMarquee";
 import TiltCard from "@/components/TiltCard";
 import Magnetic from "@/components/Magnetic";
 import {
@@ -167,17 +168,31 @@ export default function Home() {
             >
               Trading Education · Online &amp; Offline
             </motion.p>
-            <motion.h1
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.35 }}
+            <h1
               className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tighter leading-[0.95] text-white [text-shadow:0_2px_40px_rgba(0,0,0,0.9)]"
               data-testid="hero-headline"
             >
-              Learn the market.
-              <br />
-              <span className="italic text-zinc-400">Master the process.</span>
-            </motion.h1>
+              <span className="block overflow-hidden">
+                <motion.span
+                  className="block"
+                  initial={{ y: "110%" }}
+                  animate={{ y: 0 }}
+                  transition={{ duration: 1, delay: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                >
+                  Learn the market.
+                </motion.span>
+              </span>
+              <span className="block overflow-hidden">
+                <motion.span
+                  className="block italic text-zinc-400"
+                  initial={{ y: "110%" }}
+                  animate={{ y: 0 }}
+                  transition={{ duration: 1, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                >
+                  Master the process.
+                </motion.span>
+              </span>
+            </h1>
             <motion.p
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
@@ -235,6 +250,8 @@ export default function Home() {
 
       <TickerTape dark />
 
+      <EditorialMarquee />
+
       {/* WHY */}
       <section id="why" data-testid="why-section" className="max-w-7xl mx-auto px-6 sm:px-10 py-24 sm:py-32">
         <motion.div {...fadeUp} className="max-w-2xl mb-16">
@@ -255,7 +272,7 @@ export default function Home() {
               }`}
             >
               <div className="flex items-start justify-between mb-8">
-                <span className="font-mono text-sm text-zinc-500">{v.n}</span>
+                <span className="font-mono text-sm text-zinc-500">Chapter {v.n}</span>
                 <v.icon className="w-6 h-6 text-zinc-600 group-hover:text-white transition-colors" strokeWidth={1.5} />
               </div>
               <h3 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-white mb-4">
