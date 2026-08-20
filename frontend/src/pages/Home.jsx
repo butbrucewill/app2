@@ -15,7 +15,6 @@ import Footer from "@/components/Footer";
 import TickerTape from "@/components/TickerTape";
 import HeroVideo from "@/components/HeroVideo";
 import BannerPhotos from "@/components/BannerPhotos";
-import PartnerMarquee from "@/components/PartnerMarquee";
 import ChartQuiz from "@/components/ChartQuiz";
 import ResultsWall from "@/components/ResultsWall";
 import EditorialMarquee from "@/components/EditorialMarquee";
@@ -372,8 +371,6 @@ export default function Home() {
           ))}
         </div>
       </section>
-
-      <PartnerMarquee />
 
       {/* VISION & TRACK RECORD */}
       <section id="vision" data-testid="vision-section" className="max-w-7xl mx-auto px-6 sm:px-10 py-24 sm:py-32">

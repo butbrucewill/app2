@@ -5,8 +5,6 @@ import { toast } from "sonner";
 import axios from "axios";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
-const WHATSAPP_NUMBER = "918882350889";
-const WHATSAPP_LINK = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("Hi! I want to know about One Stock Academy courses.")}`;
 
 const CHIPS = ["What is Buniyaad?", "Online vs Offline?", "What are the fees?"];
 
@@ -64,18 +62,9 @@ function LeadModal({ open, onClose }) {
                   <Send className="w-5 h-5 text-green-500" />
                 </span>
                 <h2 className="font-display text-3xl font-bold text-white mb-3">You're on the list.</h2>
-                <p className="text-zinc-400 text-sm leading-relaxed mb-6">
-                  Our team will reach out to you on WhatsApp shortly with program details and batch information.
+                <p className="text-zinc-400 text-sm leading-relaxed">
+                  Our team will reach out to you shortly with program details and batch information.
                 </p>
-                <a
-                  href={WHATSAPP_LINK}
-                  target="_blank"
-                  rel="noreferrer"
-                  data-testid="lead-whatsapp-direct"
-                  className="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.15em] text-[#25D366] border border-[#25D366]/40 px-5 py-3 hover:bg-[#25D366]/10 transition-colors"
-                >
-                  Message us directly on WhatsApp
-                </a>
               </div>
             ) : (
               <>
@@ -108,18 +97,10 @@ function LeadModal({ open, onClose }) {
                     Submit
                   </button>
                   <p className="text-[10px] text-zinc-600 leading-relaxed text-center">
-                    By submitting, you allow One Stock Academy to contact you via WhatsApp, call, or email
+                    By submitting, you allow One Stock Academy to contact you via call or email
                     with program updates.
                   </p>
                 </form>
-                <a
-                  href={WHATSAPP_LINK}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="block mt-4 text-center font-mono text-[10px] uppercase tracking-[0.15em] text-[#25D366] hover:text-white transition-colors"
-                >
-                  or message us directly on WhatsApp →
-                </a>
               </>
             )}
           </motion.div>
@@ -198,18 +179,6 @@ export default function FloatingActions() {
     <>
       <LeadModal open={leadOpen} onClose={() => setLeadOpen(false)} />
       <div className="fixed bottom-5 right-5 z-[85] flex flex-col items-end gap-3">
-        <motion.button
-          data-testid="whatsapp-btn"
-          onClick={() => setLeadOpen(true)}
-          whileHover={{ scale: 1.08 }}
-          whileTap={{ scale: 0.94 }}
-          aria-label="Chat with us on WhatsApp"
-          className="w-12 h-12 rounded-full bg-[#25D366] text-black flex items-center justify-center shadow-[0_0_30px_rgba(37,211,102,0.35)]"
-        >
-          <svg viewBox="0 0 24 24" className="w-6 h-6 fill-current" aria-hidden="true">
-            <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.87 9.87 0 0 0 4.74 1.21h.01c5.46 0 9.9-4.45 9.9-9.91a9.85 9.85 0 0 0-2.9-7.01A9.83 9.83 0 0 0 12.04 2m0 18.15h-.01a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24a8.2 8.2 0 0 1 8.24 8.25c0 4.54-3.7 8.23-8.24 8.23m4.52-6.16c-.25-.13-1.47-.72-1.7-.8-.22-.09-.39-.13-.55.12-.17.25-.64.8-.78.97-.14.17-.29.19-.54.06-.25-.12-1.05-.38-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.01-.38.11-.51.11-.11.25-.29.37-.43.12-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.13-.55-1.34-.76-1.83-.2-.48-.4-.42-.55-.43-.14-.01-.31-.01-.47-.01-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18-.06-.1-.22-.16-.47-.28" />
-          </svg>
-        </motion.button>
         <motion.button
           data-testid="chat-toggle-btn"
           onClick={() => setOpen((o) => !o)}
