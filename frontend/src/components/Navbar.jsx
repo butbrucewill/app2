@@ -24,7 +24,7 @@ export default function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-6 sm:px-10 h-16 flex items-center justify-between">
         <Link to="/" data-testid="nav-logo" className="flex items-center">
-          <img src="/logo-white.png" alt="One Stock Academy" className="h-10 w-auto invert" />
+          <img src="/logo-blue.png" alt="One Stock Academy" className="h-10 w-auto" />
         </Link>
         <nav className="hidden md:flex items-center gap-8 font-mono text-[11px] uppercase tracking-[0.18em] text-paper/60">
           <a href="/#why" data-testid="nav-link-why" className="hover:text-paper transition-colors">Why Us</a>
@@ -66,7 +66,7 @@ export default function Navbar() {
             className="fixed inset-0 z-[60] bg-[#050505] md:hidden flex flex-col"
           >
             <div className="h-16 px-6 flex items-center justify-between border-b border-white/10">
-              <img src="/logo-white.png" alt="One Stock Academy" className="h-10 w-auto invert" />
+              <img src="/logo-blue.png" alt="One Stock Academy" className="h-10 w-auto" />
               <button
                 data-testid="mobile-menu-close-btn"
                 onClick={() => setOpen(false)}
@@ -88,7 +88,7 @@ export default function Navbar() {
                   transition={{ delay: 0.15 + i * 0.06, duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
                   className="font-display text-4xl font-bold text-white py-3 border-b border-white/5 hover:text-zinc-400 transition-colors flex items-baseline gap-4"
                 >
-                  <span className="font-mono text-xs text-zinc-600">0{i + 1}</span>
+                  <span className="font-mono text-xs text-brand/70">0{i + 1}</span>
                   {l.label}
                 </motion.a>
               ))}

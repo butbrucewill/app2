@@ -102,7 +102,7 @@ export default function Admin() {
           <div data-testid="admin-dashboard">
             <div className="flex flex-wrap items-end justify-between gap-4 mb-10">
               <div>
-                <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-zinc-500 mb-2">Registered Students</p>
+                <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-brand mb-2">Registered Students</p>
                 <h1 className="font-display text-4xl sm:text-5xl font-bold tracking-tight text-white">Enrollments</h1>
               </div>
               <div className="flex gap-3">

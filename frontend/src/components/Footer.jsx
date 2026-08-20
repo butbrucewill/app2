@@ -9,7 +9,7 @@ export default function Footer() {
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10">
           <div>
             <div className="mb-4">
-              <img src="/logo-white.png" alt="One Stock Academy" className="h-11 w-auto invert" />
+              <img src="/logo-blue.png" alt="One Stock Academy" className="h-11 w-auto" />
             </div>
             <p className="text-sm text-paper/60 leading-relaxed mb-6">
               The one-stop solution to every trading worry — outcome-oriented, high-quality
@@ -28,7 +28,7 @@ export default function Footer() {
             </div>
           </div>
           <div>
-            <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-paper/40 mb-4">Explore</p>
+            <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-brand mb-4">Explore</p>
             <div className="flex flex-col gap-2.5 text-sm text-paper/70">
               <a href="/#why" className="hover:text-paper transition-colors">Why One Stock Academy</a>
               <a href="/#mentor" className="hover:text-paper transition-colors">Mentors</a>
@@ -39,7 +39,7 @@ export default function Footer() {
             </div>
           </div>
           <div>
-            <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-paper/40 mb-4">Program</p>
+            <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-brand mb-4">Program</p>
             <div className="flex flex-col gap-2.5 text-sm text-paper/70">
               <a href="/enroll?course=online" className="hover:text-paper transition-colors">
                 Buniyaad — Online <span className="font-mono text-xs text-paper/40">₹49,000</span>
@@ -51,7 +51,7 @@ export default function Footer() {
             </div>
           </div>
           <div>
-            <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-paper/40 mb-4">Reach Us</p>
+            <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-brand mb-4">Reach Us</p>
             <div className="flex flex-col gap-2.5 text-sm text-paper/70">
               <span className="flex items-center gap-2"><Phone className="w-3.5 h-3.5 text-paper/40" /> Number being added</span>
               <span className="flex items-center gap-2"><Mail className="w-3.5 h-3.5 text-paper/40" /> Email being added</span>

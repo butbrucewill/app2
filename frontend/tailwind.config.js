@@ -23,6 +23,8 @@ module.exports = {
           muted: '#64748B',
         },
         bull: '#0A0A0A',
+        brand: '#7C9AFF',
+        'brand-deep': '#2B40B0',
         'chart-green': '#111111',
         'chart-red': '#9CA3AF',
         gold: '#A3A3A3',

@@ -173,7 +173,7 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.2 }}
-              className="font-mono text-[11px] uppercase tracking-[0.25em] text-paper/50 mb-6"
+              className="font-mono text-[11px] uppercase tracking-[0.25em] text-brand mb-6"
               data-testid="hero-eyebrow"
             >
               Trading Education · Online &amp; Offline
@@ -265,7 +265,7 @@ export default function Home() {
       {/* WHY */}
       <section id="why" data-testid="why-section" className="max-w-7xl mx-auto px-6 sm:px-10 py-24 sm:py-32">
         <motion.div {...fadeUp} className="max-w-2xl mb-16">
-          <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-zinc-500 mb-4">Why One Stock Academy</p>
+          <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-brand mb-4">Why One Stock Academy</p>
           <h2 className="font-display text-4xl sm:text-5xl font-bold tracking-tight text-white leading-tight">
             Built for people who want to trade <span className="italic text-zinc-400">properly</span>
           </h2>
@@ -282,7 +282,7 @@ export default function Home() {
               }`}
             >
               <div className="flex items-start justify-between mb-8">
-                <span className="font-mono text-sm text-zinc-500">Chapter {v.n}</span>
+                <span className="font-mono text-sm text-brand">Chapter {v.n}</span>
                 <v.icon className="w-6 h-6 text-zinc-600 group-hover:text-white transition-colors" strokeWidth={1.5} />
               </div>
               <h3 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-white mb-4">
@@ -297,7 +297,7 @@ export default function Home() {
       {/* MENTORS */}
       <section id="mentor" data-testid="mentor-section" className="max-w-7xl mx-auto px-6 sm:px-10 py-24 sm:py-32">
         <motion.div {...fadeUp} className="max-w-2xl mb-16">
-          <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-zinc-500 mb-4">Your Mentors</p>
+          <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-brand mb-4">Your Mentors</p>
           <h2 className="font-display text-4xl sm:text-5xl font-bold tracking-tight text-white leading-tight">
             Practitioners the market <span className="italic text-zinc-400">already follows</span>
           </h2>
@@ -313,14 +313,14 @@ export default function Home() {
       <section id="vision" data-testid="vision-section" className="max-w-7xl mx-auto px-6 sm:px-10 py-24 sm:py-32">
         <div className="grid md:grid-cols-2 gap-6 mb-6">
           <motion.div {...fadeUp} className="bg-black/70 md:bg-white/[0.04] backdrop-blur-xl border border-white/10 p-8 sm:p-12">
-            <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-zinc-500 mb-6">Founder's Vision</p>
+            <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-brand mb-6">Founder's Vision</p>
             <p className="font-display text-2xl sm:text-3xl font-bold text-white leading-snug">
               Empower the youth of India with trading skills they can hold a strong command over the
               financial economy with — and help India realise <span className="italic text-zinc-400">"Viksit Bharat @ 2047".</span>
             </p>
           </motion.div>
           <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.1 }} className="bg-black/70 md:bg-white/[0.04] backdrop-blur-xl border border-white/10 p-8 sm:p-12">
-            <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-zinc-500 mb-6">Mission Mode</p>
+            <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-brand mb-6">Mission Mode</p>
             <p className="font-display text-2xl sm:text-3xl font-bold text-white leading-snug">
               Relevant, curated course material delivered by trading experts in a time-bound manner —
               quality learning, <span className="italic text-zinc-400">outcome oriented.</span>
@@ -351,7 +351,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6 sm:px-10 py-24 sm:py-32">
           <motion.div {...fadeUp} className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-16">
             <div className="max-w-xl">
-              <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-zinc-500 mb-4">Our Learning Program</p>
+              <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-brand mb-4">Our Learning Program</p>
               <h2 className="font-display text-4xl sm:text-5xl font-bold tracking-tight text-white leading-tight">
                 Buniyaad — the Foundation Mentorship Program
               </h2>
@@ -367,7 +367,7 @@ export default function Home() {
           >
             {PHASES.map((p, i) => (
               <div key={p} className="p-6" data-testid={`phase-${i + 1}`}>
-                <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-green-500 mb-3">Phase 0{i + 1}</p>
+                <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-brand mb-3">Phase 0{i + 1}</p>
                 <p className="font-display text-lg font-bold text-white leading-snug">{p}</p>
               </div>
             ))}
@@ -445,7 +445,7 @@ export default function Home() {
       <section id="reviews" data-testid="reviews-section" className="border-y border-white/10 bg-black/40 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-6 sm:px-10 py-24 sm:py-32">
           <motion.div {...fadeUp} className="max-w-2xl mb-16">
-            <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-zinc-500 mb-4">Student Reviews</p>
+            <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-brand mb-4">Student Reviews</p>
             <h2 className="font-display text-4xl sm:text-5xl font-bold tracking-tight text-white leading-tight">
               In their own words
             </h2>
@@ -472,7 +472,7 @@ export default function Home() {
       <section id="faq" data-testid="faq-section" className="border-y border-white/10 bg-black/40 backdrop-blur-sm">
         <div className="max-w-4xl mx-auto px-6 sm:px-10 py-24 sm:py-32">
           <motion.div {...fadeUp} className="mb-14">
-            <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-zinc-500 mb-4">Questions</p>
+            <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-brand mb-4">Questions</p>
             <h2 className="font-display text-4xl sm:text-5xl font-bold tracking-tight text-white">
               Before you enroll
             </h2>
@@ -504,7 +504,7 @@ export default function Home() {
       <section data-testid="final-cta-section" className="max-w-7xl mx-auto px-6 sm:px-10 py-24 sm:py-32">
         <motion.div {...fadeUp} className="relative bg-white/[0.05] backdrop-blur-2xl border border-white/10 text-white p-10 sm:p-20 overflow-hidden">
           <div className="relative max-w-2xl">
-            <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-zinc-400 mb-6">Seats are batch-limited</p>
+            <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-brand mb-6">Seats are batch-limited</p>
             <h2 className="font-display text-4xl sm:text-6xl font-bold tracking-tight leading-[1.02] mb-8">
               Stop watching the market.
               <br />
