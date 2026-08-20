@@ -5,6 +5,7 @@ import { AnimatePresence } from "framer-motion";
 import Lenis from "lenis";
 import { Toaster } from "@/components/ui/sonner";
 import PageWipe from "@/components/PageWipe";
+import FloatingActions from "@/components/FloatingActions";
 import Home from "@/pages/Home";
 import BuyCourse from "@/pages/BuyCourse";
 import PaymentResult from "@/pages/PaymentResult";
@@ -43,6 +44,7 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <AnimatedRoutes />
+        <FloatingActions />
         <Toaster position="top-center" />
       </BrowserRouter>
     </div>

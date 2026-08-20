@@ -1,4 +1,5 @@
 from fastapi import FastAPI, APIRouter, HTTPException, Request
+from fastapi.responses import StreamingResponse
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -11,6 +12,7 @@ import re
 import ipaddress
 import httpx
 import jwt
+import json
 from html import escape
 from html.parser import HTMLParser
 from urllib.parse import urlparse
@@ -361,6 +363,82 @@ async def admin_enrollments(request: Request):
     require_admin(request)
     docs = await db.enrollments.find({}, {"_id": 0}).sort("created_at", -1).to_list(500)
     return {"enrollments": [{**public_enrollment(d), "phone": d.get("phone", "")} for d in docs]}
+
+
+EMERGENT_LLM_KEY = os.environ.get("EMERGENT_LLM_KEY", "")
+
+CHAT_SYSTEM = (
+    "You are the One Stock Academy website assistant. One Stock Academy is an Indian trading education company. "
+    "Facts you must use: The program is Buniyaad — the Foundation Mentorship Program, with 5 phases: Market & Price Action Foundation; Smart Money Concepts; Risk & Trade Management; Strategy Building & Execution; Psychology, Journaling & Performance. "
+    "Two formats, both one-time payment: Online live virtual classes at ₹49,000; Offline in-person classroom at ₹99,000. "
+    "Mentors: Aman Singh Negi (Chief Academic Officer, 750k+ on Instagram), Rajat Sharma (Founding Director, 150k+ on Instagram), Rishabh Mishra (Founding Director, SEBI-registered). "
+    "The academy never gives stock tips or signals and never guarantees profits — it is education only, not investment advice. "
+    "To enroll, visitors click Enroll Now, pick a batch, fill in their details, and pay; a confirmation email follows payment verification. "
+    "Keep replies short (2-4 sentences), friendly, and plain. Answer general trading-education questions helpfully. "
+    "If asked for stock tips, price targets, or guaranteed returns, politely refuse and explain the academy teaches process, not tips. "
+    "If asked about things not listed here (exact batch dates, venue address, contact numbers), say the team will confirm directly after enrollment or on WhatsApp."
+)
+
+_chat_sessions = {}
+_chat_rate = {}
+
+
+class ChatRequest(BaseModel):
+    session_id: str = Field(min_length=4, max_length=64)
+    message: str = Field(min_length=1, max_length=1000)
+
+
+@api_router.post("/chat")
+async def chat(payload: ChatRequest, request: Request):
+    if not EMERGENT_LLM_KEY:
+        raise HTTPException(status_code=503, detail="Chat not configured")
+    ip = request.client.host if request.client else "unknown"
+    now = datetime.now(timezone.utc).timestamp()
+    hits = [t for t in _chat_rate.get(ip, []) if now - t < 60]
+    if len(hits) >= 10:
+        raise HTTPException(status_code=429, detail="Too many messages — please wait a moment")
+    _chat_rate[ip] = hits + [now]
+
+    from emergentintegrations.llm.chat import LlmChat, UserMessage, TextDelta, StreamDone
+
+    if payload.session_id not in _chat_sessions:
+        _chat_sessions[payload.session_id] = LlmChat(
+            api_key=EMERGENT_LLM_KEY,
+            session_id=payload.session_id,
+            system_message=CHAT_SYSTEM,
+        ).with_model("openai", "gpt-5.4")
+    llm = _chat_sessions[payload.session_id]
+
+    async def stream():
+        full = ""
+        try:
+            async for ev in llm.stream_message(UserMessage(text=payload.message)):
+                if isinstance(ev, TextDelta):
+                    full += ev.content
+                    yield f"data: {json.dumps({'t': ev.content})}\n\n"
+                elif isinstance(ev, StreamDone):
+                    break
+        except Exception as e:
+            logger.error(f"chat error: {e}")
+            yield f"data: {json.dumps({'t': 'Sorry, I had trouble answering that. Please try again.'})}\n\n"
+        await db.chat_sessions.update_one(
+            {"session_id": payload.session_id},
+            {
+                "$push": {"messages": {"$each": [
+                    {"role": "user", "text": payload.message, "at": datetime.now(timezone.utc).isoformat()},
+                    {"role": "assistant", "text": full, "at": datetime.now(timezone.utc).isoformat()},
+                ]}},
+                "$set": {"updated_at": datetime.now(timezone.utc).isoformat()},
+            },
+            upsert=True,
+        )
+        yield "data: [DONE]\n\n"
+
+    return StreamingResponse(
+        stream(),
+        media_type="text/event-stream",
+        headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
+    )
 
 
 app.include_router(api_router)
