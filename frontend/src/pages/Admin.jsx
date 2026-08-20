@@ -12,19 +12,23 @@ export default function Admin() {
   const [token, setToken] = useState(() => sessionStorage.getItem("osa_admin") || "");
   const [password, setPassword] = useState("");
   const [rows, setRows] = useState(null);
+  const [leads, setLeads] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const load = async (t) => {
     setLoading(true);
     try {
-      const res = await axios.get(`${API}/admin/enrollments`, {
-        headers: { Authorization: `Bearer ${t}` },
-      });
-      setRows(res.data.enrollments);
+      const [enr, lds] = await Promise.all([
+        axios.get(`${API}/admin/enrollments`, { headers: { Authorization: `Bearer ${t}` } }),
+        axios.get(`${API}/admin/leads`, { headers: { Authorization: `Bearer ${t}` } }),
+      ]);
+      setRows(enr.data.enrollments);
+      setLeads(lds.data.leads);
     } catch {
       sessionStorage.removeItem("osa_admin");
       setToken("");
       setRows(null);
+      setLeads(null);
     } finally {
       setLoading(false);
     }
@@ -123,10 +127,11 @@ export default function Admin() {
               </div>
             </div>
 
-            <div className="grid grid-cols-3 gap-4 mb-10">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-10">
               {[
                 ["Total", rows?.length ?? 0],
                 ["Paid", paid],
+                ["Leads", leads?.length ?? 0],
                 ["Revenue (demo)", inr(revenue)],
               ].map(([label, val]) => (
                 <div key={label} className="border border-white/10 bg-white/[0.04] backdrop-blur-xl p-5 sm:p-6" data-testid={`stat-${label.toLowerCase().replace(/[^a-z]/g, "-")}`}>
@@ -187,6 +192,48 @@ export default function Admin() {
                   </tbody>
                 </table>
               </div>
+            )}
+
+            {leads && leads.length > 0 && (
+              <>
+                <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-brand mb-4 mt-14">
+                  Chat With Us — Leads
+                </p>
+                <div className="border border-white/10 bg-white/[0.03] backdrop-blur-xl overflow-x-auto">
+                  <table className="w-full text-sm font-mono" data-testid="admin-leads-table">
+                    <thead>
+                      <tr className="border-b border-white/10 text-left text-[10px] uppercase tracking-[0.18em] text-zinc-500">
+                        <th className="px-5 py-4">Lead</th>
+                        <th className="px-5 py-4">Name</th>
+                        <th className="px-5 py-4">WhatsApp</th>
+                        <th className="px-5 py-4">Email</th>
+                        <th className="px-5 py-4">City</th>
+                        <th className="px-5 py-4">Interest</th>
+                        <th className="px-5 py-4">Date</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {leads.map((l) => (
+                        <tr key={l.lead_id} className="border-b border-white/5 hover:bg-white/[0.04] transition-colors" data-testid={`lead-row-${l.lead_id}`}>
+                          <td className="px-5 py-4 text-white whitespace-nowrap">{l.lead_id}</td>
+                          <td className="px-5 py-4 text-white">{l.name}</td>
+                          <td className="px-5 py-4 text-zinc-400">+91 {l.whatsapp}</td>
+                          <td className="px-5 py-4 text-zinc-400">{l.email}</td>
+                          <td className="px-5 py-4 text-zinc-400">{l.city}</td>
+                          <td className="px-5 py-4">
+                            <span className="text-[10px] uppercase tracking-[0.15em] px-2.5 py-1 border border-brand/40 text-brand">
+                              {l.interest}
+                            </span>
+                          </td>
+                          <td className="px-5 py-4 text-zinc-500 whitespace-nowrap text-xs">
+                            {new Date(l.created_at).toLocaleDateString("en-IN", { day: "2-digit", month: "short" })}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </>
             )}
           </div>
         )}

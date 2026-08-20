@@ -166,8 +166,8 @@ export default function Home() {
 
       {/* HERO */}
       <section data-testid="hero-section" className="relative overflow-hidden">
-        <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-10 min-h-screen flex flex-col justify-center py-24">
-          <div className="max-w-3xl relative">
+        <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-10 min-h-screen grid lg:grid-cols-12 gap-12 items-center py-24">
+          <div className="lg:col-span-7 relative">
             <div className="absolute -inset-10 -z-10 bg-[radial-gradient(closest-side,rgba(5,5,5,0.88),transparent)] pointer-events-none" />
             <motion.p
               initial={{ opacity: 0, y: 20 }}
@@ -240,10 +240,40 @@ export default function Home() {
             </motion.div>
           </div>
           <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.9, delay: 0.85, ease: [0.22, 1, 0.36, 1] }}
+            className="lg:col-span-5 relative mt-6 lg:mt-0"
+            data-testid="hero-mentor-photo"
+          >
+            <div className="absolute -inset-3 border border-brand/30 pointer-events-none" />
+            <div className="relative overflow-hidden border border-white/15 group">
+              <img
+                src="/mentor-aman-hero.jpg"
+                alt="Aman Singh Negi, Chief Academic Officer of One Stock Academy"
+                className="w-full aspect-[4/5] object-cover object-[50%_42%] grayscale-[30%] group-hover:grayscale-0 transition-all duration-700"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent pointer-events-none" />
+              <div className="absolute bottom-5 left-5 right-5 flex items-end justify-between gap-3">
+                <div>
+                  <p className="font-display text-2xl sm:text-3xl font-bold text-white">Aman Singh Negi</p>
+                  <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-brand mt-1">Chief Academic Officer</p>
+                </div>
+                <span className="font-mono text-[9px] uppercase tracking-[0.15em] text-white/80 border border-white/20 bg-black/50 backdrop-blur px-3 py-1.5 whitespace-nowrap">
+                  750k+ on Instagram
+                </span>
+              </div>
+            </div>
+            <p className="font-mono text-[9px] uppercase tracking-[0.25em] text-zinc-500 mt-4 text-right">
+              Learn directly from the mentor
+            </p>
+          </motion.div>
+
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 1 }}
-            className="mt-16 flex flex-wrap gap-x-10 gap-y-4 font-mono text-[11px] uppercase tracking-[0.15em] text-paper/40"
+            className="lg:col-span-7 flex flex-wrap gap-x-10 gap-y-4 font-mono text-[11px] uppercase tracking-[0.15em] text-paper/40"
             data-testid="hero-facts"
           >
             <span>Live Classes</span>

@@ -388,6 +388,38 @@ class ChatRequest(BaseModel):
     message: str = Field(min_length=1, max_length=1000)
 
 
+class LeadCreate(BaseModel):
+    name: str = Field(min_length=2, max_length=120)
+    email: EmailStr
+    whatsapp: str = Field(min_length=8, max_length=15)
+    city: str = Field(min_length=2, max_length=80)
+    interest: str = "online"
+
+
+@api_router.post("/leads")
+async def create_lead(payload: LeadCreate):
+    interest = payload.interest if payload.interest in COURSES else "online"
+    doc = {
+        "lead_id": "LEAD-" + uuid.uuid4().hex[:8].upper(),
+        "name": payload.name.strip(),
+        "email": payload.email.lower(),
+        "whatsapp": payload.whatsapp.strip(),
+        "city": payload.city.strip(),
+        "interest": interest,
+        "status": "new",
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    }
+    await db.leads.insert_one(doc)
+    return {"status": "ok", "lead_id": doc["lead_id"]}
+
+
+@api_router.get("/admin/leads")
+async def admin_leads(request: Request):
+    require_admin(request)
+    docs = await db.leads.find({}, {"_id": 0}).sort("created_at", -1).to_list(500)
+    return {"leads": docs}
+
+
 @api_router.post("/chat")
 async def chat(payload: ChatRequest, request: Request):
     if not EMERGENT_LLM_KEY:
