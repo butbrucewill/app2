@@ -36,7 +36,7 @@ export default function MentorCard({ m, i }) {
       onMouseMove={onMove}
       onMouseLeave={onLeave}
       style={{ rotateX, rotateY, transformPerspective: 1100, transformStyle: "preserve-3d" }}
-      className="relative bg-gradient-to-b from-white/[0.08] to-white/[0.02] backdrop-blur-xl border border-white/10 hover:border-white/25 transition-colors overflow-hidden"
+      className="relative bg-gradient-to-b from-white/[0.08] to-white/[0.02] backdrop-blur-xl border border-white/10 hover:border-white/25 transition-colors overflow-hidden rounded-2xl"
     >
       {/* deep background chart layer */}
       <div className="absolute inset-0 opacity-[0.13] pointer-events-none" style={{ transform: "translateZ(-40px)" }}>

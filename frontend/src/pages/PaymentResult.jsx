@@ -51,7 +51,7 @@ export default function PaymentResult() {
               <span className="font-mono text-xs uppercase tracking-[0.18em]">Checking enrollment…</span>
             </div>
           ) : success ? (
-            <div className="bg-white/[0.04] backdrop-blur-xl border border-white/10 p-8 sm:p-12" data-testid="payment-success-panel">
+            <div className="bg-white/[0.04] backdrop-blur-xl border border-white/10 rounded-2xl p-8 sm:p-12" data-testid="payment-success-panel">
               <CheckCircle2 className="w-12 h-12 text-green-500 mb-6" strokeWidth={1.5} />
               <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-green-500 mb-3">
                 Payment verified · Enrollment confirmed
@@ -81,14 +81,14 @@ export default function PaymentResult() {
               <Link
                 to="/"
                 data-testid="success-home-btn"
-                className="group inline-flex items-center gap-2 bg-white text-black font-mono text-xs uppercase tracking-[0.18em] px-8 py-4 hover:bg-zinc-200 transition-colors"
+                className="group inline-flex items-center gap-2 bg-white text-black font-mono text-xs uppercase tracking-[0.18em] px-8 py-4 hover:bg-zinc-200 transition-colors rounded-full"
               >
                 Back to home
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
           ) : (
-            <div className="bg-white/[0.04] backdrop-blur-xl border border-white/10 p-8 sm:p-12" data-testid="payment-failed-panel">
+            <div className="bg-white/[0.04] backdrop-blur-xl border border-white/10 rounded-2xl p-8 sm:p-12" data-testid="payment-failed-panel">
               <XCircle className="w-12 h-12 text-red-500 mb-6" strokeWidth={1.5} />
               <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-red-500 mb-3">
                 Payment not completed
@@ -105,7 +105,7 @@ export default function PaymentResult() {
                 <Link
                   to="/enroll"
                   data-testid="retry-payment-btn"
-                  className="inline-flex items-center gap-2 bg-white text-black font-mono text-xs uppercase tracking-[0.18em] px-8 py-4 hover:bg-zinc-200 transition-colors"
+                  className="inline-flex items-center gap-2 bg-white text-black font-mono text-xs uppercase tracking-[0.18em] px-8 py-4 hover:bg-zinc-200 transition-colors rounded-full"
                 >
                   <RotateCcw className="w-4 h-4" />
                   Try again
@@ -113,7 +113,7 @@ export default function PaymentResult() {
                 <Link
                   to="/"
                   data-testid="failed-home-btn"
-                  className="inline-flex items-center gap-2 border border-white/20 text-white font-mono text-xs uppercase tracking-[0.18em] px-8 py-4 hover:border-white transition-colors"
+                  className="inline-flex items-center gap-2 border border-white/20 text-white font-mono text-xs uppercase tracking-[0.18em] px-8 py-4 hover:border-white transition-colors rounded-full"
                 >
                   Back to home
                 </Link>

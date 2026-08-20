@@ -102,7 +102,7 @@ export default function ChartQuiz() {
 
   return (
     <div
-      className="max-w-3xl mx-auto border border-white/10 bg-black/60 backdrop-blur-xl p-6 sm:p-10"
+      className="max-w-3xl mx-auto border border-white/10 bg-black/60 backdrop-blur-xl rounded-2xl p-6 sm:p-10"
       data-testid="chart-quiz"
     >
       {!done ? (
@@ -140,14 +140,14 @@ export default function ChartQuiz() {
               <button
                 data-testid="quiz-breakout-btn"
                 onClick={() => pick("breakout")}
-                className="group flex items-center justify-center gap-2 border border-brand/40 bg-brand/10 text-brand font-mono text-xs uppercase tracking-[0.18em] px-6 py-4 hover:bg-brand hover:text-black transition-colors"
+                className="group flex items-center justify-center gap-2 border border-brand/40 bg-brand/10 text-brand font-mono text-xs uppercase tracking-[0.18em] px-6 py-4 hover:bg-brand hover:text-black transition-colors rounded-xl"
               >
                 <TrendingUp className="w-4 h-4" /> Breakout
               </button>
               <button
                 data-testid="quiz-breakdown-btn"
                 onClick={() => pick("breakdown")}
-                className="group flex items-center justify-center gap-2 border border-white/20 text-white font-mono text-xs uppercase tracking-[0.18em] px-6 py-4 hover:bg-white hover:text-black transition-colors"
+                className="group flex items-center justify-center gap-2 border border-white/20 text-white font-mono text-xs uppercase tracking-[0.18em] px-6 py-4 hover:bg-white hover:text-black transition-colors rounded-xl"
               >
                 <TrendingDown className="w-4 h-4" /> Breakdown
               </button>
@@ -176,7 +176,7 @@ export default function ChartQuiz() {
                 <button
                   data-testid="quiz-next-btn"
                   onClick={next}
-                  className="w-full bg-white text-black font-mono text-xs uppercase tracking-[0.18em] px-6 py-4 hover:bg-zinc-200 transition-colors"
+                  className="w-full bg-white text-black font-mono text-xs uppercase tracking-[0.18em] px-6 py-4 hover:bg-zinc-200 transition-colors rounded-xl"
                 >
                   {round + 1 >= ROUNDS.length ? "See your score" : "Next chart"}
                 </button>
@@ -202,14 +202,14 @@ export default function ChartQuiz() {
             <Link
               to="/enroll"
               data-testid="quiz-enroll-btn"
-              className="group inline-flex items-center gap-2 bg-brand-deep text-white font-mono text-xs uppercase tracking-[0.18em] px-8 py-4 hover:bg-brand transition-colors"
+              className="group inline-flex items-center gap-2 bg-brand-deep text-white font-mono text-xs uppercase tracking-[0.18em] px-8 py-4 hover:bg-brand transition-colors rounded-full"
             >
               Learn it for real <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
             <button
               data-testid="quiz-restart-btn"
               onClick={restart}
-              className="inline-flex items-center gap-2 border border-white/20 text-white font-mono text-xs uppercase tracking-[0.18em] px-8 py-4 hover:border-white transition-colors"
+              className="inline-flex items-center gap-2 border border-white/20 text-white font-mono text-xs uppercase tracking-[0.18em] px-8 py-4 hover:border-white transition-colors rounded-full"
             >
               <RotateCcw className="w-4 h-4" /> Play again
             </button>

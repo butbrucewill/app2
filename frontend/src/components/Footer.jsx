@@ -16,13 +16,13 @@ export default function Footer() {
               courses delivered by domain experts, online and in the classroom.
             </p>
             <div className="flex gap-3">
-              <a href="#" data-testid="social-instagram" aria-label="Instagram" className="w-9 h-9 border border-white/15 flex items-center justify-center text-paper/60 hover:text-white hover:border-white/40 transition-colors">
+              <a href="#" data-testid="social-instagram" aria-label="Instagram" className="w-9 h-9 border border-white/15 rounded-lg flex items-center justify-center text-paper/60 hover:text-white hover:border-white/40 transition-colors">
                 <Instagram className="w-4 h-4" />
               </a>
-              <a href="#" data-testid="social-youtube" aria-label="YouTube" className="w-9 h-9 border border-white/15 flex items-center justify-center text-paper/60 hover:text-white hover:border-white/40 transition-colors">
+              <a href="#" data-testid="social-youtube" aria-label="YouTube" className="w-9 h-9 border border-white/15 rounded-lg flex items-center justify-center text-paper/60 hover:text-white hover:border-white/40 transition-colors">
                 <Youtube className="w-4 h-4" />
               </a>
-              <a href="#" data-testid="social-twitter" aria-label="Twitter / X" className="w-9 h-9 border border-white/15 flex items-center justify-center text-paper/60 hover:text-white hover:border-white/40 transition-colors">
+              <a href="#" data-testid="social-twitter" aria-label="Twitter / X" className="w-9 h-9 border border-white/15 rounded-lg flex items-center justify-center text-paper/60 hover:text-white hover:border-white/40 transition-colors">
                 <Twitter className="w-4 h-4" />
               </a>
             </div>
@@ -63,7 +63,7 @@ export default function Footer() {
             </div>
           </div>
         </div>
-        <div className="mt-14 border border-white/10 bg-white/[0.03] p-6">
+        <div className="mt-14 border border-white/10 bg-white/[0.03] rounded-xl p-6">
           <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-paper/40 mb-3">Risk Disclosure</p>
           <p data-testid="risk-disclosure" className="font-mono text-[11px] leading-relaxed text-paper/50">
             Trading and investing in securities markets involve substantial risk of loss. One Stock Academy

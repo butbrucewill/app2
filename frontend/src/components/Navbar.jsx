@@ -37,7 +37,7 @@ export default function Navbar() {
             <Link
               to="/enroll"
               data-testid="nav-enroll-btn"
-              className="block bg-paper text-ink font-mono text-[11px] uppercase tracking-[0.18em] px-5 py-2.5 hover:bg-white transition-colors"
+              className="block bg-paper text-ink font-mono text-[11px] uppercase tracking-[0.18em] px-5 py-2.5 hover:bg-white transition-colors rounded-full"
             >
               Enroll Now
             </Link>
@@ -103,7 +103,7 @@ export default function Navbar() {
                 to="/enroll"
                 data-testid="mobile-menu-enroll-btn"
                 onClick={() => setOpen(false)}
-                className="block text-center bg-white text-black font-mono text-xs uppercase tracking-[0.2em] px-6 py-4"
+                className="block text-center bg-white text-black font-mono text-xs uppercase tracking-[0.2em] px-6 py-4 rounded-full"
               >
                 Enroll Now
               </Link>

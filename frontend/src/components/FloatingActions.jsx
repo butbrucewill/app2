@@ -29,7 +29,7 @@ function LeadModal({ open, onClose }) {
   };
 
   const inputCls =
-    "w-full bg-white/5 border border-white/15 px-4 py-3 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-brand rounded-none";
+    "w-full bg-white/5 border border-white/15 px-4 py-3 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-brand rounded-lg";
 
   return (
     <AnimatePresence>
@@ -48,7 +48,7 @@ function LeadModal({ open, onClose }) {
             exit={{ y: 30, opacity: 0, scale: 0.97 }}
             transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
             onClick={(e) => e.stopPropagation()}
-            className="relative w-full max-w-md bg-[#0a0a0a] border border-white/15 p-8"
+            className="relative w-full max-w-md bg-[#0a0a0a] border border-white/15 rounded-2xl p-8"
           >
             <button
               data-testid="lead-modal-close-btn"
@@ -102,7 +102,7 @@ function LeadModal({ open, onClose }) {
                     type="submit"
                     data-testid="lead-submit-btn"
                     disabled={busy}
-                    className="w-full bg-brand-deep text-white font-mono text-xs uppercase tracking-[0.2em] px-6 py-4 hover:bg-brand transition-colors disabled:opacity-60 flex items-center justify-center gap-2"
+                    className="w-full bg-brand-deep text-white font-mono text-xs uppercase tracking-[0.2em] px-6 py-4 hover:bg-brand transition-colors disabled:opacity-60 flex items-center justify-center gap-2 rounded-xl"
                   >
                     {busy && <Loader2 className="w-4 h-4 animate-spin" />}
                     Submit
@@ -230,7 +230,7 @@ export default function FloatingActions() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 24, scale: 0.96 }}
             transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed bottom-24 right-5 z-[85] w-[calc(100vw-40px)] max-w-sm h-[480px] flex flex-col bg-[#0a0a0a]/95 backdrop-blur-2xl border border-white/15 shadow-2xl"
+            className="fixed bottom-24 right-5 z-[85] w-[calc(100vw-40px)] max-w-sm h-[480px] flex flex-col bg-[#0a0a0a]/95 backdrop-blur-2xl border border-white/15 rounded-2xl shadow-2xl overflow-hidden"
           >
             <div className="flex items-center gap-3 px-5 py-4 border-b border-white/10">
               <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
@@ -244,7 +244,7 @@ export default function FloatingActions() {
               {messages.map((m, i) => (
                 <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
                   <div
-                    className={`max-w-[85%] px-4 py-3 text-sm leading-relaxed ${
+                    className={`max-w-[85%] px-4 py-3 text-sm leading-relaxed rounded-2xl ${
                       m.role === "user"
                         ? "bg-white text-black"
                         : "bg-white/[0.06] border border-white/10 text-zinc-200"
@@ -263,7 +263,7 @@ export default function FloatingActions() {
                   data-testid={`chat-chip-${c.toLowerCase().replace(/[^a-z]+/g, "-")}`}
                   onClick={() => send(c)}
                   disabled={busy}
-                  className="font-mono text-[10px] uppercase tracking-[0.12em] border border-white/15 text-zinc-400 px-3 py-1.5 hover:border-white/50 hover:text-white transition-colors disabled:opacity-50"
+                  className="font-mono text-[10px] uppercase tracking-[0.12em] border border-white/15 text-zinc-400 px-3 py-1.5 rounded-full hover:border-white/50 hover:text-white transition-colors disabled:opacity-50"
                 >
                   {c}
                 </button>
@@ -282,13 +282,13 @@ export default function FloatingActions() {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Type your question…"
-                className="flex-1 bg-white/5 border border-white/15 px-4 py-3 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-white/50 rounded-none"
+                className="flex-1 bg-white/5 border border-white/15 px-4 py-3 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-white/50 rounded-full"
               />
               <button
                 type="submit"
                 data-testid="chat-send-btn"
                 disabled={busy}
-                className="w-11 h-11 bg-white text-black flex items-center justify-center hover:bg-zinc-200 transition-colors disabled:opacity-50"
+                className="w-11 h-11 bg-white text-black flex items-center justify-center hover:bg-zinc-200 transition-colors disabled:opacity-50 rounded-full"
               >
                 {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
               </button>

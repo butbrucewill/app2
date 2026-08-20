@@ -11,7 +11,7 @@ export default function ResultsWall() {
           <div
             key={i}
             data-testid={`result-slot-${i + 1}`}
-            className="mx-3 w-52 h-72 sm:w-60 sm:h-80 border border-dashed border-brand/30 bg-brand/[0.04] flex flex-col items-center justify-center gap-3 text-center px-6"
+            className="mx-3 w-52 h-72 sm:w-60 sm:h-80 border border-dashed border-brand/30 bg-brand/[0.04] rounded-2xl flex flex-col items-center justify-center gap-3 text-center px-6"
           >
             <ImagePlus className="w-6 h-6 text-brand/50" strokeWidth={1.5} />
             <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-brand/70 leading-relaxed">

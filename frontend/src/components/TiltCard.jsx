@@ -30,7 +30,7 @@ export default function TiltCard({ children, className = "", testId, onClick }) 
       onMouseMove={onMove}
       onMouseLeave={onLeave}
       style={{ rotateX, rotateY, transformPerspective: 1000, transformStyle: "preserve-3d" }}
-      className={`relative ${className}`}
+      className={`relative rounded-2xl overflow-hidden ${className}`}
     >
       <motion.div
         aria-hidden="true"

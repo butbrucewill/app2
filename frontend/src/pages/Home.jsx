@@ -15,6 +15,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import TickerTape from "@/components/TickerTape";
 import ChartBackdrop, { scrollState } from "@/components/ChartBackdrop";
+import HeroVideo from "@/components/HeroVideo";
 import BannerPhotos from "@/components/BannerPhotos";
 import PartnerMarquee from "@/components/PartnerMarquee";
 import ChartQuiz from "@/components/ChartQuiz";
@@ -229,7 +230,7 @@ export default function Home() {
                 <Link
                   to="/enroll"
                   data-testid="hero-enroll-btn"
-                  className="group bg-paper text-ink font-mono text-xs uppercase tracking-[0.18em] px-8 py-4 flex items-center gap-2 hover:bg-white transition-colors"
+                  className="group bg-paper text-ink font-mono text-xs uppercase tracking-[0.18em] px-8 py-4 flex items-center gap-2 hover:bg-white transition-colors rounded-full"
                 >
                   Enroll Now
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -238,7 +239,7 @@ export default function Home() {
               <a
                 href="#courses"
                 data-testid="hero-courses-link"
-                className="font-mono text-xs uppercase tracking-[0.18em] text-paper border border-paper/25 px-8 py-4 hover:border-paper hover:bg-paper/5 transition-colors"
+                className="font-mono text-xs uppercase tracking-[0.18em] text-paper border border-paper/25 px-8 py-4 hover:border-paper hover:bg-paper/5 transition-colors rounded-full"
               >
                 View Courses
               </a>
@@ -251,27 +252,8 @@ export default function Home() {
             className="lg:col-span-5 relative mt-6 lg:mt-0"
             data-testid="hero-mentor-photo"
           >
-            <div className="absolute -inset-3 border border-brand/30 pointer-events-none" />
-            <div className="relative overflow-hidden border border-white/15 group bg-black">
-              <iframe
-                src="https://www.youtube-nocookie.com/embed/hAIP2zrLQuo?autoplay=1&mute=1&loop=1&playlist=hAIP2zrLQuo&playsinline=1&rel=0&modestbranding=1"
-                title="Aman Singh Negi — One Stock Academy"
-                data-testid="hero-video"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="w-full aspect-[9/16] max-h-[70vh] mx-auto"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent pointer-events-none" />
-              <div className="absolute bottom-5 left-5 right-5 flex items-end justify-between gap-3">
-                <div>
-                  <p className="font-display text-2xl sm:text-3xl font-bold text-white">Aman Singh Negi</p>
-                  <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-brand mt-1">Chief Academic Officer</p>
-                </div>
-                <span className="font-mono text-[9px] uppercase tracking-[0.15em] text-white/80 border border-white/20 bg-black/50 backdrop-blur px-3 py-1.5 whitespace-nowrap">
-                  750k+ on Instagram
-                </span>
-              </div>
-            </div>
+            <div className="absolute -inset-3 border border-brand/30 rounded-3xl pointer-events-none" />
+            <HeroVideo />
             <p className="font-mono text-[9px] uppercase tracking-[0.25em] text-zinc-500 mt-4 text-right">
               Learn directly from the mentor
             </p>
@@ -323,7 +305,7 @@ export default function Home() {
                 {...fadeUp}
                 transition={{ ...fadeUp.transition, delay: i * 0.08 }}
                 data-testid={`banner-stat-${i}`}
-                className="bg-brand-deep/25 backdrop-blur-xl border border-brand/25 p-6 hover:bg-brand-deep/35 transition-colors"
+                className="bg-brand-deep/25 backdrop-blur-xl border border-brand/25 rounded-xl p-6 hover:bg-brand-deep/35 transition-colors"
               >
                 <c.icon className="w-5 h-5 text-brand mb-4" strokeWidth={1.5} />
                 <p className="font-display text-2xl sm:text-3xl font-bold text-white mb-1">{c.big}</p>
@@ -339,7 +321,7 @@ export default function Home() {
               <Link
                 to="/enroll"
                 data-testid="banner-enroll-btn"
-                className="group inline-flex items-center gap-2 bg-white text-black font-mono text-xs uppercase tracking-[0.18em] px-8 py-4 hover:bg-zinc-200 transition-colors"
+                className="group inline-flex items-center gap-2 bg-white text-black font-mono text-xs uppercase tracking-[0.18em] px-8 py-4 hover:bg-zinc-200 transition-colors rounded-full"
               >
                 Enroll Now
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -379,7 +361,7 @@ export default function Home() {
               {...fadeUp}
               transition={{ ...fadeUp.transition, delay: i * 0.08 }}
               data-testid={`value-prop-${v.n}`}
-              className={`group bg-white/[0.04] backdrop-blur-xl border border-white/10 p-8 sm:p-12 hover:bg-white/[0.08] hover:border-white/20 transition-colors ${
+              className={`group bg-white/[0.04] backdrop-blur-xl border border-white/10 rounded-2xl p-8 sm:p-12 hover:bg-white/[0.08] hover:border-white/20 transition-colors ${
                 i === 0 || i === 3 ? "md:col-span-7" : "md:col-span-5"
               }`}
             >
@@ -401,14 +383,14 @@ export default function Home() {
       {/* VISION & TRACK RECORD */}
       <section id="vision" data-testid="vision-section" className="max-w-7xl mx-auto px-6 sm:px-10 py-24 sm:py-32">
         <div className="grid md:grid-cols-2 gap-6 mb-6">
-          <motion.div {...fadeUp} className="bg-black/70 md:bg-white/[0.04] backdrop-blur-xl border border-white/10 p-8 sm:p-12">
+          <motion.div {...fadeUp} className="bg-black/70 md:bg-white/[0.04] backdrop-blur-xl border border-white/10 rounded-2xl p-8 sm:p-12">
             <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-brand mb-6">Founder's Vision</p>
             <p className="font-display text-2xl sm:text-3xl font-bold text-white leading-snug">
               Empower the youth of India with trading skills they can hold a strong command over the
               financial economy with — and help India realise <span className="italic text-zinc-400">"Viksit Bharat @ 2047".</span>
             </p>
           </motion.div>
-          <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.1 }} className="bg-black/70 md:bg-white/[0.04] backdrop-blur-xl border border-white/10 p-8 sm:p-12">
+          <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.1 }} className="bg-black/70 md:bg-white/[0.04] backdrop-blur-xl border border-white/10 rounded-2xl p-8 sm:p-12">
             <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-brand mb-6">Mission Mode</p>
             <p className="font-display text-2xl sm:text-3xl font-bold text-white leading-snug">
               Relevant, curated course material delivered by trading experts in a time-bound manner —
@@ -420,7 +402,7 @@ export default function Home() {
           {...fadeUp}
           transition={{ ...fadeUp.transition, delay: 0.15 }}
           data-testid="track-record"
-          className="grid grid-cols-1 sm:grid-cols-3 border border-white/10 divide-y sm:divide-y-0 sm:divide-x divide-white/10 bg-black/70 md:bg-black/30 backdrop-blur-sm"
+          className="grid grid-cols-1 sm:grid-cols-3 border border-white/10 divide-y sm:divide-y-0 sm:divide-x divide-white/10 bg-black/70 md:bg-black/30 backdrop-blur-sm rounded-2xl overflow-hidden"
         >
           {[
             ["1.9M+", "Combined social community"],
@@ -463,7 +445,7 @@ export default function Home() {
           <motion.div
             {...fadeUp}
             data-testid="fmp-phases"
-            className="grid grid-cols-1 sm:grid-cols-5 border border-white/10 divide-y sm:divide-y-0 sm:divide-x divide-white/10 bg-black/70 md:bg-black/30 backdrop-blur-sm mb-16"
+            className="grid grid-cols-1 sm:grid-cols-5 border border-white/10 divide-y sm:divide-y-0 sm:divide-x divide-white/10 bg-black/70 md:bg-black/30 backdrop-blur-sm rounded-2xl overflow-hidden mb-16"
           >
             {PHASES.map((p, i) => (
               <div key={p} className="p-6" data-testid={`phase-${i + 1}`}>
@@ -495,7 +477,7 @@ export default function Home() {
                 <Link
                   to="/enroll?course=online"
                   data-testid="enroll-online-btn"
-                  className="group/btn inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.18em] text-white border border-white/25 px-8 py-4 hover:border-white hover:bg-white/5 transition-colors"
+                  className="group/btn inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.18em] text-white border border-white/25 px-8 py-4 hover:border-white hover:bg-white/5 transition-colors rounded-full"
                 >
                   Enroll — Online
                   <ArrowUpRight className="w-4 h-4 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform" />
@@ -530,7 +512,7 @@ export default function Home() {
                 <Link
                   to="/enroll?course=offline"
                   data-testid="enroll-offline-btn"
-                  className="group/btn inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.18em] bg-white text-black px-8 py-4 hover:bg-zinc-200 transition-colors"
+                  className="group/btn inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.18em] bg-white text-black px-8 py-4 hover:bg-zinc-200 transition-colors rounded-full"
                 >
                   Enroll — Offline
                   <ArrowUpRight className="w-4 h-4 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform" />
@@ -557,7 +539,7 @@ export default function Home() {
                 {...fadeUp}
                 transition={{ ...fadeUp.transition, delay: i * 0.08 }}
                 data-testid={`review-card-${i}`}
-                className="bg-white/[0.04] backdrop-blur-xl border border-white/10 p-8 sm:p-10"
+                className="bg-white/[0.04] backdrop-blur-xl border border-white/10 rounded-2xl p-8 sm:p-10"
               >
                 <p className="font-display text-xl sm:text-2xl text-white leading-snug mb-8">"{r.quote}"</p>
                 <p className="font-mono text-xs uppercase tracking-[0.2em] text-white">{r.name}</p>
@@ -644,7 +626,7 @@ export default function Home() {
               <Link
                 to="/enroll"
                 data-testid="final-cta-btn"
-                className="group inline-flex items-center gap-2 bg-white text-black font-mono text-xs uppercase tracking-[0.18em] px-8 py-4 hover:bg-zinc-200 transition-colors"
+                className="group inline-flex items-center gap-2 bg-white text-black font-mono text-xs uppercase tracking-[0.18em] px-8 py-4 hover:bg-zinc-200 transition-colors rounded-full"
               >
                 Enroll Now
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />

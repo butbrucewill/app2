@@ -189,7 +189,7 @@ export default function BuyCourse() {
               ))}
             </div>
 
-            <div className="border border-white/10 bg-white/[0.04] backdrop-blur-xl p-6 sm:p-8" data-testid="student-details-form">
+            <div className="border border-white/10 bg-white/[0.04] backdrop-blur-xl rounded-2xl p-6 sm:p-8" data-testid="student-details-form">
               <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-zinc-500 mb-6">Your details</p>
               <div className="grid sm:grid-cols-2 gap-5">
                 <label className="block">
@@ -200,7 +200,7 @@ export default function BuyCourse() {
                     onChange={set("name")}
                     required
                     placeholder="Your full name"
-                    className="mt-2 w-full border border-white/15 bg-white/5 px-4 py-3 text-white placeholder:text-zinc-600 focus:outline-none focus:border-white/60 rounded-none"
+                    className="mt-2 w-full border border-white/15 bg-white/5 px-4 py-3 text-white placeholder:text-zinc-600 focus:outline-none focus:border-white/60 rounded-lg"
                   />
                 </label>
                 <label className="block">
@@ -212,7 +212,7 @@ export default function BuyCourse() {
                     required
                     type="tel"
                     placeholder="10-digit mobile"
-                    className="mt-2 w-full border border-white/15 bg-white/5 px-4 py-3 text-white placeholder:text-zinc-600 focus:outline-none focus:border-white/60 rounded-none"
+                    className="mt-2 w-full border border-white/15 bg-white/5 px-4 py-3 text-white placeholder:text-zinc-600 focus:outline-none focus:border-white/60 rounded-lg"
                   />
                 </label>
                 <label className="block sm:col-span-2">
@@ -224,7 +224,7 @@ export default function BuyCourse() {
                     required
                     type="email"
                     placeholder="you@example.com"
-                    className="mt-2 w-full border border-white/15 bg-white/5 px-4 py-3 text-white placeholder:text-zinc-600 focus:outline-none focus:border-white/60 rounded-none"
+                    className="mt-2 w-full border border-white/15 bg-white/5 px-4 py-3 text-white placeholder:text-zinc-600 focus:outline-none focus:border-white/60 rounded-lg"
                   />
                 </label>
               </div>
@@ -232,7 +232,7 @@ export default function BuyCourse() {
           </div>
 
           <div className="lg:col-span-5">
-            <div className="border border-white/10 bg-white/[0.05] backdrop-blur-xl text-white p-6 sm:p-8 sticky top-8" data-testid="order-summary">
+            <div className="border border-white/10 bg-white/[0.05] backdrop-blur-xl text-white rounded-2xl p-6 sm:p-8 sticky top-8" data-testid="order-summary">
               <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-zinc-500 mb-6">Order summary</p>
               <div className="flex justify-between items-baseline mb-2">
                 <span className="font-display text-2xl font-medium">{course.name}</span>
@@ -256,7 +256,7 @@ export default function BuyCourse() {
                 type="submit"
                 data-testid="pay-now-btn"
                 disabled={loading}
-                className="mt-8 w-full bg-white text-black font-mono text-xs uppercase tracking-[0.18em] px-6 py-4 hover:bg-zinc-200 transition-colors disabled:opacity-60 flex items-center justify-center gap-2"
+                className="mt-8 w-full bg-white text-black font-mono text-xs uppercase tracking-[0.18em] px-6 py-4 hover:bg-zinc-200 transition-colors disabled:opacity-60 flex items-center justify-center gap-2 rounded-xl"
               >
                 {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Lock className="w-4 h-4" />}
                 {loading ? "Preparing payment…" : `Pay ${inr(orderSummary.total)}`}
@@ -283,7 +283,7 @@ export default function BuyCourse() {
             <motion.div
               initial={{ y: 24, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
-              className="bg-[#0a0a0a] border border-white/10 max-w-md w-full p-8"
+              className="bg-[#0a0a0a] border border-white/10 rounded-2xl max-w-md w-full p-8"
             >
               <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-500 mb-2">Demo mode — gateway keys pending</p>
               <h2 className="font-display text-3xl font-bold text-white mb-2">Simulated hosted checkout</h2>
@@ -299,14 +299,14 @@ export default function BuyCourse() {
                 <button
                   data-testid="demo-pay-success-btn"
                   onClick={() => verifyAndRoute({ order_ref: demoOrder.order_ref, demo_outcome: "success" })}
-                  className="flex-1 bg-white text-black font-mono text-xs uppercase tracking-[0.18em] px-4 py-3.5 hover:bg-zinc-200 transition-colors"
+                  className="flex-1 bg-white text-black font-mono text-xs uppercase tracking-[0.18em] px-4 py-3.5 hover:bg-zinc-200 transition-colors rounded-xl"
                 >
                   Simulate success
                 </button>
                 <button
                   data-testid="demo-pay-fail-btn"
                   onClick={() => verifyAndRoute({ order_ref: demoOrder.order_ref, demo_outcome: "failure" })}
-                  className="flex-1 border border-white/20 text-white font-mono text-xs uppercase tracking-[0.18em] px-4 py-3.5 hover:border-red-500 hover:text-red-500 transition-colors"
+                  className="flex-1 border border-white/20 text-white font-mono text-xs uppercase tracking-[0.18em] px-4 py-3.5 hover:border-red-500 hover:text-red-500 transition-colors rounded-xl"
                 >
                   Simulate failure
                 </button>
