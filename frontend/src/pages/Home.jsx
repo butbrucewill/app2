@@ -182,7 +182,7 @@ export default function Home() {
               Trading Education · Online &amp; Offline
             </motion.p>
             <h1
-              className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tighter leading-[0.95] text-white [text-shadow:0_2px_40px_rgba(0,0,0,0.9)]"
+              className="font-display text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.02] text-white [text-shadow:0_2px_40px_rgba(0,0,0,0.9)]"
               data-testid="hero-headline"
             >
               <span className="block overflow-hidden">
@@ -197,7 +197,7 @@ export default function Home() {
               </span>
               <span className="block overflow-hidden">
                 <motion.span
-                  className="block italic text-zinc-400"
+                  className="block italic text-brand"
                   initial={{ y: "110%" }}
                   animate={{ y: 0 }}
                   transition={{ duration: 1, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
