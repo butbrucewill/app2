@@ -254,15 +254,8 @@ export default function Home() {
                 alt="Aman Singh Negi, Chief Academic Officer of One Stock Academy"
                 className="w-full aspect-[4/5] object-cover object-[50%_42%] grayscale-[30%] group-hover:grayscale-0 transition-all duration-700"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent pointer-events-none" />
-              <div className="absolute bottom-5 left-5 right-5 flex items-end justify-between gap-3">
-                <div>
-                  <p className="font-display text-2xl sm:text-3xl font-bold text-white">Aman Singh Negi</p>
-                  <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-brand mt-1">Chief Academic Officer</p>
-                </div>
-                <span className="font-mono text-[9px] uppercase tracking-[0.15em] text-white/80 border border-white/20 bg-black/50 backdrop-blur px-3 py-1.5 whitespace-nowrap">
-                  750k+ on Instagram
-                </span>
+              <div className="absolute bottom-4 left-4 font-mono text-[10px] uppercase tracking-[0.15em] text-white/85 border border-white/20 bg-black/55 backdrop-blur px-3.5 py-2">
+                Aman Singh Negi | Chief Academic Officer
               </div>
             </div>
             <p className="font-mono text-[9px] uppercase tracking-[0.25em] text-zinc-500 mt-4 text-right">
@@ -293,56 +286,78 @@ export default function Home() {
 
       <EditorialMarquee />
 
-      {/* FEATURE BANNER */}
-      <section data-testid="feature-banner" className="relative overflow-hidden border-y border-white/10">
-        <img
-          src="/mentor-aman-hero.jpg"
-          alt="Aman Singh Negi leading a session at One Stock Academy"
-          className="absolute inset-0 w-full h-full object-cover object-[50%_28%]"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#04060D] via-[#04060D]/85 to-[#04060D]/35" />
-        <div className="relative max-w-7xl mx-auto px-6 sm:px-10 py-24 sm:py-36">
-          <motion.div {...fadeUp} className="max-w-2xl mb-14">
-            <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-brand mb-4">New-Age Trading Education</p>
-            <h2 className="font-display text-4xl sm:text-6xl font-bold tracking-tight text-white leading-[1.02]">
-              Learn trading from practitioners the market <span className="italic text-zinc-400">already follows</span>
-            </h2>
-          </motion.div>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
-            {[
-              { icon: BookOpen, big: "5 Phases", small: "Structured Buniyaad FMP curriculum" },
-              { icon: Monitor, big: "2 Formats", small: "Live online classes & in-person classroom" },
-              { icon: UserCheck, big: "3 Mentors", small: "SEBI-registered founder-led teaching" },
-              { icon: TrendingUp, big: "1.9M+", small: "Combined social community" },
-            ].map((c, i) => (
-              <motion.div
-                key={c.big}
-                {...fadeUp}
-                transition={{ ...fadeUp.transition, delay: i * 0.08 }}
-                data-testid={`banner-stat-${i}`}
-                className="bg-brand-deep/25 backdrop-blur-xl border border-brand/25 p-6 hover:bg-brand-deep/35 transition-colors"
-              >
-                <c.icon className="w-5 h-5 text-brand mb-4" strokeWidth={1.5} />
-                <p className="font-display text-2xl sm:text-3xl font-bold text-white mb-1">{c.big}</p>
-                <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-white/60 leading-relaxed">{c.small}</p>
-              </motion.div>
-            ))}
+      {/* PROGRAM DETAILS */}
+      <section data-testid="feature-banner" className="max-w-7xl mx-auto px-6 sm:px-10 py-24 sm:py-32">
+        <motion.div
+          {...fadeUp}
+          className="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-brand-deep/30 via-[#0a1226] to-[#04060D]"
+        >
+          <div className="grid lg:grid-cols-12">
+            <div className="lg:col-span-4 relative min-h-[340px] lg:min-h-[480px]">
+              <img
+                src="/mentor-aman-hero.jpg"
+                alt="Aman Singh Negi, Chief Academic Officer of One Stock Academy"
+                className="absolute inset-0 w-full h-full object-cover object-[50%_35%]"
+              />
+              <div className="absolute bottom-4 left-4 font-mono text-[10px] uppercase tracking-[0.15em] text-white/85 border border-white/20 bg-black/55 backdrop-blur px-3.5 py-2">
+                Aman Singh Negi | Chief Academic Officer
+              </div>
+            </div>
+            <div className="lg:col-span-8 p-8 sm:p-14 flex flex-col justify-center">
+              <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-brand mb-4">Program Details</p>
+              <h2 className="font-display text-4xl sm:text-5xl font-bold tracking-tight text-white leading-tight mb-5">
+                Buniyaad — the Foundation Mentorship Program
+              </h2>
+              <p className="text-zinc-400 text-sm leading-relaxed max-w-xl mb-8">
+                A time-bound, practical-heavy mentorship that takes you from market basics to strategy,
+                psychology, and disciplined execution — taught live by practitioners.
+              </p>
+              <div className="flex flex-wrap gap-3 mb-10" data-testid="program-pills">
+                {["Live Classes", "5-Phase Curriculum", "Online & Offline", "One-Time Fee"].map((pill) => (
+                  <span
+                    key={pill}
+                    className="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.15em] text-white/85 border border-brand/30 bg-brand/10 rounded-full px-4 py-2"
+                  >
+                    <span className="w-1.5 h-1.5 bg-brand rounded-full" />
+                    {pill}
+                  </span>
+                ))}
+              </div>
+              <div>
+                <Magnetic>
+                  <Link
+                    to="/enroll"
+                    data-testid="banner-enroll-btn"
+                    className="group inline-flex items-center gap-2 bg-white text-black font-mono text-xs uppercase tracking-[0.18em] px-8 py-4 hover:bg-zinc-200 transition-colors"
+                  >
+                    Enroll Now
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </Link>
+                </Magnetic>
+              </div>
+            </div>
           </div>
-          <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.2 }} className="flex flex-wrap items-center gap-5">
-            <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-white/80 border border-white/25 bg-black/50 backdrop-blur px-4 py-2">
-              Aman Singh Negi | Chief Academic Officer
-            </span>
-            <Magnetic>
-              <Link
-                to="/enroll"
-                data-testid="banner-enroll-btn"
-                className="group inline-flex items-center gap-2 bg-white text-black font-mono text-xs uppercase tracking-[0.18em] px-8 py-4 hover:bg-zinc-200 transition-colors"
-              >
-                Enroll Now
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </Link>
-            </Magnetic>
-          </motion.div>
+        </motion.div>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
+          {[
+            { icon: BookOpen, big: "5 Phases", small: "Structured Buniyaad FMP curriculum" },
+            { icon: Monitor, big: "2 Formats", small: "Live online classes & in-person classroom" },
+            { icon: UserCheck, big: "3 Mentors", small: "SEBI-registered founder-led teaching" },
+            { icon: TrendingUp, big: "1.9M+", small: "Combined social community" },
+          ].map((c, i) => (
+            <motion.div
+              key={c.big}
+              {...fadeUp}
+              transition={{ ...fadeUp.transition, delay: i * 0.08 }}
+              data-testid={`banner-stat-${i}`}
+              className="relative bg-brand-deep/20 backdrop-blur-xl border border-brand/20 rounded-xl p-6 overflow-hidden hover:bg-brand-deep/30 transition-colors"
+            >
+              <span className="absolute top-3 right-4 font-display text-5xl font-bold text-brand/15">{i + 1}</span>
+              <c.icon className="w-5 h-5 text-brand mb-4" strokeWidth={1.5} />
+              <p className="font-display text-2xl sm:text-3xl font-bold text-white mb-1">{c.big}</p>
+              <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-white/60 leading-relaxed">{c.small}</p>
+            </motion.div>
+          ))}
         </div>
       </section>
 
@@ -439,17 +454,6 @@ export default function Home() {
               <h2 className="font-display text-4xl sm:text-5xl font-bold tracking-tight text-white leading-tight">
                 Buniyaad — the Foundation Mentorship Program
               </h2>
-              <div className="flex flex-wrap gap-3 mt-6" data-testid="program-pills">
-                {["Live Classes", "5-Phase Curriculum", "Online & Offline", "One-Time Fee"].map((pill) => (
-                  <span
-                    key={pill}
-                    className="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.15em] text-white/85 border border-brand/30 bg-brand/10 rounded-full px-4 py-2"
-                  >
-                    <span className="w-1.5 h-1.5 bg-brand rounded-full" />
-                    {pill}
-                  </span>
-                ))}
-              </div>
             </div>
             <p className="font-mono text-[11px] uppercase tracking-[0.15em] text-zinc-500">
               One-time payment · No subscriptions
