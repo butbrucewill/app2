@@ -16,6 +16,7 @@ import Footer from "@/components/Footer";
 import TickerTape from "@/components/TickerTape";
 import ChartBackdrop, { scrollState } from "@/components/ChartBackdrop";
 import BannerPhotos from "@/components/BannerPhotos";
+import PartnerMarquee from "@/components/PartnerMarquee";
 import EditorialMarquee from "@/components/EditorialMarquee";
 import CustomCursor from "@/components/CustomCursor";
 import MentorCard from "@/components/MentorCard";
@@ -374,6 +375,8 @@ export default function Home() {
           ))}
         </div>
       </section>
+
+      <PartnerMarquee />
 
       {/* MENTORS */}
       <section id="mentor" data-testid="mentor-section" className="max-w-7xl mx-auto px-6 sm:px-10 py-24 sm:py-32">
