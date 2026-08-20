@@ -15,6 +15,8 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import TickerTape from "@/components/TickerTape";
 import ChartBackdrop, { scrollState } from "@/components/ChartBackdrop";
+import BannerPhotos from "@/components/BannerPhotos";
+import ClassroomStrip from "@/components/ClassroomStrip";
 import EditorialMarquee from "@/components/EditorialMarquee";
 import CustomCursor from "@/components/CustomCursor";
 import MentorCard from "@/components/MentorCard";
@@ -295,11 +297,7 @@ export default function Home() {
 
       {/* FEATURE BANNER */}
       <section data-testid="feature-banner" className="relative overflow-hidden border-y border-white/10">
-        <img
-          src="/mentor-aman-hero.jpg"
-          alt="Aman Singh Negi leading a session at One Stock Academy"
-          className="absolute inset-0 w-full h-full object-cover object-[50%_28%]"
-        />
+        <BannerPhotos />
         <div className="absolute inset-0 bg-gradient-to-r from-[#04060D] via-[#04060D]/85 to-[#04060D]/35" />
         <div className="relative max-w-7xl mx-auto px-6 sm:px-10 py-24 sm:py-36">
           <motion.div {...fadeUp} className="max-w-2xl mb-14">
@@ -562,6 +560,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <ClassroomStrip />
 
       {/* FAQ */}
       <section id="faq" data-testid="faq-section" className="border-y border-white/10 bg-black/40 backdrop-blur-sm">
