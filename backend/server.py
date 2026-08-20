@@ -174,13 +174,13 @@ COURSES = {
         "id": "online",
         "name": "Online — Live Virtual Classes",
         "format": "Live virtual classes",
-        "price_inr": 49000,
+        "price_inr": 49990,
     },
     "offline": {
         "id": "offline",
         "name": "Offline — In-Person Classroom",
         "format": "In-person classroom",
-        "price_inr": 99000,
+        "price_inr": 199990,
     },
 }
 
@@ -370,7 +370,7 @@ EMERGENT_LLM_KEY = os.environ.get("EMERGENT_LLM_KEY", "")
 CHAT_SYSTEM = (
     "You are the One Stock Academy website assistant. One Stock Academy is an Indian trading education company. "
     "Facts you must use: The program is Buniyaad — the Foundation Mentorship Program, with 5 phases: Market & Price Action Foundation; Smart Money Concepts; Risk & Trade Management; Strategy Building & Execution; Psychology, Journaling & Performance. "
-    "Two formats, both one-time payment: Online live virtual classes at ₹49,000; Offline in-person classroom at ₹99,000. "
+    "Two formats, both one-time payment inclusive of GST: Online live virtual classes at ₹49,990; Offline in-person classroom at ₹1,99,990. "
     "Mentors: Aman Singh Negi (Chief Academic Officer, 750k+ on Instagram), Rajat Sharma (Founding Director, 150k+ on Instagram), Rishabh Mishra (Founding Director, SEBI-registered). "
     "The academy never gives stock tips or signals and never guarantees profits — it is education only, not investment advice. "
     "To enroll, visitors click Enroll Now, pick a batch, fill in their details, and pay; a confirmation email follows payment verification. "

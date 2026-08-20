@@ -42,10 +42,10 @@ export default function Footer() {
             <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-brand mb-4">Program</p>
             <div className="flex flex-col gap-2.5 text-sm text-paper/70">
               <a href="/enroll?course=online" className="hover:text-paper transition-colors">
-                Buniyaad — Online <span className="font-mono text-xs text-paper/40">₹49,000</span>
+                Buniyaad — Online <span className="font-mono text-xs text-paper/40">₹49,990</span>
               </a>
               <a href="/enroll?course=offline" className="hover:text-paper transition-colors">
-                Buniyaad — Offline <span className="font-mono text-xs text-paper/40">₹99,000</span>
+                Buniyaad — Offline <span className="font-mono text-xs text-paper/40">₹1,99,990</span>
               </a>
               <a href="/enroll" className="hover:text-paper transition-colors">Enroll Now</a>
             </div>

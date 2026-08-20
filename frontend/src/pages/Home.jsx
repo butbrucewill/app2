@@ -71,7 +71,7 @@ const FAQS = [
   },
   {
     q: "What is the difference between the online and offline batches?",
-    a: "The curriculum, mentor, and duration are identical. Online is ₹49,000 and delivered as live virtual classes you can join from anywhere. Offline is ₹99,000 and delivered in person in a classroom setting, with face-to-face interaction and on-desk practice.",
+    a: "The curriculum, mentor, and duration are identical. Online is ₹49,990 (inclusive of GST) and delivered as live virtual classes you can join from anywhere. Offline is ₹1,99,990 (inclusive of GST) and delivered in person in a classroom setting, with face-to-face interaction and on-desk practice.",
   },
   {
     q: "Do you give stock tips or trading signals?",
@@ -83,7 +83,7 @@ const FAQS = [
   },
   {
     q: "Is the fee a one-time payment or a subscription?",
-    a: "One-time. You pay once at enrollment — ₹49,000 for online or ₹99,000 for offline — through a secure payment gateway (UPI, cards, and netbanking accepted). There are no recurring charges.",
+    a: "One-time. You pay once at enrollment — ₹49,990 for online or ₹1,99,990 for offline, both inclusive of GST — through a secure payment gateway (UPI, cards, and netbanking accepted). There are no recurring charges.",
   },
   {
     q: "What happens after I pay?",
@@ -456,15 +456,23 @@ export default function Home() {
                 <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-zinc-500">Live Virtual Classes</span>
               </div>
               <h3 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-white mb-2">Online Batch</h3>
-              <p className="font-mono text-4xl sm:text-5xl font-semibold text-white mt-6 mb-2" data-testid="price-online">
-                ₹49,000
+              <p className="font-mono text-4xl sm:text-5xl font-semibold text-white mt-6 mb-1" data-testid="price-online">
+                ₹49,990
               </p>
+              <p className="font-mono text-[10px] uppercase tracking-[0.15em] text-brand mb-1">Inclusive of GST</p>
               <p className="font-mono text-[11px] uppercase tracking-[0.15em] text-zinc-500 mb-10">One-time · Attend from anywhere</p>
               <ul className="space-y-3 text-zinc-400 text-sm mb-12">
-                {["Live interactive virtual classes", "Full structured curriculum", "Doubt-clearing with practitioner mentors", "Batch schedule + student portal access"].map((f) => (
-                  <li key={f} className="flex gap-3">
-                    <span className="text-green-500 mt-1">—</span>
-                    <span>{f}</span>
+                {[
+                  ["VIP Group & Community", "private learning & trading community access"],
+                  ["Live Market With Mentors", "learn during live market sessions"],
+                  ["Weekly Personal Doubt Session", "dedicated time for individual questions"],
+                  ["Seminar Access", "attend selected seminars at no additional fee"],
+                  ["1-Year Recorded Learning Vault", "revisit sessions throughout the year"],
+                  ["AI Trading Strategy & Indicator", "stated value ₹1,10,000"],
+                ].map(([t, d]) => (
+                  <li key={t} className="flex gap-3">
+                    <span className="text-brand mt-0.5 text-[10px]">◆</span>
+                    <span><strong className="text-white font-semibold">{t}</strong> — {d}</span>
                   </li>
                 ))}
               </ul>
@@ -491,15 +499,27 @@ export default function Home() {
                 <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-zinc-500">In-Person Classroom</span>
               </div>
               <h3 className="font-display text-3xl sm:text-4xl font-bold tracking-tight mb-2">Offline Batch</h3>
-              <p className="font-mono text-4xl sm:text-5xl font-semibold text-white mt-6 mb-2" data-testid="price-offline">
-                ₹99,000
+              <p className="font-mono text-4xl sm:text-5xl font-semibold text-white mt-6 mb-1" data-testid="price-offline">
+                ₹1,99,990
               </p>
+              <p className="font-mono text-[10px] uppercase tracking-[0.15em] text-brand mb-1">Inclusive of GST</p>
               <p className="font-mono text-[11px] uppercase tracking-[0.15em] text-zinc-500 mb-10">One-time · In-person classroom</p>
               <ul className="space-y-3 text-zinc-400 text-sm mb-12">
-                {["Face-to-face classroom sessions", "On-desk practice with live market context", "Direct mentor access in the room", "Full structured curriculum + batch details"].map((f) => (
-                  <li key={f} className="flex gap-3">
-                    <span className="text-green-500 mt-1">—</span>
-                    <span>{f}</span>
+                {[
+                  ["Exclusive In-Person Mentorship", "face-to-face learning with mentors"],
+                  ["Hybrid Model Available", "join online/live sessions whenever required"],
+                  ["Daily Personal Doubt Sessions", "individual guidance every day"],
+                  ["Lifetime Recorded Learning Vault", "lifetime access to recordings"],
+                  ["Premium Welcome Kit", "curated onboarding experience"],
+                  ["Complimentary Snacks", "included during offline sessions"],
+                  ["VIP Seminar Pass", "premium seating & priority access"],
+                  ["10% OFF Future Bootcamps", "Dubai · Thailand · Goa · Rishikesh"],
+                  ["Lifetime Mentor Access", "book mentor appointments anytime"],
+                  ["AI Trading Strategy & Indicator", "stated value ₹1,10,000"],
+                ].map(([t, d]) => (
+                  <li key={t} className="flex gap-3">
+                    <span className="text-brand mt-0.5 text-[10px]">◆</span>
+                    <span><strong className="text-white font-semibold">{t}</strong> — {d}</span>
                   </li>
                 ))}
               </ul>

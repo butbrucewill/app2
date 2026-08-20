@@ -95,8 +95,8 @@ function LeadModal({ open, onClose }) {
                     onChange={set("interest")}
                     className="w-full bg-white/5 border border-white/15 px-4 py-3 text-sm text-white focus:outline-none focus:border-brand rounded-none [&>option]:bg-[#0a0a0a]"
                   >
-                    <option value="online">Interested in — Online Batch (₹49,000)</option>
-                    <option value="offline">Interested in — Offline Batch (₹99,000)</option>
+                    <option value="online">Interested in — Online Batch (₹49,990)</option>
+                    <option value="offline">Interested in — Offline Batch (₹1,99,990)</option>
                   </select>
                   <button
                     type="submit"

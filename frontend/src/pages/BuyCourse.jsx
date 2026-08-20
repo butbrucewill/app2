@@ -13,17 +13,17 @@ const COURSES = {
     id: "online",
     name: "Online Batch",
     format: "Live Virtual Classes",
-    price: 49000,
+    price: 49990,
     icon: Monitor,
-    points: ["Attend live from anywhere", "Full structured curriculum", "Portal access + batch schedule"],
+    points: ["VIP community + live market sessions with mentors", "Weekly personal doubt sessions", "1-year learning vault + AI strategy (₹1.1L value)"],
   },
   offline: {
     id: "offline",
     name: "Offline Batch",
     format: "In-Person Classroom",
-    price: 99000,
+    price: 199990,
     icon: MapPin,
-    points: ["Face-to-face classroom sessions", "On-desk live market practice", "Direct mentor access"],
+    points: ["In-person mentorship + hybrid online access", "Daily doubt sessions · lifetime learning vault", "Welcome kit, VIP seminar pass, 10% off bootcamps"],
   },
 };
 
