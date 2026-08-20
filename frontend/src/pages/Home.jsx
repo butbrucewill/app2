@@ -165,6 +165,18 @@ export default function Home() {
   return (
     <div className="relative bg-[#050505] text-white min-h-screen hide-native-cursor">
       <ChartBackdrop />
+      <video
+        src="/promo.mp4"
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="auto"
+        aria-hidden="true"
+        data-testid="bg-video"
+        className="fixed inset-0 z-[1] w-full h-full object-cover opacity-[0.12] pointer-events-none"
+        style={{ filter: "saturate(0.35) brightness(0.9)" }}
+      />
       <div className="fixed inset-0 z-[2] bg-black/45 md:bg-black/15 pointer-events-none" aria-hidden="true" />
       <CustomCursor />
       <div className="relative z-10">
@@ -263,14 +275,23 @@ export default function Home() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 1 }}
-            className="lg:col-span-7 flex flex-wrap gap-x-10 gap-y-4 font-mono text-[11px] uppercase tracking-[0.15em] text-paper/40"
+            className="lg:col-span-7 flex flex-wrap gap-3"
             data-testid="hero-facts"
           >
-            <span>Live Classes</span>
-            <span className="text-paper/15">/</span>
-            <span>One-Time Fee</span>
-            <span className="text-paper/15">/</span>
-            <span>Beginner Friendly</span>
+            {[
+              ["1.9M+", "Combined Community"],
+              ["750K+", "Aman Singh Negi"],
+              ["150K+", "Rajat Sharma"],
+              ["SEBI", "Registered Mentorship"],
+            ].map(([val, label]) => (
+              <span
+                key={label}
+                className="inline-flex items-baseline gap-2 border border-brand/25 bg-brand/10 backdrop-blur rounded-full px-5 py-2.5"
+              >
+                <span className="font-display text-base font-bold text-white">{val}</span>
+                <span className="font-mono text-[9px] uppercase tracking-[0.15em] text-brand/90">{label}</span>
+              </span>
+            ))}
           </motion.div>
         </div>
         <p className="absolute bottom-5 right-6 sm:right-10 z-10 font-mono text-[10px] uppercase tracking-[0.2em] text-white/30">
