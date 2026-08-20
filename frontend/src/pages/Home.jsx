@@ -252,11 +252,14 @@ export default function Home() {
             data-testid="hero-mentor-photo"
           >
             <div className="absolute -inset-3 border border-brand/30 pointer-events-none" />
-            <div className="relative overflow-hidden border border-white/15 group">
-              <img
-                src="/mentor-aman-hero.jpg"
-                alt="Aman Singh Negi, Chief Academic Officer of One Stock Academy"
-                className="w-full aspect-[4/5] object-cover object-[50%_42%] grayscale-[30%] group-hover:grayscale-0 transition-all duration-700"
+            <div className="relative overflow-hidden border border-white/15 group bg-black">
+              <iframe
+                src="https://www.youtube-nocookie.com/embed/hAIP2zrLQuo?autoplay=1&mute=1&loop=1&playlist=hAIP2zrLQuo&playsinline=1&rel=0&modestbranding=1"
+                title="Aman Singh Negi — One Stock Academy"
+                data-testid="hero-video"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="w-full aspect-[9/16] max-h-[70vh] mx-auto"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent pointer-events-none" />
               <div className="absolute bottom-5 left-5 right-5 flex items-end justify-between gap-3">
