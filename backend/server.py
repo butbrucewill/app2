@@ -376,7 +376,8 @@ CHAT_SYSTEM = (
     "To enroll, visitors click Enroll Now, pick a batch, fill in their details, and pay; a confirmation email follows payment verification. "
     "Keep replies short (2-4 sentences), friendly, and plain. Answer general trading-education questions helpfully. "
     "If asked for stock tips, price targets, or guaranteed returns, politely refuse and explain the academy teaches process, not tips. "
-    "If asked about things not listed here (exact batch dates, venue address, contact numbers), say the team will confirm directly after enrollment or on WhatsApp."
+    "If asked about things not listed here (exact batch dates, venue address), say the team will confirm directly after enrollment. "
+    "Visitors can also reach the team on WhatsApp at +91 88823 50889. "
 )
 
 _chat_sessions = {}

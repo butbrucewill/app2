@@ -5,6 +5,8 @@ import { toast } from "sonner";
 import axios from "axios";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
+const WHATSAPP_NUMBER = "918882350889";
+const WHATSAPP_LINK = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("Hi! I want to know about One Stock Academy courses.")}`;
 
 const CHIPS = ["What is Buniyaad?", "Online vs Offline?", "What are the fees?"];
 
@@ -62,9 +64,18 @@ function LeadModal({ open, onClose }) {
                   <Send className="w-5 h-5 text-green-500" />
                 </span>
                 <h2 className="font-display text-3xl font-bold text-white mb-3">You're on the list.</h2>
-                <p className="text-zinc-400 text-sm leading-relaxed">
+                <p className="text-zinc-400 text-sm leading-relaxed mb-6">
                   Our team will reach out to you on WhatsApp shortly with program details and batch information.
                 </p>
+                <a
+                  href={WHATSAPP_LINK}
+                  target="_blank"
+                  rel="noreferrer"
+                  data-testid="lead-whatsapp-direct"
+                  className="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.15em] text-[#25D366] border border-[#25D366]/40 px-5 py-3 hover:bg-[#25D366]/10 transition-colors"
+                >
+                  Message us directly on WhatsApp
+                </a>
               </div>
             ) : (
               <>
@@ -101,6 +112,14 @@ function LeadModal({ open, onClose }) {
                     with program updates.
                   </p>
                 </form>
+                <a
+                  href={WHATSAPP_LINK}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="block mt-4 text-center font-mono text-[10px] uppercase tracking-[0.15em] text-[#25D366] hover:text-white transition-colors"
+                >
+                  or message us directly on WhatsApp →
+                </a>
               </>
             )}
           </motion.div>
