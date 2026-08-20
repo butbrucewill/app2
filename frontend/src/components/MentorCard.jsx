@@ -69,7 +69,7 @@ export default function MentorCard({ m, i }) {
               src={m.photo}
               alt={m.name}
               data-testid={`mentor-photo-${i}`}
-              className="absolute inset-0 w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
+              className="absolute inset-0 w-full h-full object-cover transition-all duration-700"
               style={{ objectPosition: m.focus || "50% 30%" }}
             />
           ) : (
