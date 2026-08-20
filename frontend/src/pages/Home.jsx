@@ -16,7 +16,6 @@ import Footer from "@/components/Footer";
 import TickerTape from "@/components/TickerTape";
 import ChartBackdrop, { scrollState } from "@/components/ChartBackdrop";
 import BannerPhotos from "@/components/BannerPhotos";
-import ClassroomStrip from "@/components/ClassroomStrip";
 import EditorialMarquee from "@/components/EditorialMarquee";
 import CustomCursor from "@/components/CustomCursor";
 import MentorCard from "@/components/MentorCard";
@@ -560,8 +559,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
-      <ClassroomStrip />
 
       {/* FAQ */}
       <section id="faq" data-testid="faq-section" className="border-y border-white/10 bg-black/40 backdrop-blur-sm">
