@@ -16,7 +16,6 @@ import TickerTape from "@/components/TickerTape";
 import HeroVideo from "@/components/HeroVideo";
 import BannerPhotos from "@/components/BannerPhotos";
 import ChartQuiz from "@/components/ChartQuiz";
-import ResultsWall from "@/components/ResultsWall";
 import EditorialMarquee from "@/components/EditorialMarquee";
 import CustomCursor from "@/components/CustomCursor";
 import MentorCard from "@/components/MentorCard";
@@ -576,19 +575,6 @@ export default function Home() {
         </motion.div>
         <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.1 }}>
           <ChartQuiz />
-        </motion.div>
-      </section>
-
-      {/* RESULTS WALL */}
-      <section id="results" data-testid="results-section" className="border-y border-white/10 bg-black/40 backdrop-blur-sm py-24 sm:py-32 overflow-hidden">
-        <motion.div {...fadeUp} className="max-w-2xl mx-auto text-center mb-14 px-6">
-          <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-brand mb-4">Student Results</p>
-          <h2 className="font-display text-4xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight">
-            Proof over promises
-          </h2>
-        </motion.div>
-        <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.1 }}>
-          <ResultsWall />
         </motion.div>
       </section>
 
