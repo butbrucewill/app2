@@ -39,19 +39,31 @@ export default function CustomCursor() {
 
   if (!enabled) return null;
 
+  const bodyColor = label.up ? "#22c55e" : "#ef4444";
+
   return (
     <>
-      <div className="fixed inset-0 z-[70] pointer-events-none mix-blend-difference" data-testid="custom-cursor" aria-hidden="true">
-        <motion.div className="absolute top-0 bottom-0 w-px bg-white/20" style={{ left: lineX }} />
-        <motion.div className="absolute left-0 right-0 h-px bg-white/20" style={{ top: lineY }} />
+      <div className="fixed inset-0 z-[70] pointer-events-none" data-testid="custom-cursor" aria-hidden="true">
         <motion.div
-          className="absolute w-8 h-8 -ml-4 -mt-4 border border-white/50 rounded-full"
-          style={{ left: ringX, top: ringY }}
+          className="absolute top-0 bottom-0 w-px"
+          style={{ left: lineX, backgroundColor: bodyColor, opacity: 0.35 }}
         />
-        <motion.div className="absolute w-1.5 h-1.5 -ml-[3px] -mt-[3px] bg-white" style={{ left: lineX, top: lineY }} />
+        <motion.div
+          className="absolute w-[14px] h-9 -ml-[7px] -mt-[18px] rounded-[2px]"
+          style={{
+            left: lineX,
+            top: lineY,
+            backgroundColor: bodyColor,
+            boxShadow: `0 0 18px ${bodyColor}66`,
+          }}
+        />
+        <motion.div
+          className="absolute w-[26px] h-[26px] -ml-[13px] -mt-[13px] border rounded-full"
+          style={{ left: ringX, top: ringY, borderColor: `${bodyColor}55` }}
+        />
       </div>
       <motion.div
-        className="fixed z-[70] pointer-events-none ml-4 mt-3 font-mono text-[10px] tracking-wider whitespace-nowrap"
+        className="fixed z-[70] pointer-events-none ml-4 mt-6 font-mono text-[10px] tracking-wider whitespace-nowrap"
         style={{ left: lineX, top: lineY }}
         aria-hidden="true"
       >
