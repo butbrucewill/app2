@@ -14,7 +14,7 @@ import {
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import TickerTape from "@/components/TickerTape";
-import ScrollExperience, { scrollState } from "@/components/ScrollExperience";
+import ChartBackdrop, { scrollState } from "@/components/ChartBackdrop";
 import EditorialMarquee from "@/components/EditorialMarquee";
 import CustomCursor from "@/components/CustomCursor";
 import MentorCard from "@/components/MentorCard";
@@ -159,13 +159,8 @@ export default function Home() {
 
   return (
     <div className="relative bg-[#050505] text-white min-h-screen hide-native-cursor">
-      <ScrollExperience />
-      <div
-        className="fixed inset-0 z-[1] opacity-[0.07] pointer-events-none bg-repeat"
-        style={{ backgroundImage: "url('/bg-pattern.png')", backgroundSize: "500px" }}
-        aria-hidden="true"
-      />
-      <div className="fixed inset-0 z-[2] bg-black/60 md:bg-black/25 pointer-events-none" aria-hidden="true" />
+      <ChartBackdrop />
+      <div className="fixed inset-0 z-[2] bg-black/45 md:bg-black/15 pointer-events-none" aria-hidden="true" />
       <CustomCursor />
       <div className="relative z-10">
       <Navbar />

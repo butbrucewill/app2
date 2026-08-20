@@ -48,7 +48,7 @@ export default function MentorCard({ m, i }) {
               y={110 - v}
               width="8"
               height={v * 0.8}
-              fill={j % 3 === 0 ? "#ef4444" : "#22c55e"}
+              fill={j % 3 === 0 ? "#0070F0" : "#3D9BFF"}
             />
           ))}
         </svg>
