@@ -111,7 +111,7 @@ function Terrain() {
   });
   return (
     <mesh geometry={geom} rotation={[-Math.PI / 2, 0, 0]} position={[0, -3.6, 0]}>
-      <meshBasicMaterial color="#3f3f46" wireframe transparent opacity={0.45} />
+      <meshBasicMaterial color="#1E3A6E" wireframe transparent opacity={0.55} />
     </mesh>
   );
 }
@@ -181,7 +181,7 @@ function DataRing() {
       })}
       <mesh rotation={[-Math.PI / 2, 0, 0]}>
         <torusGeometry args={[4.4, 0.012, 8, 80]} />
-        <meshBasicMaterial color="#52525b" transparent opacity={0.6} />
+        <meshBasicMaterial color="#2E4E8F" transparent opacity={0.7} />
       </mesh>
     </group>
   );
@@ -199,13 +199,13 @@ function Finale() {
     <group ref={g} position={[0, 0.4, 0]}>
       <mesh>
         <icosahedronGeometry args={[2.6, 1]} />
-        <meshBasicMaterial color="#d4d4d8" wireframe transparent opacity={0.5} />
+        <meshBasicMaterial color="#3D9BFF" wireframe transparent opacity={0.35} />
       </mesh>
       <mesh>
         <icosahedronGeometry args={[1.4, 0]} />
-        <meshStandardMaterial color="#050505" emissive="#22c55e" emissiveIntensity={0.35} metalness={0.8} roughness={0.2} />
+        <meshStandardMaterial color="#050505" emissive="#0070F0" emissiveIntensity={0.5} metalness={0.8} roughness={0.2} />
       </mesh>
-      <pointLight intensity={6} color="#22c55e" distance={9} />
+      <pointLight intensity={8} color="#3D9BFF" distance={10} />
     </group>
   );
 }
@@ -223,11 +223,12 @@ export default function ScrollExperience() {
   return (
     <div className="fixed inset-0 z-0 pointer-events-none" data-testid="scroll-experience" aria-hidden="true">
       <Canvas camera={{ position: [0, 1.4, 11], fov: 45 }} dpr={[1, 1.75]}>
-        <color attach="background" args={["#050505"]} />
-        <fog attach="fog" args={["#050505", 12, 34]} />
+        <color attach="background" args={["#04060D"]} />
+        <fog attach="fog" args={["#04060D", 12, 34]} />
         <ambientLight intensity={0.55} />
         <directionalLight position={[5, 10, 6]} intensity={1.1} />
-        <pointLight position={[-6, 4, -4]} intensity={10} color="#ffffff" />
+        <pointLight position={[-6, 4, -4]} intensity={14} color="#3D9BFF" />
+        <pointLight position={[7, 2, -2]} intensity={9} color="#0070F0" />
         <Stars radius={50} depth={30} count={1600} factor={2.4} saturation={0} fade speed={0.5} />
         <Rig />
         <CandleForest />

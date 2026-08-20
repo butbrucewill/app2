@@ -9,7 +9,7 @@ export default function Footer() {
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10">
           <div>
             <div className="mb-4">
-              <img src="/logo-blue.png" alt="One Stock Academy" className="h-11 w-auto" />
+              <img src="/logo-brand.png" alt="One Stock Academy" className="h-11 w-auto" />
             </div>
             <p className="text-sm text-paper/60 leading-relaxed mb-6">
               The one-stop solution to every trading worry — outcome-oriented, high-quality
