@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
@@ -14,7 +13,6 @@ import {
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import TickerTape from "@/components/TickerTape";
-import ChartBackdrop, { scrollState } from "@/components/ChartBackdrop";
 import HeroVideo from "@/components/HeroVideo";
 import BannerPhotos from "@/components/BannerPhotos";
 import PartnerMarquee from "@/components/PartnerMarquee";
@@ -152,32 +150,8 @@ const REVIEWS = [
 ];
 
 export default function Home() {
-  useEffect(() => {
-    const onScroll = () => {
-      const max = document.documentElement.scrollHeight - window.innerHeight;
-      scrollState.p = max > 0 ? Math.min(Math.max(window.scrollY / max, 0), 1) : 0;
-    };
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
   return (
     <div className="relative bg-[#050505] text-white min-h-screen hide-native-cursor">
-      <ChartBackdrop />
-      <video
-        src="/promo.mp4"
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="auto"
-        aria-hidden="true"
-        data-testid="bg-video"
-        className="fixed inset-0 z-[1] w-full h-full object-cover opacity-[0.12] pointer-events-none"
-        style={{ filter: "saturate(0.35) brightness(0.9)" }}
-      />
-      <div className="fixed inset-0 z-[2] bg-black/45 md:bg-black/15 pointer-events-none" aria-hidden="true" />
       <CustomCursor />
       <div className="relative z-10">
       <Navbar />
