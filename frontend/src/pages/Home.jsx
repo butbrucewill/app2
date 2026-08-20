@@ -294,6 +294,21 @@ export default function Home() {
         </div>
       </section>
 
+      {/* MENTORS */}
+      <section id="mentor" data-testid="mentor-section" className="max-w-7xl mx-auto px-6 sm:px-10 py-24 sm:py-32">
+        <motion.div {...fadeUp} className="max-w-2xl mb-16">
+          <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-zinc-500 mb-4">Your Mentors</p>
+          <h2 className="font-display text-4xl sm:text-5xl font-bold tracking-tight text-white leading-tight">
+            Practitioners the market <span className="italic text-zinc-400">already follows</span>
+          </h2>
+        </motion.div>
+        <div className="flex flex-col gap-8 max-w-4xl mx-auto" style={{ perspective: 1600 }}>
+          {MENTORS.map((m, i) => (
+            <MentorCard key={m.name} m={m} i={i} />
+          ))}
+        </div>
+      </section>
+
       {/* VISION & TRACK RECORD */}
       <section id="vision" data-testid="vision-section" className="max-w-7xl mx-auto px-6 sm:px-10 py-24 sm:py-32">
         <div className="grid md:grid-cols-2 gap-6 mb-6">
@@ -423,21 +438,6 @@ export default function Home() {
               </Magnetic>
             </TiltCard>
           </div>
-        </div>
-      </section>
-
-      {/* MENTORS */}
-      <section id="mentor" data-testid="mentor-section" className="max-w-7xl mx-auto px-6 sm:px-10 py-24 sm:py-32">
-        <motion.div {...fadeUp} className="max-w-2xl mb-16">
-          <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-zinc-500 mb-4">Your Mentors</p>
-          <h2 className="font-display text-4xl sm:text-5xl font-bold tracking-tight text-white leading-tight">
-            Practitioners the market <span className="italic text-zinc-400">already follows</span>
-          </h2>
-        </motion.div>
-        <div className="flex flex-col gap-8 max-w-4xl mx-auto" style={{ perspective: 1600 }}>
-          {MENTORS.map((m, i) => (
-            <MentorCard key={m.name} m={m} i={i} />
-          ))}
         </div>
       </section>
 
