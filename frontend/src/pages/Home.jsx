@@ -17,6 +17,8 @@ import TickerTape from "@/components/TickerTape";
 import ChartBackdrop, { scrollState } from "@/components/ChartBackdrop";
 import BannerPhotos from "@/components/BannerPhotos";
 import PartnerMarquee from "@/components/PartnerMarquee";
+import ChartQuiz from "@/components/ChartQuiz";
+import ResultsWall from "@/components/ResultsWall";
 import EditorialMarquee from "@/components/EditorialMarquee";
 import CustomCursor from "@/components/CustomCursor";
 import MentorCard from "@/components/MentorCard";
@@ -561,6 +563,36 @@ export default function Home() {
             ))}
           </div>
         </div>
+      </section>
+
+      {/* CHART QUIZ */}
+      <section id="quiz" data-testid="quiz-section" className="max-w-7xl mx-auto px-6 sm:px-10 py-24 sm:py-32">
+        <motion.div {...fadeUp} className="max-w-2xl mx-auto text-center mb-14">
+          <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-brand mb-4">Test Yourself</p>
+          <h2 className="font-display text-4xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight">
+            Can you read this chart?
+          </h2>
+          <p className="text-zinc-400 text-sm mt-4 leading-relaxed">
+            Three real chart situations. Call the move, then watch what the market did — the way our
+            students learn every single session.
+          </p>
+        </motion.div>
+        <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.1 }}>
+          <ChartQuiz />
+        </motion.div>
+      </section>
+
+      {/* RESULTS WALL */}
+      <section id="results" data-testid="results-section" className="border-y border-white/10 bg-black/40 backdrop-blur-sm py-24 sm:py-32 overflow-hidden">
+        <motion.div {...fadeUp} className="max-w-2xl mx-auto text-center mb-14 px-6">
+          <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-brand mb-4">Student Results</p>
+          <h2 className="font-display text-4xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight">
+            Proof over promises
+          </h2>
+        </motion.div>
+        <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.1 }}>
+          <ResultsWall />
+        </motion.div>
       </section>
 
       {/* FAQ */}
