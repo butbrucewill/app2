@@ -52,6 +52,17 @@
 }
 
 @layer utilities {
+    .text-pop {
+        background: linear-gradient(100deg, #3D9BFF 0%, #7C9AFF 20%, #A78BFA 40%, #F472B6 62%, #FBBF24 82%, #3D9BFF 100%);
+        background-size: 220% auto;
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        animation: text-pop-shift 8s linear infinite;
+    }
+    @keyframes text-pop-shift {
+        to { background-position: 220% center; }
+    }
     .paper-noise {
         position: relative;
     }

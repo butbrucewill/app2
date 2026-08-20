@@ -186,7 +186,7 @@ export default function Home() {
               </span>
               <span className="block overflow-hidden">
                 <motion.span
-                  className="block italic text-brand"
+                  className="block italic text-pop"
                   initial={{ y: "110%" }}
                   animate={{ y: 0 }}
                   transition={{ duration: 1, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
@@ -285,7 +285,7 @@ export default function Home() {
           <motion.div {...fadeUp} className="max-w-2xl mb-14">
             <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-brand mb-4">New-Age Trading Education</p>
             <h2 className="font-display text-4xl sm:text-6xl font-bold tracking-tight text-white leading-[1.02]">
-              Learn trading from practitioners the market <span className="italic text-zinc-400">already follows</span>
+              Learn trading from practitioners the market <span className="italic text-pop">already follows</span>
             </h2>
           </motion.div>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
@@ -331,7 +331,7 @@ export default function Home() {
         <motion.div {...fadeUp} className="max-w-2xl mb-16">
           <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-brand mb-4">Your Mentors</p>
           <h2 className="font-display text-4xl sm:text-5xl font-bold tracking-tight text-white leading-tight">
-            Practitioners the market <span className="italic text-zinc-400">already follows</span>
+            Practitioners the market <span className="italic text-pop">already follows</span>
           </h2>
         </motion.div>
         <div className="flex flex-col gap-8 max-w-4xl mx-auto" style={{ perspective: 1600 }}>
@@ -346,7 +346,7 @@ export default function Home() {
         <motion.div {...fadeUp} className="max-w-2xl mb-16">
           <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-brand mb-4">Why One Stock Academy</p>
           <h2 className="font-display text-4xl sm:text-5xl font-bold tracking-tight text-white leading-tight">
-            Built for people who want to trade <span className="italic text-zinc-400">properly</span>
+            Built for people who want to trade <span className="italic text-pop">properly</span>
           </h2>
         </motion.div>
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
@@ -382,14 +382,14 @@ export default function Home() {
             <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-brand mb-6">Founder's Vision</p>
             <p className="font-display text-2xl sm:text-3xl font-bold text-white leading-snug">
               Empower the youth of India with trading skills they can hold a strong command over the
-              financial economy with — and help India realise <span className="italic text-zinc-400">"Viksit Bharat @ 2047".</span>
+              financial economy with — and help India realise <span className="italic text-pop">"Viksit Bharat @ 2047".</span>
             </p>
           </motion.div>
           <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.1 }} className="bg-black/70 md:bg-white/[0.04] backdrop-blur-xl border border-white/10 rounded-2xl p-8 sm:p-12">
             <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-brand mb-6">Mission Mode</p>
             <p className="font-display text-2xl sm:text-3xl font-bold text-white leading-snug">
               Relevant, curated course material delivered by trading experts in a time-bound manner —
-              quality learning, <span className="italic text-zinc-400">outcome oriented.</span>
+              quality learning, <span className="italic text-pop">outcome oriented.</span>
             </p>
           </motion.div>
         </div>
@@ -635,7 +635,7 @@ export default function Home() {
             <h2 className="font-display text-4xl sm:text-6xl font-bold tracking-tight leading-[1.02] mb-8">
               Stop watching the market.
               <br />
-              <span className="italic text-zinc-400">Start reading it.</span>
+              <span className="italic text-pop">Start reading it.</span>
             </h2>
             <Magnetic>
               <Link
