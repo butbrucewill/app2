@@ -17,6 +17,8 @@ Build a 2-page website for One Stock Academy, a trading education company (onlin
 - Database: dual-mode via /app/backend/database.py — MySQL (aiomysql pool, auto-creates tables
   enrollments/leads/chat_messages) when MYSQL_HOST/MYSQL_USER/MYSQL_DATABASE are set in backend/.env,
   otherwise MongoDB (motor, MONGO_URL/DB_NAME). Chosen per user (Hostinger shared hosting ships MySQL).
+  LIVE since 2026-08-21: connected to user's Hostinger MySQL (srv1647.hstgr.io / u763720042_onestock,
+  Remote MySQL "Any Host" % enabled by user). MongoDB is now only a fallback if MYSQL_* are cleared.
 - Key endpoints: POST /api/chat (rule-based chatbot), POST /api/leads (handoff lead form),
   POST /api/orders + POST /api/payments/verify + GET /api/orders/{ref} (enrollment, DEMO payment mode),
   POST /api/admin/login (JWT, 12h), GET /api/admin/enrollments, GET /api/admin/leads.
@@ -31,7 +33,9 @@ Build a 2-page website for One Stock Academy, a trading education company (onlin
 
 ## Pending / backlog
 - P0: Apex IT Solutions LMS payment link from user → wire Enroll buttons as external redirect (currently demo checkout).
-- P0 (user-side, deployment): Hostinger deployment — admin panel broken there because frontend was deployed without a reachable backend (REACT_APP_BACKEND_URL / API hosting / CORS). Code verified working in preview. User to share hosting details for guidance.
+- P0 (user-side, deployment): Hostinger frontend deploy — upload fresh /app/app2-main.zip in
+  hPanel → Deployments, set env var REACT_APP_BACKEND_URL to the Emergent deployed backend URL,
+  then Deploy the app on Emergent. Backend already talks to their Hostinger MySQL.
 - P1: UI or CLI to change default admin password (OneStock@Admin2026 → ADMIN_PASSWORD in backend/.env).
 - P1: Refactor server.py (510+ lines) into routers/modules; extract Home.jsx section data.
 - P2: Contact details/socials in footer, batch dates, SEO meta + OG images.
