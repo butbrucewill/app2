@@ -34,13 +34,13 @@ export default function Navbar() {
         </nav>
         <div className="flex items-center gap-3">
           <Magnetic strength={0.3}>
-            <Link
-              to="/enroll"
-              data-testid="nav-enroll-btn"
+            <a
+              href="https://web.onestockacademy.com"
+              data-testid="nav-login-btn"
               className="block whitespace-nowrap bg-paper text-ink font-mono text-[11px] uppercase tracking-[0.18em] px-5 py-2.5 hover:bg-white transition-colors rounded-full"
             >
-              Enroll Now
-            </Link>
+              Login / Signup
+            </a>
           </Magnetic>
           <button
             data-testid="mobile-menu-btn"
@@ -99,14 +99,14 @@ export default function Navbar() {
               transition={{ delay: 0.5 }}
               className="p-8 border-t border-white/10"
             >
-              <Link
-                to="/enroll"
-                data-testid="mobile-menu-enroll-btn"
+              <a
+                href="https://web.onestockacademy.com"
+                data-testid="mobile-menu-login-btn"
                 onClick={() => setOpen(false)}
                 className="block text-center bg-white text-black font-mono text-xs uppercase tracking-[0.2em] px-6 py-4 rounded-full"
               >
-                Enroll Now
-              </Link>
+                Login / Signup
+              </a>
             </motion.div>
           </motion.div>
         )}
