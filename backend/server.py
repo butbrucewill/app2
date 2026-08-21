@@ -331,6 +331,23 @@ JWT_SECRET = os.environ.get("JWT_SECRET", "")
 ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "")
 
 
+def client_ip(request: Request) -> str:
+    fwd = request.headers.get("X-Forwarded-For", "")
+    if fwd:
+        return fwd.split(",")[0].strip()
+    return request.client.host if request.client else "unknown"
+
+
+def rate_limited(bucket: dict, key: str, limit: int, window_sec: int) -> bool:
+    now = datetime.now(timezone.utc).timestamp()
+    hits = [t for t in bucket.get(key, []) if now - t < window_sec]
+    bucket[key] = hits + [now]
+    if len(bucket) > 5000:  # prune stale keys so the dict can't grow unbounded
+        for k in [k for k, v in bucket.items() if not v or now - v[-1] >= window_sec]:
+            bucket.pop(k, None)
+    return len(hits) >= limit
+
+
 class AdminLogin(BaseModel):
     password: str
 
@@ -346,10 +363,17 @@ def require_admin(request: Request):
         raise HTTPException(status_code=401, detail="Invalid or expired token")
 
 
+_admin_attempts = {}
+
+
 @api_router.post("/admin/login")
-async def admin_login(payload: AdminLogin):
+async def admin_login(payload: AdminLogin, request: Request):
+    ip = client_ip(request)
+    if rate_limited(_admin_attempts, ip, limit=5, window_sec=600):
+        raise HTTPException(status_code=429, detail="Too many attempts — try again in a few minutes")
     if not ADMIN_PASSWORD or payload.password != ADMIN_PASSWORD:
         raise HTTPException(status_code=401, detail="Invalid password")
+    _admin_attempts.pop(ip, None)
     token = jwt.encode(
         {"sub": "admin", "exp": datetime.now(timezone.utc) + timedelta(hours=12)},
         JWT_SECRET,
@@ -365,21 +389,67 @@ async def admin_enrollments(request: Request):
     return {"enrollments": [{**public_enrollment(d), "phone": d.get("phone", "")} for d in docs]}
 
 
-EMERGENT_LLM_KEY = os.environ.get("EMERGENT_LLM_KEY", "")
+CHAT_FAQ = [
+    (["buniyaad", "curriculum", "syllabus", "phase", "what do you teach", "what will i learn"],
+     "Buniyaad is our Foundation Mentorship Program with 5 phases: Market & Price Action Foundation, Smart Money Concepts, Risk & Trade Management, Strategy Building & Execution, and Psychology, Journaling & Performance.", False),
+    (["fee", "price", "cost", "charge", "payment", "subscription"],
+     "Online batch is ₹49,990 and Offline classroom is ₹1,99,990 — both one-time payments, inclusive of GST, with no recurring charges.", False),
+    (["difference", "which batch", "online vs", "online or offline", "compare"],
+     "Both formats teach the same Buniyaad curriculum with the same mentors. Online is live virtual classes from anywhere (₹49,990); Offline is in-person classroom learning with daily doubt sessions and premium perks (₹1,99,990).", False),
+    (["online"],
+     "The Online batch is ₹49,990 (incl. GST) — live virtual classes, VIP community, weekly personal doubt sessions, seminar access, and a 1-year recorded learning vault plus our AI trading strategy.", False),
+    (["offline", "classroom", "in-person", "in person"],
+     "The Offline batch is ₹1,99,990 (incl. GST) — in-person mentorship, hybrid online access, daily doubt sessions, lifetime learning vault, welcome kit, VIP seminar pass, and 10% off future bootcamps.", False),
+    (["mentor", "teacher", "aman", "rajat", "rishabh", "who teaches", "sebi", "trainer"],
+     "Your mentors are Aman Singh Negi (Chief Academic Officer, 750k+ on Instagram), Rajat Sharma (Founding Director, 150k+ traders on Instagram), and Rishabh Mishra (Founding Director, SEBI-registered).", False),
+    (["tip", "signal", "calls", "recommendation", "which stock", "what to buy", "jackpot"],
+     "We never give stock tips, signals, or buy/sell calls — Buniyaad teaches you to build your own trading process so you never depend on anyone's calls.", False),
+    (["guarantee", "profit", "returns", "rich", "sure shot", "sureshot"],
+     "No honest educator can guarantee profits — trading involves real risk of loss. What we commit to is a complete, disciplined process: skills, risk management, and psychology.", False),
+    (["enroll", "join", "register", "admission", "how to start", "get started", "sign up"],
+     "Click Enroll Now on this page, choose Online or Offline, fill in your details, and pay — enrollment is confirmed right after payment verification and details reach you by email.", False),
+    (["beginner", "experience", "new to", "fresher", "no knowledge", "start from scratch"],
+     "No experience needed — Buniyaad starts from the absolute basics and builds up phase by phase. Beginners fit right in.", False),
+    (["duration", "how long", "timing", "batch date", "schedule", "when does", "next batch", "batch", "start date"],
+     "Batch schedules and dates are shared with enrolled students directly. For upcoming batch dates, leave your details in the Chat With Us form and the team will confirm.", True),
+    (["refund", "cancel", "money back"],
+     "For refunds or cancellations, please leave your details in the Chat With Us form — our team will reach out and help you personally.", True),
+    (["contact", "talk to", "human", "team", "call me", "support"],
+     "Sure — leave your name, email, and WhatsApp number in the Chat With Us form and our team will reach out to you.", True),
+    (["hi", "hello", "hey", "namaste"],
+     "Hello! I can help with the Buniyaad program, fees, mentors, formats, and enrollment. What would you like to know?", False),
+]
 
-CHAT_SYSTEM = (
-    "You are the One Stock Academy website assistant. One Stock Academy is an Indian trading education company. "
-    "Facts you must use: The program is Buniyaad — the Foundation Mentorship Program, with 5 phases: Market & Price Action Foundation; Smart Money Concepts; Risk & Trade Management; Strategy Building & Execution; Psychology, Journaling & Performance. "
-    "Two formats, both one-time payment inclusive of GST: Online live virtual classes at ₹49,990; Offline in-person classroom at ₹1,99,990. "
-    "Mentors: Aman Singh Negi (Chief Academic Officer, 750k+ on Instagram), Rajat Sharma (Founding Director, 150k+ on Instagram), Rishabh Mishra (Founding Director, SEBI-registered). "
-    "The academy never gives stock tips or signals and never guarantees profits — it is education only, not investment advice. "
-    "To enroll, visitors click Enroll Now, pick a batch, fill in their details, and pay; a confirmation email follows payment verification. "
-    "Keep replies short (2-4 sentences), friendly, and plain. Answer general trading-education questions helpfully. "
-    "If asked for stock tips, price targets, or guaranteed returns, politely refuse and explain the academy teaches process, not tips. "
-    "If asked about things not listed here (exact batch dates, venue address, contact numbers), say the team will confirm directly after enrollment."
+CHAT_FALLBACK = (
+    "That's beyond what I can answer here. Please share your details in the Chat With Us form — "
+    "our team will reach out to you and help you personally."
 )
 
-_chat_sessions = {}
+
+def _kw_pattern(k: str):
+    # single words tolerate a trailing plural (fee→fees, tip→tips, batch→batches);
+    # multi-word phrases match verbatim
+    suffix = r"(?:e?s)?" if " " not in k else ""
+    return re.compile(r"\b" + re.escape(k) + suffix + r"\b", re.IGNORECASE)
+
+
+CHAT_PATTERNS = [
+    ([_kw_pattern(k) for k in keywords], reply, handoff)
+    for keywords, reply, handoff in CHAT_FAQ
+]
+
+
+def chat_answer(message: str):
+    text = message.lower()
+    best, best_score = None, 0
+    for patterns, reply, handoff in CHAT_PATTERNS:
+        score = sum(1 for p in patterns if p.search(text))
+        if score > best_score:
+            best, best_score = (reply, handoff), score
+    if best:
+        return {"reply": best[0], "handoff": best[1]}
+    return {"reply": CHAT_FALLBACK, "handoff": True}
+
 _chat_rate = {}
 
 
@@ -422,55 +492,23 @@ async def admin_leads(request: Request):
 
 @api_router.post("/chat")
 async def chat(payload: ChatRequest, request: Request):
-    if not EMERGENT_LLM_KEY:
-        raise HTTPException(status_code=503, detail="Chat not configured")
-    ip = request.client.host if request.client else "unknown"
-    now = datetime.now(timezone.utc).timestamp()
-    hits = [t for t in _chat_rate.get(ip, []) if now - t < 60]
-    if len(hits) >= 10:
+    ip = client_ip(request)
+    if rate_limited(_chat_rate, ip, limit=10, window_sec=60):
         raise HTTPException(status_code=429, detail="Too many messages — please wait a moment")
-    _chat_rate[ip] = hits + [now]
 
-    from emergentintegrations.llm.chat import LlmChat, UserMessage, TextDelta, StreamDone
-
-    if payload.session_id not in _chat_sessions:
-        _chat_sessions[payload.session_id] = LlmChat(
-            api_key=EMERGENT_LLM_KEY,
-            session_id=payload.session_id,
-            system_message=CHAT_SYSTEM,
-        ).with_model("openai", "gpt-5.4")
-    llm = _chat_sessions[payload.session_id]
-
-    async def stream():
-        full = ""
-        try:
-            async for ev in llm.stream_message(UserMessage(text=payload.message)):
-                if isinstance(ev, TextDelta):
-                    full += ev.content
-                    yield f"data: {json.dumps({'t': ev.content})}\n\n"
-                elif isinstance(ev, StreamDone):
-                    break
-        except Exception as e:
-            logger.error(f"chat error: {e}")
-            yield f"data: {json.dumps({'t': 'Sorry, I had trouble answering that. Please try again.'})}\n\n"
-        await db.chat_sessions.update_one(
-            {"session_id": payload.session_id},
-            {
-                "$push": {"messages": {"$each": [
-                    {"role": "user", "text": payload.message, "at": datetime.now(timezone.utc).isoformat()},
-                    {"role": "assistant", "text": full, "at": datetime.now(timezone.utc).isoformat()},
-                ]}},
-                "$set": {"updated_at": datetime.now(timezone.utc).isoformat()},
-            },
-            upsert=True,
-        )
-        yield "data: [DONE]\n\n"
-
-    return StreamingResponse(
-        stream(),
-        media_type="text/event-stream",
-        headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
+    result = chat_answer(payload.message)
+    await db.chat_sessions.update_one(
+        {"session_id": payload.session_id},
+        {
+            "$push": {"messages": {"$each": [
+                {"role": "user", "text": payload.message, "at": datetime.now(timezone.utc).isoformat()},
+                {"role": "assistant", "text": result["reply"], "at": datetime.now(timezone.utc).isoformat()},
+            ]}},
+            "$set": {"updated_at": datetime.now(timezone.utc).isoformat()},
+        },
+        upsert=True,
     )
+    return result
 
 
 app.include_router(api_router)

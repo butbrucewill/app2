@@ -37,7 +37,7 @@ export default function Navbar() {
             <Link
               to="/enroll"
               data-testid="nav-enroll-btn"
-              className="block bg-paper text-ink font-mono text-[11px] uppercase tracking-[0.18em] px-5 py-2.5 hover:bg-white transition-colors rounded-full"
+              className="block whitespace-nowrap bg-paper text-ink font-mono text-[11px] uppercase tracking-[0.18em] px-5 py-2.5 hover:bg-white transition-colors rounded-full"
             >
               Enroll Now
             </Link>

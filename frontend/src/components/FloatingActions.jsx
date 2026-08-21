@@ -136,35 +136,13 @@ export default function FloatingActions() {
     setBusy(true);
     setMessages((m) => [...m, { role: "assistant", text: "" }]);
     try {
-      const res = await fetch(`${API}/chat`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ session_id: sessionId.current, message: msg }),
+      const res = await axios.post(`${API}/chat`, { session_id: sessionId.current, message: msg });
+      await new Promise((r) => setTimeout(r, 550));
+      setMessages((m) => {
+        const c = [...m];
+        c[c.length - 1] = { role: "assistant", text: res.data.reply, handoff: res.data.handoff };
+        return c;
       });
-      if (!res.ok || !res.body) throw new Error("chat failed");
-      const reader = res.body.getReader();
-      const dec = new TextDecoder();
-      let buf = "";
-      for (;;) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        buf += dec.decode(value, { stream: true });
-        const parts = buf.split("\n\n");
-        buf = parts.pop();
-        for (const p of parts) {
-          if (!p.startsWith("data: ")) continue;
-          const data = p.slice(6);
-          if (data === "[DONE]") continue;
-          try {
-            const { t } = JSON.parse(data);
-            setMessages((m) => {
-              const c = [...m];
-              c[c.length - 1] = { role: "assistant", text: c[c.length - 1].text + t };
-              return c;
-            });
-          } catch {}
-        }
-      }
     } catch {
       setMessages((m) => {
         const c = [...m];
@@ -220,6 +198,15 @@ export default function FloatingActions() {
                     }`}
                   >
                     {m.text || (busy && i === messages.length - 1 ? "…" : "")}
+                    {m.role === "assistant" && m.handoff && m.text && (
+                      <button
+                        data-testid="chat-handoff-btn"
+                        onClick={() => setLeadOpen(true)}
+                        className="mt-3 flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.15em] text-brand border border-brand/40 bg-brand/10 px-4 py-2.5 rounded-full hover:bg-brand hover:text-black transition-colors"
+                      >
+                        Talk to the team →
+                      </button>
+                    )}
                   </div>
                 </div>
               ))}

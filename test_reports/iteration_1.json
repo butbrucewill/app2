@@ -1,0 +1,54 @@
+{
+  "summary": "Full backend + frontend regression of One Stock Academy. Created pytest suite (/app/backend/tests) covering health/courses, rule-based chat (23 cases incl. all reported regressions), leads + admin auth/dashboard APIs, and demo enrollment/payment flow: 30/31 assertions passed. Playwright verified home page, chatbot handoff -> lead modal submission, offline/online enroll deep links + demo payment success (OSA-B240753134 paid), admin login (wrong + correct password) with enrollments/leads tables showing the new records, quiz, mentor cards, custom cursor, mobile viewport. Only failure: /api/chat rate limiting is not actually enforced.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "POST /api/chat", "issue": "Documented 10 msg/min per-IP rate limit never triggers — 15 rapid requests all returned 200 (test_chat_ratelimit.py). Root cause: _chat_rate is keyed on request.client.host, which behind the k8s ingress is the proxy/pod address and is not the real client; key on X-Forwarded-For (first hop) instead. In-memory dict also never evicts old IPs (slow leak)."},
+      {"endpoint": "POST /api/admin/login", "issue": "No brute-force protection / lockout or throttling on the admin password endpoint — unlimited password guesses accepted (only 401s). Single shared password, no per-attempt delay."},
+      {"endpoint": "docs", "issue": "Review request refers to POST /api/enroll; actual endpoint is POST /api/orders + POST /api/payments/verify. Docs/credentials note should be aligned (no code bug)."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Home header (390px mobile)", "issues": ["'ENROLL NOW' nav button text wraps onto two lines, making the header button taller than the hamburger — minor polish"]},
+      {"screen": "Admin login", "issues": ["Wrong-password feedback text renders but has no element with an error class/testid, making it harder to assert; consider data-testid=\"admin-login-error\""]}
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/conftest.py",
+    "/app/backend/tests/test_health.py",
+    "/app/backend/tests/test_chat.py",
+    "/app/backend/tests/test_chat_ratelimit.py",
+    "/app/backend/tests/test_leads_admin.py",
+    "/app/backend/tests/test_enrollment.py"
+  ],
+  "action_items": [
+    "Fix /api/chat rate limiting to key on X-Forwarded-For (currently completely ineffective behind ingress) and prune stale IP entries",
+    "Add basic throttling/lockout to POST /api/admin/login",
+    "Optional: mobile header 'Enroll Now' button wrapping; add data-testid to admin login error message"
+  ],
+  "critical_code_review_comments": [
+    "server.py is 510 lines and mixes email templating/scanning, payments, chat rules and admin auth — consider splitting into routers/modules before it grows further",
+    "chat_answer picks the rule with the highest keyword-hit count but ties resolve by first-declared rule; the broad ['online'] rule sits above ['offline'] so a message containing both is handled only because the 'difference' rule scores 2 — keep the specific rules above the broad single-keyword ones",
+    "Home.jsx (641 lines) and the FAQ/section content are inlined; extracting section data would ease maintenance",
+    "Backend runs uvicorn --reload watching /app/backend, so the new tests/ directory triggers a reload on edit — harmless but expect a brief reconnect during test authoring",
+    "Verified all responses exclude MongoDB _id; leads/enrollments projections are correct"
+  ],
+  "updated_files": [
+    "/app/backend/tests/conftest.py",
+    "/app/backend/tests/test_health.py",
+    "/app/backend/tests/test_chat.py",
+    "/app/backend/tests/test_chat_ratelimit.py",
+    "/app/backend/tests/test_leads_admin.py",
+    "/app/backend/tests/test_enrollment.py"
+  ],
+  "success_rate": {"backend": "97% (30/31)", "frontend": "100%"},
+  "seed_data_creation": "Test rows left in MongoDB: enrollments TEST_Student (paid), TEST_Fail (failed), TEST_Enroll 296188 (paid, via UI); leads TEST_Lead*, TEST_Interest*, 'TEST_UI Lead 296165'. Confirmation emails were dispatched to example.com addresses (Resend accepted, 202).",
+  "should_call_test_agent_after_fix": false,
+  "should_main_agent_self_test": true,
+  "test_credentials": "Admin password OneStock@Admin2026 (from /app/memory/test_credentials.md) — worked on both API and /admin UI",
+  "context_for_next_testing_agent": "pytest suite lives in /app/backend/tests (pytest.ini forces -n 2 --dist loadscope; run test_chat.py with -n 0). conftest.chat_post retries once after a 62s cooldown on 429 (currently never needed since rate limiting is broken). Regression cases confirmed fixed: 'weather in delhi' -> fallback+handoff, 'What are the fees?' -> fees rule, 'do you give stock tips?' -> tips rule. Demo payment mode confirmed (payment_mode=demo). No console errors on Home/Enroll/Admin after 3D library removal; no dangling imports of the 8 deleted components.",
+  "rca_of_the_issue": "Chat rate limit: _chat_rate uses request.client.host as the key. Behind the Kubernetes ingress the observed client host is not the end-user IP (and varies), so each request lands in a different/never-saturated bucket; 15 back-to-back /api/chat calls from one machine all returned 200. Fix: derive the client IP from X-Forwarded-For (leftmost entry) with request.client.host as fallback, and periodically drop IP keys older than the window."
+}

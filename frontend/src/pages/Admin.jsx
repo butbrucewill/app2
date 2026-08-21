@@ -14,6 +14,7 @@ export default function Admin() {
   const [rows, setRows] = useState(null);
   const [leads, setLeads] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [loginErr, setLoginErr] = useState("");
 
   const load = async (t) => {
     setLoading(true);
@@ -46,7 +47,9 @@ export default function Admin() {
       sessionStorage.setItem("osa_admin", res.data.token);
       setToken(res.data.token);
     } catch (err) {
-      toast.error(err.response?.data?.detail || "Login failed");
+      const msg = err.response?.data?.detail || "Login failed";
+      setLoginErr(msg);
+      toast.error(msg);
       setLoading(false);
     }
   };
@@ -92,6 +95,9 @@ export default function Admin() {
               required
               className="w-full border border-white/15 bg-white/5 px-4 py-3 text-white placeholder:text-zinc-600 focus:outline-none focus:border-white/60 rounded-none mb-4"
             />
+            {loginErr && (
+              <p data-testid="admin-login-error" className="text-red-400 text-xs mb-4 -mt-2">{loginErr}</p>
+            )}
             <button
               type="submit"
               data-testid="admin-login-btn"
