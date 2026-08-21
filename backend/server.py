@@ -2,7 +2,6 @@ from fastapi import FastAPI, APIRouter, HTTPException, Request
 from fastapi.responses import StreamingResponse
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
-from motor.motor_asyncio import AsyncIOMotorClient
 import os
 import logging
 import uuid
@@ -24,9 +23,7 @@ from datetime import datetime, timezone, timedelta
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
-mongo_url = os.environ['MONGO_URL']
-client = AsyncIOMotorClient(mongo_url)
-db = client[os.environ['DB_NAME']]
+from database import store
 
 RAZORPAY_KEY_ID = os.environ.get('RAZORPAY_KEY_ID', '').strip()
 RAZORPAY_KEY_SECRET = os.environ.get('RAZORPAY_KEY_SECRET', '').strip()
@@ -249,7 +246,7 @@ async def create_order(payload: OrderCreate):
             "payment_capture": 1,
         })
         doc["razorpay_order_id"] = rzp_order["id"]
-        await db.enrollments.insert_one(doc)
+        await store.insert_enrollment(doc)
         return {
             "demo": False,
             "order_ref": order_ref,
@@ -260,7 +257,7 @@ async def create_order(payload: OrderCreate):
             "course": course,
         }
 
-    await db.enrollments.insert_one(doc)
+    await store.insert_enrollment(doc)
     return {
         "demo": True,
         "order_ref": order_ref,
@@ -272,7 +269,7 @@ async def create_order(payload: OrderCreate):
 
 @api_router.post("/payments/verify")
 async def verify_payment(payload: PaymentVerify):
-    doc = await db.enrollments.find_one({"order_ref": payload.order_ref}, {"_id": 0})
+    doc = await store.get_enrollment(payload.order_ref)
     if not doc:
         raise HTTPException(status_code=404, detail="Order not found")
     if doc["status"] == "paid":
@@ -289,28 +286,26 @@ async def verify_payment(payload: PaymentVerify):
             hashlib.sha256,
         ).hexdigest()
         if not hmac.compare_digest(expected, payload.razorpay_signature):
-            await db.enrollments.update_one({"order_ref": payload.order_ref}, {"$set": {"status": "failed"}})
+            await store.update_enrollment(payload.order_ref, {"status": "failed"})
             raise HTTPException(status_code=400, detail="Invalid payment signature")
     else:
         if payload.demo_outcome != "success":
-            await db.enrollments.update_one({"order_ref": payload.order_ref}, {"$set": {"status": "failed"}})
+            await store.update_enrollment(payload.order_ref, {"status": "failed"})
             return {"status": "failed"}
 
     paid_at = datetime.now(timezone.utc).isoformat()
     update = {"status": "paid", "paid_at": paid_at}
     if payload.razorpay_payment_id:
         update["razorpay_payment_id"] = payload.razorpay_payment_id
-    await db.enrollments.update_one({"order_ref": payload.order_ref}, {"$set": update})
-    doc = await db.enrollments.find_one({"order_ref": payload.order_ref}, {"_id": 0})
+    await store.update_enrollment(payload.order_ref, update)
+    doc = await store.get_enrollment(payload.order_ref)
 
     email_status = "skipped"
     if EMAIL_KEY and EMAIL_FROM_NAME:
         try:
             subject = f"Enrollment confirmed — {COURSES[doc['course_id']]['name']}"
             email_id = await send_email(to=doc["email"], subject=subject, html=enrollment_email_html(doc))
-            await db.enrollments.update_one(
-                {"order_ref": payload.order_ref}, {"$set": {"confirmation_email_id": email_id}}
-            )
+            await store.update_enrollment(payload.order_ref, {"confirmation_email_id": email_id})
             email_status = "sent"
         except Exception as e:
             logger.error(f"Confirmation email failed for {payload.order_ref}: {e}")
@@ -321,7 +316,7 @@ async def verify_payment(payload: PaymentVerify):
 
 @api_router.get("/orders/{order_ref}")
 async def get_order(order_ref: str):
-    doc = await db.enrollments.find_one({"order_ref": order_ref}, {"_id": 0})
+    doc = await store.get_enrollment(order_ref)
     if not doc:
         raise HTTPException(status_code=404, detail="Order not found")
     return {"enrollment": public_enrollment(doc), "payment_mode": "live" if RAZORPAY_CONFIGURED else "demo"}
@@ -385,7 +380,7 @@ async def admin_login(payload: AdminLogin, request: Request):
 @api_router.get("/admin/enrollments")
 async def admin_enrollments(request: Request):
     require_admin(request)
-    docs = await db.enrollments.find({}, {"_id": 0}).sort("created_at", -1).to_list(500)
+    docs = await store.list_enrollments()
     return {"enrollments": [{**public_enrollment(d), "phone": d.get("phone", "")} for d in docs]}
 
 
@@ -479,14 +474,14 @@ async def create_lead(payload: LeadCreate):
         "status": "new",
         "created_at": datetime.now(timezone.utc).isoformat(),
     }
-    await db.leads.insert_one(doc)
+    await store.insert_lead(doc)
     return {"status": "ok", "lead_id": doc["lead_id"]}
 
 
 @api_router.get("/admin/leads")
 async def admin_leads(request: Request):
     require_admin(request)
-    docs = await db.leads.find({}, {"_id": 0}).sort("created_at", -1).to_list(500)
+    docs = await store.list_leads()
     return {"leads": docs}
 
 
@@ -497,17 +492,10 @@ async def chat(payload: ChatRequest, request: Request):
         raise HTTPException(status_code=429, detail="Too many messages — please wait a moment")
 
     result = chat_answer(payload.message)
-    await db.chat_sessions.update_one(
-        {"session_id": payload.session_id},
-        {
-            "$push": {"messages": {"$each": [
-                {"role": "user", "text": payload.message, "at": datetime.now(timezone.utc).isoformat()},
-                {"role": "assistant", "text": result["reply"], "at": datetime.now(timezone.utc).isoformat()},
-            ]}},
-            "$set": {"updated_at": datetime.now(timezone.utc).isoformat()},
-        },
-        upsert=True,
-    )
+    await store.append_chat_messages(payload.session_id, [
+        {"role": "user", "text": payload.message, "at": datetime.now(timezone.utc).isoformat()},
+        {"role": "assistant", "text": result["reply"], "at": datetime.now(timezone.utc).isoformat()},
+    ])
     return result
 
 
@@ -523,8 +511,3 @@ app.add_middleware(
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
-
-
-@app.on_event("shutdown")
-async def shutdown_db_client():
-    client.close()
