@@ -250,7 +250,7 @@ export default function Home() {
             data-testid="hero-facts"
           >
             {[
-              ["1.9M+", "Combined Community"],
+              ["10M+", "Combined Community"],
               ["750K+", "Aman Singh Negi"],
               ["150K+", "Rajat Sharma"],
               ["SEBI", "Registered Mentorship"],
@@ -290,7 +290,7 @@ export default function Home() {
               { icon: BookOpen, big: "5 Phases", small: "Structured Buniyaad FMP curriculum" },
               { icon: Monitor, big: "2 Formats", small: "Live online classes & in-person classroom" },
               { icon: UserCheck, big: "3 Mentors", small: "SEBI-registered founder-led teaching" },
-              { icon: TrendingUp, big: "1.9M+", small: "Combined social community" },
+              { icon: TrendingUp, big: "10M+", small: "Combined social community" },
             ].map((c, i) => (
               <motion.div
                 key={c.big}
@@ -395,7 +395,7 @@ export default function Home() {
           className="grid grid-cols-1 sm:grid-cols-3 border border-white/10 divide-y sm:divide-y-0 sm:divide-x divide-white/10 bg-black/70 md:bg-black/30 backdrop-blur-sm rounded-2xl overflow-hidden"
         >
           {[
-            ["1.9M+", "Combined social community"],
+            ["10M+", "Combined social community"],
             ["SEBI", "Registered founder-led mentorship"],
             ["3", "Market verticals covered"],
           ].map(([stat, label]) => (
