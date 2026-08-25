@@ -402,7 +402,7 @@ CHAT_FAQ = [
     (["guarantee", "profit", "returns", "rich", "sure shot", "sureshot"],
      "No honest educator can guarantee profits — trading involves real risk of loss. What we commit to is a complete, disciplined process: skills, risk management, and psychology.", False),
     (["enroll", "join", "register", "admission", "how to start", "get started", "sign up"],
-     "Click Enroll Now on this page, choose Online or Offline, fill in your details, and pay — enrollment is confirmed right after payment verification and details reach you by email.", False),
+     "Click any Enroll button on this page — it takes you to our course portal where you choose Online (₹49,990) or Offline (₹1,99,990) and complete payment securely. Your access details reach you right after enrollment.", False),
     (["beginner", "experience", "new to", "fresher", "no knowledge", "start from scratch"],
      "No experience needed — Buniyaad starts from the absolute basics and builds up phase by phase. Beginners fit right in.", False),
     (["duration", "how long", "timing", "batch date", "schedule", "when does", "next batch", "batch", "start date"],

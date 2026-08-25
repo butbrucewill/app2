@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Link } from "react-router-dom";
 import { TrendingUp, TrendingDown, RotateCcw, ArrowRight, CheckCircle2, XCircle } from "lucide-react";
 
 const H = 260;
@@ -199,13 +198,13 @@ export default function ChartQuiz() {
               : "Reading charts is a trained skill, not a talent. This is exactly what we drill, live, every session of Buniyaad."}
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <Link
-              to="/enroll"
+            <a
+              href="https://course.onestockacademy.com"
               data-testid="quiz-enroll-btn"
               className="group inline-flex items-center gap-2 bg-brand-deep text-white font-mono text-xs uppercase tracking-[0.18em] px-8 py-4 hover:bg-brand transition-colors rounded-full"
             >
               Learn it for real <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </Link>
+            </a>
             <button
               data-testid="quiz-restart-btn"
               onClick={restart}

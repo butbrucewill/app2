@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
 import {
   BookOpen,
   Monitor,
@@ -211,14 +210,14 @@ export default function Home() {
               className="mt-10 flex flex-wrap items-center gap-4"
             >
               <Magnetic>
-                <Link
-                  to="/enroll"
+                <a
+                  href="https://course.onestockacademy.com"
                   data-testid="hero-enroll-btn"
                   className="group bg-paper text-ink font-mono text-xs uppercase tracking-[0.18em] px-8 py-4 flex items-center gap-2 hover:bg-white transition-colors rounded-full"
                 >
                   Enroll Now
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </Link>
+                </a>
               </Magnetic>
               <a
                 href="#courses"
@@ -311,14 +310,14 @@ export default function Home() {
               Aman Singh Negi | Chief Academic Officer
             </span>
             <Magnetic>
-              <Link
-                to="/enroll"
+              <a
+                href="https://course.onestockacademy.com"
                 data-testid="banner-enroll-btn"
                 className="group inline-flex items-center gap-2 bg-white text-black font-mono text-xs uppercase tracking-[0.18em] px-8 py-4 hover:bg-zinc-200 transition-colors rounded-full"
               >
                 Enroll Now
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </Link>
+              </a>
             </Magnetic>
           </motion.div>
         </div>
@@ -473,14 +472,14 @@ export default function Home() {
                 ))}
               </ul>
               <Magnetic>
-                <Link
-                  to="/enroll?course=online"
+                <a
+                  href="https://course.onestockacademy.com/new-courses/4-buniyaad-online"
                   data-testid="enroll-online-btn"
                   className="group/btn inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.18em] text-white border border-white/25 px-8 py-4 hover:border-white hover:bg-white/5 transition-colors rounded-full"
                 >
                   Enroll — Online
                   <ArrowUpRight className="w-4 h-4 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform" />
-                </Link>
+                </a>
               </Magnetic>
             </TiltCard>
             <TiltCard
@@ -520,14 +519,14 @@ export default function Home() {
                 ))}
               </ul>
               <Magnetic>
-                <Link
-                  to="/enroll?course=offline"
+                <a
+                  href="https://course.onestockacademy.com/new-courses/5-buniyaad-offline"
                   data-testid="enroll-offline-btn"
                   className="group/btn inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.18em] bg-white text-black px-8 py-4 hover:bg-zinc-200 transition-colors rounded-full"
                 >
                   Enroll — Offline
                   <ArrowUpRight className="w-4 h-4 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform" />
-                </Link>
+                </a>
               </Magnetic>
             </TiltCard>
           </div>
@@ -621,14 +620,14 @@ export default function Home() {
               <span className="italic text-pop">Start reading it.</span>
             </h2>
             <Magnetic>
-              <Link
-                to="/enroll"
+              <a
+                href="https://course.onestockacademy.com"
                 data-testid="final-cta-btn"
                 className="group inline-flex items-center gap-2 bg-white text-black font-mono text-xs uppercase tracking-[0.18em] px-8 py-4 hover:bg-zinc-200 transition-colors rounded-full"
               >
                 Enroll Now
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </Link>
+              </a>
             </Magnetic>
           </div>
         </motion.div>

@@ -7,8 +7,6 @@ import { Toaster } from "@/components/ui/sonner";
 import PageWipe from "@/components/PageWipe";
 import FloatingActions from "@/components/FloatingActions";
 import Home from "@/pages/Home";
-import BuyCourse from "@/pages/BuyCourse";
-import PaymentResult from "@/pages/PaymentResult";
 import Admin from "@/pages/Admin";
 
 function AnimatedRoutes() {
@@ -17,8 +15,6 @@ function AnimatedRoutes() {
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
         <Route path="/" element={<PageWipe><Home /></PageWipe>} />
-        <Route path="/enroll" element={<PageWipe><BuyCourse /></PageWipe>} />
-        <Route path="/payment/result" element={<PageWipe><PaymentResult /></PageWipe>} />
         <Route path="/admin" element={<PageWipe><Admin /></PageWipe>} />
       </Routes>
     </AnimatePresence>
