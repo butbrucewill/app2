@@ -26,7 +26,7 @@ Build a 2-page website for One Stock Academy, a trading education company (onlin
   `leads` {lead_id, name, email, whatsapp, city, interest, status, created_at}, `chat_sessions` (transcripts).
 
 ## Implemented
-- (2026-08-21) Navbar: top "Enroll Now" replaced with "Login / Signup" button redirecting to https://web.onestockacademy.com (user's LMS), desktop + mobile menu. Hero/other Enroll CTAs unchanged. .htaccess SPA fallback added to frontend/public for Hostinger (fixes 404 on /admin etc.).
+- (2026-08-21) Navbar: top "Enroll Now" button redirects to https://course.onestockacademy.com (user's LMS), desktop + mobile menu. Other in-page Enroll CTAs unchanged. .htaccess SPA fallback added to frontend/public for Hostinger (fixes 404 on /admin etc.).
 - (2026-08-21) MySQL support: backend now runs on MySQL when MYSQL_* env vars are filled (tables auto-created on first use), MongoDB otherwise. Both paths verified: full flow (order → demo pay → paid → admin tables; lead → admin; chat transcripts) + 30/30 pytest regression against each backend.
 - (2026-08-21) Rule-based chatbot: CHAT_FAQ fixed answers (fees, Buniyaad phases, mentors, formats, tips, guarantee, enroll, beginner, batch, refund, contact, greeting). Out-of-syllabus → fallback + "Talk to the team" handoff button → lead form saved to DB, visible in /admin. Word-boundary regex matching with plural tolerance (fixed 'hi'-in-'delhi' substring bug). Chat rate limit 10 msg/min keyed on X-Forwarded-For; admin login throttled to 5 attempts/10 min per IP.
 - (2026-08-21) Removed unused 3D libs (three, @react-three/fiber, @react-three/drei) and 8 dead components (CandlestickChart, HeroScene, ScrollExperience, ChartBackdrop, ClassroomStrip, PartnerMarquee, ResultsWall, VideoIntro).

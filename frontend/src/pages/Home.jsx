@@ -142,7 +142,7 @@ const REVIEWS = [
   },
   {
     name: "Arjun Singh",
-    place: "Offline Cohort, Punjab",
+    place: "Punjab",
     quote: "One of the best things about the academy is the focus on execution and discipline. It changed the way I look at trading.",
   },
 ];
