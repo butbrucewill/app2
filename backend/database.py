@@ -64,14 +64,6 @@ class MySQLStore:
                 status VARCHAR(20) NOT NULL,
                 created_at VARCHAR(40) NOT NULL
             )""",
-            """CREATE TABLE IF NOT EXISTS chat_messages (
-                id BIGINT AUTO_INCREMENT PRIMARY KEY,
-                session_id VARCHAR(64) NOT NULL,
-                role VARCHAR(12) NOT NULL,
-                text TEXT NOT NULL,
-                at VARCHAR(40) NOT NULL,
-                INDEX idx_session (session_id)
-            )""",
         ]
         async with self._pool.acquire() as conn:
             async with conn.cursor() as cur:
@@ -131,15 +123,6 @@ class MySQLStore:
     async def list_leads(self):
         return await self._fetchall("SELECT * FROM leads ORDER BY created_at DESC LIMIT 500")
 
-    async def append_chat_messages(self, session_id, messages):
-        pool = await self._get_pool()
-        async with pool.acquire() as conn:
-            async with conn.cursor() as cur:
-                await cur.executemany(
-                    "INSERT INTO chat_messages (session_id, role, text, at) VALUES (%s, %s, %s, %s)",
-                    [(session_id, m["role"], m["text"], m["at"]) for m in messages],
-                )
-
 
 # ---------------- MongoDB backend ----------------
 
@@ -166,17 +149,6 @@ class MongoStore:
 
     async def list_leads(self):
         return await self.db.leads.find({}, {"_id": 0}).sort("created_at", -1).to_list(500)
-
-    async def append_chat_messages(self, session_id, messages):
-        from datetime import datetime, timezone
-        await self.db.chat_sessions.update_one(
-            {"session_id": session_id},
-            {
-                "$push": {"messages": {"$each": messages}},
-                "$set": {"updated_at": datetime.now(timezone.utc).isoformat()},
-            },
-            upsert=True,
-        )
 
 
 store = MySQLStore() if USE_MYSQL else MongoStore()

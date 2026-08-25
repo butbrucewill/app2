@@ -8,6 +8,63 @@ const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 const CHIPS = ["What is Buniyaad?", "Online vs Offline?", "What are the fees?"];
 
+// Self-contained fixed-answer assistant — no backend API needed.
+const CHAT_FAQ = [
+  [["buniyaad", "curriculum", "syllabus", "phase", "what do you teach", "what will i learn"],
+   "Buniyaad is our Foundation Mentorship Program with 5 phases: Market & Price Action Foundation, Smart Money Concepts, Risk & Trade Management, Strategy Building & Execution, and Psychology, Journaling & Performance.", false],
+  [["fee", "price", "cost", "charge", "payment", "subscription"],
+   "Online batch is ₹49,990 and Offline classroom is ₹1,99,990 — both one-time payments, inclusive of GST, with no recurring charges.", false],
+  [["difference", "which batch", "online vs", "online or offline", "compare"],
+   "Both formats teach the same Buniyaad curriculum with the same mentors. Online is live virtual classes from anywhere (₹49,990); Offline is in-person classroom learning with daily doubt sessions and premium perks (₹1,99,990).", false],
+  [["online"],
+   "The Online batch is ₹49,990 (incl. GST) — live virtual classes, VIP community, weekly personal doubt sessions, seminar access, and a 1-year recorded learning vault plus our AI trading strategy.", false],
+  [["offline", "classroom", "in-person", "in person"],
+   "The Offline batch is ₹1,99,990 (incl. GST) — in-person mentorship, hybrid online access, daily doubt sessions, lifetime learning vault, welcome kit, VIP seminar pass, and 10% off future bootcamps.", false],
+  [["mentor", "teacher", "aman", "rajat", "rishabh", "who teaches", "sebi", "trainer"],
+   "Your mentors are Aman Singh Negi (Chief Academic Officer, 750k+ on Instagram), Rajat Sharma (Founding Director, 150k+ traders on Instagram), and Rishabh Mishra (Founding Director, SEBI-registered).", false],
+  [["tip", "signal", "calls", "recommendation", "which stock", "what to buy", "jackpot"],
+   "We never give stock tips, signals, or buy/sell calls — Buniyaad teaches you to build your own trading process so you never depend on anyone's calls.", false],
+  [["guarantee", "profit", "returns", "rich", "sure shot", "sureshot"],
+   "No honest educator can guarantee profits — trading involves real risk of loss. What we commit to is a complete, disciplined process: skills, risk management, and psychology.", false],
+  [["enroll", "join", "register", "admission", "how to start", "get started", "sign up"],
+   "Click any Enroll button on this page — it takes you to our course portal where you choose Online (₹49,990) or Offline (₹1,99,990) and complete payment securely. Your access details reach you right after enrollment.", false],
+  [["beginner", "experience", "new to", "fresher", "no knowledge", "start from scratch"],
+   "No experience needed — Buniyaad starts from the absolute basics and builds up phase by phase. Beginners fit right in.", false],
+  [["duration", "how long", "timing", "batch date", "schedule", "when does", "next batch", "batch", "start date"],
+   "Batch schedules and dates are shared with enrolled students directly. For upcoming batch dates, please contact us through the Chat With Us form and the team will confirm.", true],
+  [["refund", "cancel", "money back"],
+   "For refunds or cancellations, please contact us through the Chat With Us form — our team will reach out and help you personally.", true],
+  [["contact", "talk to", "human", "team", "call me", "support"],
+   "Sure — leave your name, email, and WhatsApp number in the Chat With Us form and our team will reach out to you.", true],
+  [["hi", "hello", "hey", "namaste"],
+   "Hello! I can help with the Buniyaad program, fees, mentors, formats, and enrollment. What would you like to know?", false],
+];
+
+const CHAT_FALLBACK =
+  "That's beyond what I can answer here — please contact us using the Chat With Us form and our team will reach out to you personally.";
+
+const escapeRe = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+const CHAT_PATTERNS = CHAT_FAQ.map(([keywords, reply, handoff]) => [
+  keywords.map((k) => new RegExp(`\\b${escapeRe(k)}${k.includes(" ") ? "" : "(?:e?s)?"}\\b`, "i")),
+  reply,
+  handoff,
+]);
+
+function chatAnswer(message) {
+  const text = message.toLowerCase();
+  let best = null;
+  let bestScore = 0;
+  for (const [patterns, reply, handoff] of CHAT_PATTERNS) {
+    const score = patterns.filter((p) => p.test(text)).length;
+    if (score > bestScore) {
+      best = { reply, handoff };
+      bestScore = score;
+    }
+  }
+  return best || { reply: CHAT_FALLBACK, handoff: true };
+}
+
 function LeadModal({ open, onClose }) {
   const [form, setForm] = useState({ name: "", email: "", whatsapp: "", city: "", interest: "online" });
   const [busy, setBusy] = useState(false);
@@ -61,7 +118,7 @@ function LeadModal({ open, onClose }) {
                 <span className="inline-flex w-12 h-12 rounded-full border border-green-500/40 bg-green-500/10 items-center justify-center mb-5">
                   <Send className="w-5 h-5 text-green-500" />
                 </span>
-                <h2 className="font-display text-3xl font-bold text-white mb-3">You're on the list.</h2>
+                <h2 className="font-display text-3xl font-bold text-white mb-3">You&rsquo;re on the list.</h2>
                 <p className="text-zinc-400 text-sm leading-relaxed">
                   Our team will reach out to you shortly with program details and batch information.
                 </p>
@@ -121,7 +178,6 @@ export default function FloatingActions() {
   ]);
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
-  const sessionId = useRef("web-" + Math.random().toString(36).slice(2, 10));
   const listRef = useRef(null);
 
   useEffect(() => {
@@ -135,21 +191,13 @@ export default function FloatingActions() {
     setInput("");
     setBusy(true);
     setMessages((m) => [...m, { role: "assistant", text: "" }]);
-    try {
-      const res = await axios.post(`${API}/chat`, { session_id: sessionId.current, message: msg });
-      await new Promise((r) => setTimeout(r, 550));
-      setMessages((m) => {
-        const c = [...m];
-        c[c.length - 1] = { role: "assistant", text: res.data.reply, handoff: res.data.handoff };
-        return c;
-      });
-    } catch {
-      setMessages((m) => {
-        const c = [...m];
-        c[c.length - 1] = { role: "assistant", text: "Something went wrong — please try again." };
-        return c;
-      });
-    }
+    await new Promise((r) => setTimeout(r, 550));
+    const ans = chatAnswer(msg);
+    setMessages((m) => {
+      const c = [...m];
+      c[c.length - 1] = { role: "assistant", text: ans.reply, handoff: ans.handoff };
+      return c;
+    });
     setBusy(false);
   };
 

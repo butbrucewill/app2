@@ -384,75 +384,6 @@ async def admin_enrollments(request: Request):
     return {"enrollments": [{**public_enrollment(d), "phone": d.get("phone", "")} for d in docs]}
 
 
-CHAT_FAQ = [
-    (["buniyaad", "curriculum", "syllabus", "phase", "what do you teach", "what will i learn"],
-     "Buniyaad is our Foundation Mentorship Program with 5 phases: Market & Price Action Foundation, Smart Money Concepts, Risk & Trade Management, Strategy Building & Execution, and Psychology, Journaling & Performance.", False),
-    (["fee", "price", "cost", "charge", "payment", "subscription"],
-     "Online batch is ₹49,990 and Offline classroom is ₹1,99,990 — both one-time payments, inclusive of GST, with no recurring charges.", False),
-    (["difference", "which batch", "online vs", "online or offline", "compare"],
-     "Both formats teach the same Buniyaad curriculum with the same mentors. Online is live virtual classes from anywhere (₹49,990); Offline is in-person classroom learning with daily doubt sessions and premium perks (₹1,99,990).", False),
-    (["online"],
-     "The Online batch is ₹49,990 (incl. GST) — live virtual classes, VIP community, weekly personal doubt sessions, seminar access, and a 1-year recorded learning vault plus our AI trading strategy.", False),
-    (["offline", "classroom", "in-person", "in person"],
-     "The Offline batch is ₹1,99,990 (incl. GST) — in-person mentorship, hybrid online access, daily doubt sessions, lifetime learning vault, welcome kit, VIP seminar pass, and 10% off future bootcamps.", False),
-    (["mentor", "teacher", "aman", "rajat", "rishabh", "who teaches", "sebi", "trainer"],
-     "Your mentors are Aman Singh Negi (Chief Academic Officer, 750k+ on Instagram), Rajat Sharma (Founding Director, 150k+ traders on Instagram), and Rishabh Mishra (Founding Director, SEBI-registered).", False),
-    (["tip", "signal", "calls", "recommendation", "which stock", "what to buy", "jackpot"],
-     "We never give stock tips, signals, or buy/sell calls — Buniyaad teaches you to build your own trading process so you never depend on anyone's calls.", False),
-    (["guarantee", "profit", "returns", "rich", "sure shot", "sureshot"],
-     "No honest educator can guarantee profits — trading involves real risk of loss. What we commit to is a complete, disciplined process: skills, risk management, and psychology.", False),
-    (["enroll", "join", "register", "admission", "how to start", "get started", "sign up"],
-     "Click any Enroll button on this page — it takes you to our course portal where you choose Online (₹49,990) or Offline (₹1,99,990) and complete payment securely. Your access details reach you right after enrollment.", False),
-    (["beginner", "experience", "new to", "fresher", "no knowledge", "start from scratch"],
-     "No experience needed — Buniyaad starts from the absolute basics and builds up phase by phase. Beginners fit right in.", False),
-    (["duration", "how long", "timing", "batch date", "schedule", "when does", "next batch", "batch", "start date"],
-     "Batch schedules and dates are shared with enrolled students directly. For upcoming batch dates, leave your details in the Chat With Us form and the team will confirm.", True),
-    (["refund", "cancel", "money back"],
-     "For refunds or cancellations, please leave your details in the Chat With Us form — our team will reach out and help you personally.", True),
-    (["contact", "talk to", "human", "team", "call me", "support"],
-     "Sure — leave your name, email, and WhatsApp number in the Chat With Us form and our team will reach out to you.", True),
-    (["hi", "hello", "hey", "namaste"],
-     "Hello! I can help with the Buniyaad program, fees, mentors, formats, and enrollment. What would you like to know?", False),
-]
-
-CHAT_FALLBACK = (
-    "That's beyond what I can answer here. Please share your details in the Chat With Us form — "
-    "our team will reach out to you and help you personally."
-)
-
-
-def _kw_pattern(k: str):
-    # single words tolerate a trailing plural (fee→fees, tip→tips, batch→batches);
-    # multi-word phrases match verbatim
-    suffix = r"(?:e?s)?" if " " not in k else ""
-    return re.compile(r"\b" + re.escape(k) + suffix + r"\b", re.IGNORECASE)
-
-
-CHAT_PATTERNS = [
-    ([_kw_pattern(k) for k in keywords], reply, handoff)
-    for keywords, reply, handoff in CHAT_FAQ
-]
-
-
-def chat_answer(message: str):
-    text = message.lower()
-    best, best_score = None, 0
-    for patterns, reply, handoff in CHAT_PATTERNS:
-        score = sum(1 for p in patterns if p.search(text))
-        if score > best_score:
-            best, best_score = (reply, handoff), score
-    if best:
-        return {"reply": best[0], "handoff": best[1]}
-    return {"reply": CHAT_FALLBACK, "handoff": True}
-
-_chat_rate = {}
-
-
-class ChatRequest(BaseModel):
-    session_id: str = Field(min_length=4, max_length=64)
-    message: str = Field(min_length=1, max_length=1000)
-
-
 class LeadCreate(BaseModel):
     name: str = Field(min_length=2, max_length=120)
     email: EmailStr
@@ -483,20 +414,6 @@ async def admin_leads(request: Request):
     require_admin(request)
     docs = await store.list_leads()
     return {"leads": docs}
-
-
-@api_router.post("/chat")
-async def chat(payload: ChatRequest, request: Request):
-    ip = client_ip(request)
-    if rate_limited(_chat_rate, ip, limit=10, window_sec=60):
-        raise HTTPException(status_code=429, detail="Too many messages — please wait a moment")
-
-    result = chat_answer(payload.message)
-    await store.append_chat_messages(payload.session_id, [
-        {"role": "user", "text": payload.message, "at": datetime.now(timezone.utc).isoformat()},
-        {"role": "assistant", "text": result["reply"], "at": datetime.now(timezone.utc).isoformat()},
-    ])
-    return result
 
 
 app.include_router(api_router)

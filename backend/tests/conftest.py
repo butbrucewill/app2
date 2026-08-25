@@ -1,5 +1,4 @@
 import os
-import time
 
 import pytest
 import requests
@@ -38,13 +37,3 @@ def admin_token(api_client):
 @pytest.fixture(scope="session")
 def admin_headers(admin_token):
     return {"Authorization": f"Bearer {admin_token}"}
-
-
-def chat_post(api_client, message, session_id="pytest-session-0001"):
-    """POST /api/chat honouring the 10 msg/min rate limit (retry once after cooldown)."""
-    url = f"{BASE_URL}/api/chat"
-    r = api_client.post(url, json={"session_id": session_id, "message": message})
-    if r.status_code == 429:
-        time.sleep(62)
-        r = api_client.post(url, json={"session_id": session_id, "message": message})
-    return r
