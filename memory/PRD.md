@@ -36,9 +36,9 @@ Build a 2-page website for One Stock Academy, a trading education company (onlin
 
 ## Pending / backlog
 - P0: Apex IT Solutions LMS payment link from user → wire Enroll buttons as external redirect (currently demo checkout).
-- P0 (user-side, deployment): Hostinger frontend deploy — upload fresh /app/app2-main.zip in
-  hPanel → Deployments, set env var REACT_APP_BACKEND_URL to the Emergent deployed backend URL,
-  then Deploy the app on Emergent. Backend already talks to their Hostinger MySQL.
+- P0 (user-side, deployment): Hostinger deployment — serve the frontend and FastAPI backend
+  from onestockacademy.com, route /api/* to the backend on port 8001, and keep the backend
+  connected to the Hostinger MySQL database. Set REACT_APP_BACKEND_URL to the same-origin URL.
 - P1: UI or CLI to change default admin password (OneStock@Admin2026 → ADMIN_PASSWORD in backend/.env).
 - P1: Refactor server.py (510+ lines) into routers/modules; extract Home.jsx section data.
 - P2: Contact details/socials in footer, batch dates, SEO meta + OG images.
