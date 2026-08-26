@@ -33,6 +33,8 @@ def test_create_lead_and_visible_in_admin(api_client, base_url, admin_headers):
         "name": f"TEST_Lead {marker}",
         "email": f"test_lead_{marker}@example.com",
         "whatsapp": "9876543210",
+        "age": 28,
+        "trading_experience": "1-to-3-years",
         "city": "Mumbai",
         "interest": "offline",
     }
@@ -52,6 +54,8 @@ def test_create_lead_and_visible_in_admin(api_client, base_url, admin_headers):
     assert lead["name"] == payload["name"]
     assert lead["email"] == payload["email"]
     assert lead["whatsapp"] == payload["whatsapp"]
+    assert lead["age"] == payload["age"]
+    assert lead["trading_experience"] == payload["trading_experience"]
     assert lead["city"] == payload["city"]
     assert lead["interest"] == "offline"
     assert lead["status"] == "new"

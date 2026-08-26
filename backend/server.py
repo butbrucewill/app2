@@ -388,6 +388,8 @@ class LeadCreate(BaseModel):
     name: str = Field(min_length=2, max_length=120)
     email: EmailStr
     whatsapp: str = Field(min_length=8, max_length=15)
+    age: int = Field(default=18, ge=13, le=100)
+    trading_experience: str = Field(default="beginner", min_length=2, max_length=40)
     city: str = Field(min_length=2, max_length=80)
     interest: str = "online"
 
@@ -400,6 +402,8 @@ async def create_lead(payload: LeadCreate):
         "name": payload.name.strip(),
         "email": payload.email.lower(),
         "whatsapp": payload.whatsapp.strip(),
+        "age": payload.age,
+        "trading_experience": payload.trading_experience.strip(),
         "city": payload.city.strip(),
         "interest": interest,
         "status": "new",

@@ -1,3 +1,5 @@
+import { useState } from "react";
+import axios from "axios";
 import { motion } from "framer-motion";
 import {
   BookOpen,
@@ -8,7 +10,10 @@ import {
   ArrowRight,
   ArrowUpRight,
   TrendingUp,
+  Send,
+  Loader2,
 } from "lucide-react";
+import { toast } from "sonner";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import TickerTape from "@/components/TickerTape";
@@ -147,6 +152,35 @@ const REVIEWS = [
 ];
 
 export default function Home() {
+  const [leadForm, setLeadForm] = useState({
+    name: "",
+    whatsapp: "",
+    email: "",
+    age: "",
+    city: "",
+    trading_experience: "beginner",
+    interest: "online",
+  });
+  const [leadSubmitting, setLeadSubmitting] = useState(false);
+  const [leadSubmitted, setLeadSubmitted] = useState(false);
+
+  const submitLead = async (event) => {
+    event.preventDefault();
+    setLeadSubmitting(true);
+    try {
+      await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/leads`, {
+        ...leadForm,
+        age: Number(leadForm.age),
+      });
+      setLeadSubmitted(true);
+      toast.success("Thanks. Our team will contact you shortly.");
+    } catch (error) {
+      toast.error(error.response?.data?.detail?.[0]?.msg || "Please check your details and try again.");
+    } finally {
+      setLeadSubmitting(false);
+    }
+  };
+
   return (
     <div className="relative bg-[#050505] text-white min-h-screen hide-native-cursor">
       <CustomCursor />
@@ -606,6 +640,85 @@ export default function Home() {
               ))}
             </Accordion>
           </motion.div>
+        </div>
+      </section>
+
+      {/* CONTACT FORM */}
+      <section id="contact" data-testid="lead-form-section" className="border-y border-white/10 bg-[#080808]">
+        <div className="max-w-7xl mx-auto px-6 sm:px-10 py-24 sm:py-32">
+          <div className="grid lg:grid-cols-[0.85fr_1.15fr] gap-12 lg:gap-24 items-start">
+            <motion.div {...fadeUp}>
+              <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-brand mb-4">Start a conversation</p>
+              <h2 className="font-display text-4xl sm:text-5xl font-bold tracking-tight text-white leading-tight">
+                Tell us where you are in your trading journey.
+              </h2>
+              <p className="text-zinc-400 text-sm leading-relaxed mt-5 max-w-md">
+                Share a few details and our team will help you find the right next step.
+              </p>
+            </motion.div>
+            <motion.form {...fadeUp} onSubmit={submitLead} className="grid sm:grid-cols-2 gap-4" data-testid="lead-form">
+              {[
+                ["name", "Full name", "text", "Your name"],
+                ["whatsapp", "Phone number", "tel", "+91 98765 43210"],
+                ["email", "Email address", "email", "you@example.com"],
+                ["age", "Age", "number", "18"],
+                ["city", "City", "text", "Mumbai"],
+              ].map(([name, label, type, placeholder]) => (
+                <label key={name} className="flex flex-col gap-2">
+                  <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-zinc-500">{label}</span>
+                  <input
+                    name={name}
+                    type={type}
+                    value={leadForm[name]}
+                    onChange={(event) => setLeadForm({ ...leadForm, [name]: event.target.value })}
+                    placeholder={placeholder}
+                    required
+                    min={name === "age" ? 13 : undefined}
+                    max={name === "age" ? 100 : undefined}
+                    className="bg-white/[0.05] border border-white/15 px-4 py-3 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-brand"
+                    data-testid={`lead-${name}-input`}
+                  />
+                </label>
+              ))}
+              <label className="flex flex-col gap-2">
+                <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-zinc-500">Trading experience</span>
+                <select
+                  name="trading_experience"
+                  value={leadForm.trading_experience}
+                  onChange={(event) => setLeadForm({ ...leadForm, trading_experience: event.target.value })}
+                  className="bg-[#111] border border-white/15 px-4 py-3 text-sm text-white focus:outline-none focus:border-brand"
+                  data-testid="lead-experience-input"
+                >
+                  <option value="beginner">Beginner</option>
+                  <option value="less-than-1-year">Less than 1 year</option>
+                  <option value="1-to-3-years">1 to 3 years</option>
+                  <option value="more-than-3-years">More than 3 years</option>
+                </select>
+              </label>
+              <label className="flex flex-col gap-2">
+                <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-zinc-500">Interested in</span>
+                <select
+                  name="interest"
+                  value={leadForm.interest}
+                  onChange={(event) => setLeadForm({ ...leadForm, interest: event.target.value })}
+                  className="bg-[#111] border border-white/15 px-4 py-3 text-sm text-white focus:outline-none focus:border-brand"
+                  data-testid="lead-interest-input"
+                >
+                  <option value="online">Online program</option>
+                  <option value="offline">Offline program</option>
+                </select>
+              </label>
+              <button
+                type="submit"
+                disabled={leadSubmitting || leadSubmitted}
+                className="sm:col-span-2 inline-flex items-center justify-center gap-2 bg-white text-black font-mono text-xs uppercase tracking-[0.18em] px-8 py-4 hover:bg-zinc-200 transition-colors disabled:opacity-60"
+                data-testid="lead-submit-btn"
+              >
+                {leadSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+                {leadSubmitted ? "Details received" : "Share my details"}
+              </button>
+            </motion.form>
+          </div>
         </div>
       </section>
 

@@ -59,6 +59,8 @@ class MySQLStore:
                 name VARCHAR(120) NOT NULL,
                 email VARCHAR(190) NOT NULL,
                 whatsapp VARCHAR(30) NOT NULL,
+                age INT NULL,
+                trading_experience VARCHAR(40) NULL,
                 city VARCHAR(80) NOT NULL,
                 interest VARCHAR(20) NOT NULL,
                 status VARCHAR(20) NOT NULL,
@@ -69,6 +71,15 @@ class MySQLStore:
             async with conn.cursor() as cur:
                 for s in stmts:
                     await cur.execute(s)
+                for s in (
+                    "ALTER TABLE leads ADD COLUMN age INT NULL",
+                    "ALTER TABLE leads ADD COLUMN trading_experience VARCHAR(40) NULL",
+                ):
+                    try:
+                        await cur.execute(s)
+                    except Exception as exc:
+                        if "duplicate column" not in str(exc).lower():
+                            raise
 
     async def _fetchone(self, query, args):
         pool = await self._get_pool()
@@ -114,7 +125,7 @@ class MySQLStore:
         return await self._fetchall("SELECT * FROM enrollments ORDER BY created_at DESC LIMIT 500")
 
     async def insert_lead(self, doc):
-        cols = ["lead_id", "name", "email", "whatsapp", "city", "interest", "status", "created_at"]
+        cols = ["lead_id", "name", "email", "whatsapp", "age", "trading_experience", "city", "interest", "status", "created_at"]
         await self._execute(
             f"INSERT INTO leads ({','.join(cols)}) VALUES ({','.join(['%s'] * len(cols))})",
             [doc.get(c) for c in cols],

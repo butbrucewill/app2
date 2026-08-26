@@ -211,9 +211,11 @@ export default function Admin() {
                       <tr className="border-b border-white/10 text-left text-[10px] uppercase tracking-[0.18em] text-zinc-500">
                         <th className="px-5 py-4">Lead</th>
                         <th className="px-5 py-4">Name</th>
-                        <th className="px-5 py-4">WhatsApp</th>
+                        <th className="px-5 py-4">Phone</th>
                         <th className="px-5 py-4">Email</th>
+                        <th className="px-5 py-4">Age</th>
                         <th className="px-5 py-4">City</th>
+                        <th className="px-5 py-4">Experience</th>
                         <th className="px-5 py-4">Interest</th>
                         <th className="px-5 py-4">Date</th>
                       </tr>
@@ -225,7 +227,9 @@ export default function Admin() {
                           <td className="px-5 py-4 text-white">{l.name}</td>
                           <td className="px-5 py-4 text-zinc-400">+91 {l.whatsapp}</td>
                           <td className="px-5 py-4 text-zinc-400">{l.email}</td>
+                          <td className="px-5 py-4 text-zinc-400">{l.age || "-"}</td>
                           <td className="px-5 py-4 text-zinc-400">{l.city}</td>
+                          <td className="px-5 py-4 text-zinc-400 whitespace-nowrap">{l.trading_experience || "-"}</td>
                           <td className="px-5 py-4">
                             <span className="text-[10px] uppercase tracking-[0.15em] px-2.5 py-1 border border-brand/40 text-brand">
                               {l.interest}
