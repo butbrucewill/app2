@@ -1,0 +1,7 @@
+# Map clean URLs to PHP files: /api/leads -> /api/leads.php, /api/admin/login -> /api/admin/login.php
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME}.php -f
+  RewriteRule ^(.*)$ $1.php [L]
+</IfModule>

@@ -2,9 +2,8 @@
   RewriteEngine On
   RewriteBase /
   RewriteRule ^index\.html$ - [L]
-
-  RewriteRule ^api(?:/(.*))?$ http://127.0.0.1:8001/api/$1 [P,L]
-
+  RewriteCond %{REQUEST_URI} ^/api/ [NC]
+  RewriteRule . - [L]
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteCond %{REQUEST_FILENAME} !-l

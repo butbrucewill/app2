@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { Lock, Loader2, LogOut, RefreshCcw, ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 
-const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
+const API = `${process.env.REACT_APP_BACKEND_URL || ""}/api`;
 const inr = (n) => "₹" + Number(n).toLocaleString("en-IN");
 
 export default function Admin() {
