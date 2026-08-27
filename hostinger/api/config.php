@@ -1,18 +1,33 @@
 <?php
-// One Stock Academy — API configuration
-// On Hostinger shared hosting the database lives on the same server: keep localhost.
-// These can also be overridden with environment variables.
+// ============================================
+// One Stock Academy — Database Configuration
+// Fill in your Hostinger MySQL details below.
+// (hPanel -> Databases -> Management shows these)
+// ============================================
 
-define('DB_HOST', getenv('OSA_DB_HOST') ?: 'localhost');
-define('DB_NAME', getenv('OSA_DB_NAME') ?: 'u763720042_onestock');
-define('DB_USER', getenv('OSA_DB_USER') ?: 'u763720042_OSA2026');
-define('DB_PASS', getenv('OSA_DB_PASS') ?: '@Onestock2026');
+// Database host — on Hostinger shared hosting this is usually: localhost
+define('DB_HOST', '');
 
-// Password for the /admin dashboard — change this to your own before going live.
-define('ADMIN_PASSWORD', getenv('OSA_ADMIN_PASSWORD') ?: 'OneStock@Admin2026');
+// Database name — example: u763720042_onestock
+define('DB_NAME', '');
 
-// Secret used to sign admin tokens — change to any long random string.
-define('TOKEN_SECRET', getenv('OSA_TOKEN_SECRET') ?: 'change-this-to-a-long-random-string-9f3k2x');
+// Database username — example: u763720042_OSA2026
+define('DB_USER', '');
+
+// Database password — the one you set when creating the database
+define('DB_PASS', '');
+
+// ============================================
+// Admin dashboard password (/admin page)
+// Change this to your own password.
+// ============================================
+define('ADMIN_PASSWORD', 'OneStock@Admin2026');
+
+// Secret used to sign admin login tokens.
+// Change this to any long random string (e.g. mash your keyboard).
+define('TOKEN_SECRET', 'change-this-to-a-long-random-string');
+
+// ---------- No need to edit below this line ----------
 
 $COURSES = [
     'online'  => ['id' => 'online',  'name' => 'Online — Live Virtual Classes', 'price_inr' => 49990],
