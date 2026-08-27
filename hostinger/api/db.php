@@ -21,11 +21,20 @@ function bootstrap(PDO $pdo) {
         name VARCHAR(120) NOT NULL,
         email VARCHAR(190) NOT NULL,
         whatsapp VARCHAR(30) NOT NULL,
+        age INT NULL,
+        trading_experience VARCHAR(40) NULL,
         city VARCHAR(80) NOT NULL,
         interest VARCHAR(20) NOT NULL,
         status VARCHAR(20) NOT NULL DEFAULT 'new',
         created_at VARCHAR(40) NOT NULL
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+    // upgrade an existing leads table that pre-dates these columns
+    foreach ([
+        "ALTER TABLE leads ADD COLUMN IF NOT EXISTS age INT NULL",
+        "ALTER TABLE leads ADD COLUMN IF NOT EXISTS trading_experience VARCHAR(40) NULL",
+    ] as $sql) {
+        try { $pdo->exec($sql); } catch (Exception $e) { /* column exists or unsupported */ }
+    }
     $pdo->exec("CREATE TABLE IF NOT EXISTS enrollments (
         order_ref VARCHAR(40) PRIMARY KEY,
         course_id VARCHAR(20) NOT NULL,

@@ -168,7 +168,7 @@ export default function Home() {
     event.preventDefault();
     setLeadSubmitting(true);
     try {
-      await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/leads`, {
+      await axios.post(`${process.env.REACT_APP_BACKEND_URL || ""}/api/leads`, {
         ...leadForm,
         age: Number(leadForm.age),
       });
@@ -683,6 +683,7 @@ export default function Home() {
               <label className="flex flex-col gap-2">
                 <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-zinc-500">Trading experience</span>
                 <select
+                  data-testid="lead-experience-select"
                   name="trading_experience"
                   value={leadForm.trading_experience}
                   onChange={(event) => setLeadForm({ ...leadForm, trading_experience: event.target.value })}

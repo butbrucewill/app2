@@ -3,5 +3,5 @@
 require_once __DIR__ . '/auth.php';
 require_admin();
 
-$rows = db()->query('SELECT lead_id, name, email, whatsapp, city, interest, status, created_at FROM leads ORDER BY created_at DESC LIMIT 500')->fetchAll();
+$rows = db()->query('SELECT lead_id, name, email, whatsapp, age, trading_experience, city, interest, status, created_at FROM leads ORDER BY created_at DESC LIMIT 500')->fetchAll();
 json_out(['leads' => $rows]);
