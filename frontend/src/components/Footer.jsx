@@ -78,6 +78,10 @@ export default function Footer() {
         </div>
         <div className="mt-12 pt-6 border-t border-paper/10 flex flex-col sm:flex-row justify-between gap-3 font-mono text-[10px] uppercase tracking-[0.2em] text-paper/40">
           <span>© {new Date().getFullYear()} One Stock Academy</span>
+          <span className="flex gap-6">
+            <a href="/about" data-testid="footer-about-link" className="hover:text-paper transition-colors">About Us</a>
+            <a href="/privacy-policy" data-testid="footer-privacy-link" className="hover:text-paper transition-colors">Privacy Policy</a>
+          </span>
           <span>Education · Not investment advice</span>
         </div>
       </div>

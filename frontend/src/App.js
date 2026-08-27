@@ -8,6 +8,8 @@ import PageWipe from "@/components/PageWipe";
 import FloatingActions from "@/components/FloatingActions";
 import Home from "@/pages/Home";
 import Admin from "@/pages/Admin";
+import AboutUs from "@/pages/AboutUs";
+import PrivacyPolicy from "@/pages/PrivacyPolicy";
 
 function AnimatedRoutes() {
   const location = useLocation();
@@ -15,6 +17,8 @@ function AnimatedRoutes() {
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
         <Route path="/" element={<PageWipe><Home /></PageWipe>} />
+        <Route path="/about" element={<PageWipe><AboutUs /></PageWipe>} />
+        <Route path="/privacy-policy" element={<PageWipe><PrivacyPolicy /></PageWipe>} />
         <Route path="/admin" element={<PageWipe><Admin /></PageWipe>} />
       </Routes>
     </AnimatePresence>
