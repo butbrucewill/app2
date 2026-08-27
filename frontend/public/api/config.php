@@ -6,16 +6,16 @@
 // ============================================
 
 // Database host — on Hostinger shared hosting this is usually: localhost
-define('DB_HOST', '');
+define('DB_HOST', 'localhost');
 
 // Database name — example: u763720042_onestock
-define('DB_NAME', '');
+define('DB_NAME', 'u763720042_onestock');
 
 // Database username — example: u763720042_OSA2026
-define('DB_USER', '');
+define('DB_USER', 'u763720042_OSA2026');
 
 // Database password — the one you set when creating the database
-define('DB_PASS', '');
+define('DB_PASS', '@Onestock2026');
 
 // ============================================
 // Admin dashboard password (/admin page)
@@ -25,7 +25,7 @@ define('ADMIN_PASSWORD', 'OneStock@Admin2026');
 
 // Secret used to sign admin login tokens.
 // Change this to any long random string (e.g. mash your keyboard).
-define('TOKEN_SECRET', 'change-this-to-a-long-random-string');
+define('TOKEN_SECRET', '219ad18fbf9689eaf8f2471a4f58ed6e1332a7e0f1c0e7450535b7b7887a9896');
 
 // ---------- No need to edit below this line ----------
 
