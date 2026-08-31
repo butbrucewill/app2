@@ -1,4 +1,4 @@
-import { Instagram, Youtube, Twitter, Phone, Mail, MapPin } from "lucide-react";
+import { Instagram, Youtube, Twitter, Facebook, Linkedin, Phone, Mail, MapPin } from "lucide-react";
 import TickerTape from "./TickerTape";
 
 export default function Footer() {
@@ -16,14 +16,20 @@ export default function Footer() {
               courses delivered by domain experts, online and in the classroom.
             </p>
             <div className="flex gap-3">
-              <a href="#" data-testid="social-instagram" aria-label="Instagram" className="w-9 h-9 border border-white/15 rounded-lg flex items-center justify-center text-paper/60 hover:text-white hover:border-white/40 transition-colors">
+              <a href="https://www.facebook.com/profile.php?id=61592868800782" target="_blank" rel="noopener noreferrer" data-testid="social-facebook" aria-label="Facebook" className="w-9 h-9 border border-white/15 rounded-lg flex items-center justify-center text-paper/60 hover:text-white hover:border-white/40 transition-colors">
+                <Facebook className="w-4 h-4" />
+              </a>
+              <a href="https://www.instagram.com/onestock_academy/" target="_blank" rel="noopener noreferrer" data-testid="social-instagram" aria-label="Instagram" className="w-9 h-9 border border-white/15 rounded-lg flex items-center justify-center text-paper/60 hover:text-white hover:border-white/40 transition-colors">
                 <Instagram className="w-4 h-4" />
               </a>
-              <a href="#" data-testid="social-youtube" aria-label="YouTube" className="w-9 h-9 border border-white/15 rounded-lg flex items-center justify-center text-paper/60 hover:text-white hover:border-white/40 transition-colors">
+              <a href="https://www.youtube.com/@onestock_academy" target="_blank" rel="noopener noreferrer" data-testid="social-youtube" aria-label="YouTube" className="w-9 h-9 border border-white/15 rounded-lg flex items-center justify-center text-paper/60 hover:text-white hover:border-white/40 transition-colors">
                 <Youtube className="w-4 h-4" />
               </a>
-              <a href="#" data-testid="social-twitter" aria-label="Twitter / X" className="w-9 h-9 border border-white/15 rounded-lg flex items-center justify-center text-paper/60 hover:text-white hover:border-white/40 transition-colors">
+              <a href="https://x.com/onestockacademy" target="_blank" rel="noopener noreferrer" data-testid="social-twitter" aria-label="Twitter / X" className="w-9 h-9 border border-white/15 rounded-lg flex items-center justify-center text-paper/60 hover:text-white hover:border-white/40 transition-colors">
                 <Twitter className="w-4 h-4" />
+              </a>
+              <a href="https://www.linkedin.com/in/one-stock-academy-080a06428/" target="_blank" rel="noopener noreferrer" data-testid="social-linkedin" aria-label="LinkedIn" className="w-9 h-9 border border-white/15 rounded-lg flex items-center justify-center text-paper/60 hover:text-white hover:border-white/40 transition-colors">
+                <Linkedin className="w-4 h-4" />
               </a>
             </div>
           </div>
