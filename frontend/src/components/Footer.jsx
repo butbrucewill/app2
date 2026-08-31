@@ -1,4 +1,4 @@
-import { Instagram, Youtube, Twitter, Facebook, Linkedin, Phone, Mail, MapPin } from "lucide-react";
+import { Instagram, Youtube, Twitter, Facebook, Linkedin, Phone, Mail, MapPin, MessageCircle } from "lucide-react";
 import TickerTape from "./TickerTape";
 
 export default function Footer() {
@@ -59,7 +59,8 @@ export default function Footer() {
           <div>
             <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-brand mb-4">Reach Us</p>
             <div className="flex flex-col gap-2.5 text-sm text-paper/70">
-              <span className="flex items-center gap-2"><Phone className="w-3.5 h-3.5 text-paper/40" /> Number being added</span>
+              <a href="tel:+919599037181" data-testid="footer-phone" className="flex items-center gap-2 hover:text-paper transition-colors"><Phone className="w-3.5 h-3.5 text-paper/40" /> +91 95990 37181</a>
+              <a href="https://wa.me/919599037181" target="_blank" rel="noopener noreferrer" data-testid="footer-whatsapp" className="flex items-center gap-2 hover:text-paper transition-colors"><MessageCircle className="w-3.5 h-3.5 text-paper/40" /> Chat on WhatsApp</a>
               <span className="flex items-center gap-2"><Mail className="w-3.5 h-3.5 text-paper/40" /> Email being added</span>
               <span className="flex items-center gap-2"><MapPin className="w-3.5 h-3.5 text-paper/40" /> Classroom address coming soon</span>
               <span className="flex items-center gap-2 text-paper/50 text-xs mt-2">Or use the chat assistant on screen</span>

@@ -247,13 +247,24 @@ export default function FloatingActions() {
                   >
                     {m.text || (busy && i === messages.length - 1 ? "…" : "")}
                     {m.role === "assistant" && m.handoff && m.text && (
-                      <button
-                        data-testid="chat-handoff-btn"
-                        onClick={() => setLeadOpen(true)}
-                        className="mt-3 flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.15em] text-brand border border-brand/40 bg-brand/10 px-4 py-2.5 rounded-full hover:bg-brand hover:text-black transition-colors"
-                      >
-                        Talk to the team →
-                      </button>
+                      <div className="mt-3 flex flex-wrap items-center gap-2">
+                        <button
+                          data-testid="chat-handoff-btn"
+                          onClick={() => setLeadOpen(true)}
+                          className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.15em] text-brand border border-brand/40 bg-brand/10 px-4 py-2.5 rounded-full hover:bg-brand hover:text-black transition-colors"
+                        >
+                          Talk to the team →
+                        </button>
+                        <a
+                          data-testid="chat-whatsapp-btn"
+                          href="https://wa.me/919599037181"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.15em] text-emerald-400 border border-emerald-500/40 bg-emerald-500/10 px-4 py-2.5 rounded-full hover:bg-emerald-500 hover:text-black transition-colors"
+                        >
+                          WhatsApp us →
+                        </a>
+                      </div>
                     )}
                   </div>
                 </div>
