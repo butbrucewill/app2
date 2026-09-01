@@ -11,6 +11,7 @@ const LINKS = [
   { label: "Courses", href: "/#courses" },
   { label: "Reviews", href: "/#reviews" },
   { label: "FAQ", href: "/#faq" },
+  { label: "Contact Us", href: "/#contact" },
 ];
 
 export default function Navbar() {
@@ -31,6 +32,7 @@ export default function Navbar() {
           <a href="/#courses" data-testid="nav-link-courses" className="hover:text-paper transition-colors">Courses</a>
           <a href="/#mentor" data-testid="nav-link-mentor" className="hover:text-paper transition-colors">Mentor</a>
           <a href="/#faq" data-testid="nav-link-faq" className="hover:text-paper transition-colors">FAQ</a>
+          <a href="/#contact" data-testid="nav-link-contact" className="hover:text-paper transition-colors">Contact Us</a>
         </nav>
         <div className="flex items-center gap-3">
           <Magnetic strength={0.3}>
