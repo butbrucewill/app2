@@ -241,7 +241,7 @@ export default function Home() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.65 }}
-              className="mt-10 flex flex-wrap items-center gap-4"
+              className="mt-10 flex flex-wrap items-center gap-3 sm:gap-4"
             >
               <Magnetic>
                 <a
@@ -253,6 +253,17 @@ export default function Home() {
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </a>
               </Magnetic>
+
+              <Magnetic>
+                <a
+                  href="https://course.onestockacademy.com/login"
+                  data-testid="hero-login-btn"
+                  className="group bg-[#f6f3ed] text-ink font-mono text-[10px] uppercase tracking-[0.2em] px-5 py-3 flex items-center justify-center rounded-full border border-paper/20 hover:bg-white transition-colors shadow-[0_0_24px_rgba(255,255,255,0.08)]"
+                >
+                  Login
+                </a>
+              </Magnetic>
+
               <a
                 href="#courses"
                 data-testid="hero-courses-link"
