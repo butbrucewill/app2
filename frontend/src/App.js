@@ -7,6 +7,8 @@ import { Toaster } from "@/components/ui/sonner";
 import PageWipe from "@/components/PageWipe";
 import FloatingActions from "@/components/FloatingActions";
 import Home from "@/pages/Home";
+import MediaCoverage from "@/pages/MediaCoverage";
+import GlobalMarket from "@/pages/GlobalMarket";
 import Admin from "@/pages/Admin";
 import AboutUs from "@/pages/AboutUs";
 import PrivacyPolicy from "@/pages/PrivacyPolicy";
@@ -17,6 +19,8 @@ function AnimatedRoutes() {
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
         <Route path="/" element={<PageWipe><Home /></PageWipe>} />
+        <Route path="/media-coverage" element={<PageWipe><MediaCoverage /></PageWipe>} />
+        <Route path="/global-market" element={<PageWipe><GlobalMarket /></PageWipe>} />
         <Route path="/about" element={<PageWipe><AboutUs /></PageWipe>} />
         <Route path="/privacy-policy" element={<PageWipe><PrivacyPolicy /></PageWipe>} />
         <Route path="/admin" element={<PageWipe><Admin /></PageWipe>} />

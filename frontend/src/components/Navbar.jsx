@@ -9,6 +9,8 @@ const LINKS = [
   { label: "Mentors", href: "/#mentor" },
   { label: "Vision", href: "/#vision" },
   { label: "Courses", href: "/#courses" },
+  { label: "Global Market", href: "/global-market" },
+  { label: "Media Coverage", href: "/media-coverage" },
   { label: "Reviews", href: "/#reviews" },
   { label: "FAQ", href: "/#faq" },
   { label: "Contact Us", href: "/#contact" },
@@ -31,6 +33,8 @@ export default function Navbar() {
           <a href="/#why" data-testid="nav-link-why" className="hover:text-paper transition-colors">Why Us</a>
           <a href="/#courses" data-testid="nav-link-courses" className="hover:text-paper transition-colors">Courses</a>
           <a href="/#mentor" data-testid="nav-link-mentor" className="hover:text-paper transition-colors">Mentor</a>
+          <Link to="/global-market" data-testid="nav-link-global-market" className="hover:text-paper transition-colors">Global Market</Link>
+          <a href="/media-coverage" data-testid="nav-link-media-coverage" className="hover:text-paper transition-colors">Media Coverage</a>
           <a href="/#faq" data-testid="nav-link-faq" className="hover:text-paper transition-colors">FAQ</a>
           <a href="/#contact" data-testid="nav-link-contact" className="hover:text-paper transition-colors">Contact Us</a>
         </nav>
@@ -80,19 +84,33 @@ export default function Navbar() {
             </div>
             <nav className="flex-1 flex flex-col justify-center px-8 gap-2">
               {LINKS.map((l, i) => (
-                <motion.a
-                  key={l.href}
-                  href={l.href}
-                  data-testid={`mobile-link-${l.label.toLowerCase().replace(/\s+/g, "-")}`}
-                  onClick={() => setOpen(false)}
-                  initial={{ opacity: 0, x: 40 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.15 + i * 0.06, duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-                  className="font-display text-4xl font-bold text-white py-3 border-b border-white/5 hover:text-zinc-400 transition-colors flex items-baseline gap-4"
-                >
-                  <span className="font-mono text-xs text-brand/70">0{i + 1}</span>
-                  {l.label}
-                </motion.a>
+                l.href.startsWith("/") && !l.href.includes("#") ? (
+                  <motion.div key={l.href} initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.15 + i * 0.06, duration: 0.45, ease: [0.22, 1, 0.36, 1] }}>
+                    <Link
+                      to={l.href}
+                      data-testid={`mobile-link-${l.label.toLowerCase().replace(/\s+/g, "-")}`}
+                      onClick={() => setOpen(false)}
+                      className="font-display text-4xl font-bold text-white py-3 border-b border-white/5 hover:text-zinc-400 transition-colors flex items-baseline gap-4"
+                    >
+                      <span className="font-mono text-xs text-brand/70">0{i + 1}</span>
+                      {l.label}
+                    </Link>
+                  </motion.div>
+                ) : (
+                  <motion.a
+                    key={l.href}
+                    href={l.href}
+                    data-testid={`mobile-link-${l.label.toLowerCase().replace(/\s+/g, "-")}`}
+                    onClick={() => setOpen(false)}
+                    initial={{ opacity: 0, x: 40 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.15 + i * 0.06, duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                    className="font-display text-4xl font-bold text-white py-3 border-b border-white/5 hover:text-zinc-400 transition-colors flex items-baseline gap-4"
+                  >
+                    <span className="font-mono text-xs text-brand/70">0{i + 1}</span>
+                    {l.label}
+                  </motion.a>
+                )
               ))}
             </nav>
             <motion.div
