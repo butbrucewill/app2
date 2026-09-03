@@ -6,6 +6,7 @@ import {
   BookOpen,
   CheckCircle2,
   FileText,
+  MessageCircle,
   Monitor,
   ShieldCheck,
   Sparkles,
@@ -65,7 +66,7 @@ const expoPhotos = [
   { src: "/_MG_4313.JPG (1).jpeg", alt: "OneStock Academy receiving recognition at Money Expo" },
   { src: "/_MG_4485.JPG.jpeg", alt: "OneStock Academy team engaging with investors at Money Expo" },
   { src: "/_MG_3483.JPG.jpeg", alt: "OneStock Academy connecting with learners at Money Expo" },
-  { src: "/_MG_4145.JPG.jpeg", alt: "OneStock Academy market education discussion at Money Expo" },
+  { src: "/_MG_4160.JPG.jpeg", alt: "OneStock Academy market education discussion at Money Expo" },
 ];
 
 const steps = [
@@ -76,6 +77,8 @@ const steps = [
   ["05", "Review & Revisions", "Structured review against the approved curriculum and your brand and compliance requirements."],
   ["06", "Final Delivery", "Receive the complete video library and supporting education assets in your agreed formats."],
 ];
+
+const CUSTOM_BATCH_WHATSAPP = "https://wa.me/919599037181?text=Hello%20OneStock%20Academy%2C%20I%20would%20like%20to%20discuss%20a%20custom%20Global%20Market%20batch%20for%20my%20broker%20or%20team.";
 
 export default function GlobalMarket() {
   return (
@@ -91,6 +94,7 @@ export default function GlobalMarket() {
               <p className="mt-7 max-w-2xl text-lg leading-relaxed text-slate-600">A structured 70-lesson learning journey that takes traders from Forex fundamentals to advanced market analysis, Smart Money Concepts, ICT, and practical execution, built for brokers who want to give their clients a world-class education experience.</p>
               <div className="mt-9 flex flex-wrap items-center gap-4">
                 <Magnetic><a href="https://course.onestockacademy.com/new-courses/6-global-market" className="inline-flex items-center gap-2 rounded-full bg-black px-7 py-4 font-mono text-[10px] uppercase tracking-[0.2em] text-white shadow-[0_18px_35px_rgba(0,0,0,0.18)] transition hover:bg-slate-800">Enroll Now <ArrowRight size={15} /></a></Magnetic>
+                <Magnetic><a href={CUSTOM_BATCH_WHATSAPP} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full border border-slate-300 bg-white px-7 py-4 font-mono text-[10px] uppercase tracking-[0.2em] text-slate-900 shadow-sm transition hover:border-slate-900 hover:bg-slate-50"><MessageCircle size={15} /> Discuss a Custom Batch</a></Magnetic>
                 <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-slate-500">70 Video Lessons · 6–8 Minutes Each · Broker-Ready B2B Licensing</span>
               </div>
             </motion.div>
@@ -114,7 +118,7 @@ export default function GlobalMarket() {
 
         <section className="bg-black py-24 text-white"><div className="mx-auto max-w-7xl px-6 sm:px-10"><motion.div {...fadeUp} className="mb-12 max-w-3xl"><p className="font-mono text-[11px] uppercase tracking-[0.22em] text-[#d7b66d]">From Approval to Delivery</p><h2 className="mt-4 font-display text-4xl font-bold sm:text-5xl">A clear production path with no mystery.</h2></motion.div><div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">{steps.map(([number, title, text]) => <motion.article key={number} {...fadeUp} className="rounded-[24px] border border-white/15 bg-white/[0.05] p-6"><span className="font-mono text-sm text-[#d7b66d]">{number}</span><h3 className="mt-5 font-display text-2xl font-bold">{title}</h3><p className="mt-3 text-sm leading-relaxed text-slate-300">{text}</p></motion.article>)}</div></div></section>
 
-        <section id="contact" className="mx-auto max-w-5xl px-6 py-24 sm:px-10"><motion.div {...fadeUp} className="rounded-[32px] bg-[linear-gradient(135deg,#000000,#1b1b1b)] p-8 text-center text-white shadow-[0_25px_70px_rgba(0,0,0,0.18)] sm:p-14"><p className="font-mono text-[11px] uppercase tracking-[0.22em] text-[#d7b66d]">Ready to Give Your Clients a Real Education?</p><h2 className="mt-4 font-display text-4xl font-bold sm:text-5xl">Learn the market. Build your own understanding.</h2><p className="mx-auto mt-5 max-w-3xl text-base leading-relaxed text-slate-300">Whether you’re building a client onboarding funnel, strengthening platform adoption, or positioning your brand as an authority in trader education, OneStock Academy’s 70-lesson program can be delivered as a fully licensed, broker-branded asset tailored to your market.</p><a href="mailto:hello@onestockacademy.com" className="mt-8 inline-flex items-center gap-2 rounded-full bg-[#d7b66d] px-7 py-4 font-mono text-[10px] uppercase tracking-[0.2em] text-black transition hover:bg-[#f0c96c]">Contact Us for a Custom Proposal <ArrowRight size={15} /></a></motion.div></section>
+        <section id="contact" className="mx-auto max-w-5xl px-6 py-24 sm:px-10"><motion.div {...fadeUp} className="rounded-[32px] bg-[linear-gradient(135deg,#000000,#1b1b1b)] p-8 text-center text-white shadow-[0_25px_70px_rgba(0,0,0,0.18)] sm:p-14"><p className="font-mono text-[11px] uppercase tracking-[0.22em] text-[#d7b66d]">Ready to Give Your Clients a Real Education?</p><h2 className="mt-4 font-display text-4xl font-bold sm:text-5xl">Learn the market. Build your own understanding.</h2><p className="mx-auto mt-5 max-w-3xl text-base leading-relaxed text-slate-300">Whether you’re building a client onboarding funnel, strengthening platform adoption, or positioning your brand as an authority in trader education, OneStock Academy’s 70-lesson program can be delivered as a fully licensed, broker-branded asset tailored to your market.</p><a href={CUSTOM_BATCH_WHATSAPP} target="_blank" rel="noopener noreferrer" className="mt-8 inline-flex items-center gap-2 rounded-full bg-[#d7b66d] px-7 py-4 font-mono text-[10px] uppercase tracking-[0.2em] text-black transition hover:bg-[#f0c96c]">Contact Us for a Custom Proposal <ArrowRight size={15} /></a></motion.div></section>
 
         <section className="mx-auto max-w-5xl px-6 pb-24 sm:px-10"><p className="text-xs leading-relaxed text-slate-500"><strong className="text-slate-700">Educational Disclaimer:</strong> This program is intended for educational purposes only. It does not constitute investment, financial, legal, or tax advice, and it does not guarantee profits or trading performance. Forex and leveraged trading involve substantial risk, and learners should consider whether such activity is appropriate for their circumstances. Broker-specific disclosures, risk warnings, and compliance language should be reviewed and approved by the relevant compliance team before client distribution.</p></section>
       </main>

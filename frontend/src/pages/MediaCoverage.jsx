@@ -113,6 +113,8 @@ const FUTURE_EVENTS = [
   { title: "Community Meetup", date: "Planned", tag: "Networking" },
 ];
 
+const MONEY_EXPO_VIDEO = "/Money Expo Event OSA.mp4";
+
 const fadeUp = {
   initial: { opacity: 0, y: 36, filter: "blur(6px)" },
   whileInView: { opacity: 1, y: 0, filter: "blur(0px)" },
@@ -128,30 +130,11 @@ const tabs = [
 
 export default function MediaCoverage() {
   const [activeTab, setActiveTab] = useState("all");
-  const [selectedVideo, setSelectedVideo] = useState("");
-
-  const handleVideoUpload = (event) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-
-    if (selectedVideo) {
-      URL.revokeObjectURL(selectedVideo);
-    }
-
-    setSelectedVideo(URL.createObjectURL(file));
-  };
 
   const visibleCards = useMemo(() => {
     if (activeTab === "money-expo") return MONEY_EXPO_CARDS;
     if (activeTab === "future-events") return FUTURE_EVENTS;
-    return [...MONEY_EXPO_CARDS, ...FUTURE_EVENTS.map((event) => ({
-      ...event,
-      subtitle: event.tag,
-      year: event.date,
-      image:
-        "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1200&q=80",
-      text: `${event.title} is planned for future community engagement and educational visibility as we continue expanding our media footprint.`,
-    }))];
+    return MONEY_EXPO_CARDS;
   }, [activeTab]);
 
   return (
@@ -215,7 +198,6 @@ export default function MediaCoverage() {
                   <img src={MONEY_EXPO_CARDS[0].image} alt={MONEY_EXPO_CARDS[0].title} className="h-[420px] w-full object-cover" />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/90 via-[#050505]/20 to-[#050505]/30" />
                   <div className="absolute inset-x-0 bottom-0 p-6 sm:p-8">
-                    <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-brand">{MONEY_EXPO_CARDS[0].year}</span>
                     <h3 className="mt-3 font-display text-3xl sm:text-4xl font-bold text-white leading-tight">
                       {MONEY_EXPO_CARDS[0].title}
                     </h3>
@@ -255,9 +237,6 @@ export default function MediaCoverage() {
                     <div className={`relative overflow-hidden ${event.hideCaption ? "h-[360px]" : "h-[300px]"}`}>
                       <img src={event.image} alt={event.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
                       <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/90 via-[#050505]/20 to-[#050505]/20" />
-                      <div className="absolute left-4 top-4 rounded-full border border-white/20 bg-black/50 px-3 py-1.5 font-mono text-[9px] uppercase tracking-[0.2em] text-brand">
-                        {event.year}
-                      </div>
                     </div>
 
                     {!event.hideCaption && (
@@ -279,46 +258,31 @@ export default function MediaCoverage() {
             <motion.section
               {...fadeUp}
               transition={{ ...fadeUp.transition, delay: 0.15 }}
-              className="mb-20 rounded-[28px] border border-white/10 bg-white/[0.03] p-6 sm:p-8"
+              className="mb-20 overflow-hidden rounded-[30px] border border-white/10 bg-white/[0.03]"
             >
-              <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-8 items-center">
-                <div className="rounded-[22px] border border-dashed border-brand/40 bg-[#0d0d0d] p-4">
-                  {selectedVideo ? (
-                    <video
-                      src={selectedVideo}
-                      controls
-                      playsInline
-                      className="h-[320px] w-full rounded-[18px] object-cover bg-black"
-                    />
-                  ) : (
-                    <div className="flex h-[320px] items-center justify-center rounded-[18px] bg-gradient-to-br from-brand/10 via-black to-[#111] text-center">
-                      <div className="max-w-sm px-6">
-                        <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-brand mb-3">Video Upload</p>
-                        <h3 className="font-display text-3xl font-bold text-white">Money Expo Highlight Reel</h3>
-                        <p className="mt-4 text-sm text-zinc-400">
-                          Upload the event video here to display the official footage and winner moment.
-                        </p>
-                      </div>
-                    </div>
-                  )}
+              <div className="grid lg:grid-cols-[1.2fr_0.8fr] gap-0">
+                <div className="min-h-[320px] bg-black p-4 sm:p-6">
+                  <video
+                    src={MONEY_EXPO_VIDEO}
+                    controls
+                    playsInline
+                    preload="metadata"
+                    className="h-[320px] w-full rounded-[22px] bg-[#111] object-contain sm:h-[420px]"
+                  />
                 </div>
 
-                <div>
+                <div className="flex flex-col justify-center p-7 sm:p-10">
                   <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-brand mb-4">Featured Video</p>
                   <h3 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-white leading-tight">
-                    Add the award moment and expo coverage here.
+                    Money Expo highlight reel.
                   </h3>
-                  <p className="mt-5 text-zinc-400 leading-relaxed">
-                    This section is kept separate so the Money Expo story can have its own highlight reel while the rest of the media archive remains organised.
+                  <p className="mt-4 text-sm leading-relaxed text-zinc-400">
+                    Watch the official Money Expo footage and the moment One Stock Academy was recognised as Best Trading School.
                   </p>
-
-                  <label className="mt-8 inline-flex cursor-pointer items-center justify-center rounded-full border border-white/20 bg-white text-black px-6 py-3 font-mono text-[10px] uppercase tracking-[0.2em] transition hover:bg-zinc-200">
-                    {selectedVideo ? "Change Video" : "Upload Video"}
-                    <input type="file" accept="video/*" className="hidden" onChange={handleVideoUpload} />
-                  </label>
                 </div>
               </div>
             </motion.section>
+
           </>
         )}
 
@@ -355,9 +319,6 @@ export default function MediaCoverage() {
                   <div className="relative h-72 sm:h-80 overflow-hidden">
                     <img src={event.image} alt={event.title} className="h-full w-full object-cover" />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/80 via-[#050505]/10 to-transparent" />
-                    <div className="absolute left-4 top-4 rounded-full border border-white/20 bg-black/50 px-3 py-1.5 font-mono text-[9px] uppercase tracking-[0.2em] text-brand">
-                      {event.year}
-                    </div>
                   </div>
                   <div className="p-4 sm:p-5">
                     <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-zinc-500 mb-2">
