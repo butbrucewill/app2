@@ -13,6 +13,27 @@ import Admin from "@/pages/Admin";
 import AboutUs from "@/pages/AboutUs";
 import PrivacyPolicy from "@/pages/PrivacyPolicy";
 
+function SeoMetadata() {
+  const location = useLocation();
+
+  useEffect(() => {
+    const siteUrl = "https://onestockacademy.com";
+    const normalizedPath = location.pathname === "/" ? "/" : location.pathname.replace(/\/$/, "");
+    const canonicalUrl = `${siteUrl}${normalizedPath}`;
+    let canonicalLink = document.head.querySelector('link[rel="canonical"]');
+
+    if (!canonicalLink) {
+      canonicalLink = document.createElement("link");
+      canonicalLink.setAttribute("rel", "canonical");
+      document.head.appendChild(canonicalLink);
+    }
+
+    canonicalLink.setAttribute("href", canonicalUrl);
+  }, [location.pathname]);
+
+  return null;
+}
+
 function AnimatedRoutes() {
   const location = useLocation();
   return (
@@ -47,6 +68,7 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
+        <SeoMetadata />
         <AnimatedRoutes />
         <FloatingActions />
         <Toaster position="top-center" />
