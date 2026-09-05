@@ -335,18 +335,6 @@ export default function MediaCoverage() {
           </section>
         )}
 
-        <motion.div
-          {...fadeUp}
-          transition={{ ...fadeUp.transition, delay: 0.15 }}
-          className="rounded-[28px] border border-white/10 bg-black/30 p-8 sm:p-10"
-        >
-          <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-brand mb-4">
-            Media Archive
-          </p>
-          <p className="font-display text-2xl sm:text-3xl font-bold text-white leading-snug">
-            Add more stories, award moments, and future event coverage whenever the next milestone arrives.
-          </p>
-        </motion.div>
       </main>
 
       <Footer />
