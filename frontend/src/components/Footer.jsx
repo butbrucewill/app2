@@ -78,8 +78,8 @@ export default function Footer() {
             specific to your situation.
           </p>
         </div>
-        <div className="mt-14 overflow-hidden select-none" aria-hidden="true">
-          <p className="font-display font-bold text-[12vw] leading-[0.85] tracking-tight text-white/[0.05] whitespace-nowrap text-center">
+        <div className="mt-14 select-none" aria-hidden="true">
+          <p className="pb-2 font-display font-bold text-[7vw] sm:text-[6vw] lg:text-[5vw] leading-[1.05] tracking-tight text-white/[0.05] whitespace-nowrap text-center">
             One Stock Academy
           </p>
         </div>
