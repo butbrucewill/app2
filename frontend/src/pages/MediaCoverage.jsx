@@ -106,13 +106,6 @@ const MONEY_EXPO_CARDS = [
   },
 ];
 
-const FUTURE_EVENTS = [
-  { title: "Investor Webinar", date: "Upcoming", tag: "Education" },
-  { title: "Trading Bootcamp", date: "Upcoming", tag: "Workshop" },
-  { title: "Market Masterclass", date: "Planned", tag: "Live Session" },
-  { title: "Community Meetup", date: "Planned", tag: "Networking" },
-];
-
 const MONEY_EXPO_VIDEO = "/Money Expo Event OSA.mp4";
 
 const fadeUp = {
@@ -125,7 +118,6 @@ const fadeUp = {
 const tabs = [
   { id: "all", label: "All Media Coverage" },
   { id: "money-expo", label: "Money Expo" },
-  { id: "future-events", label: "Future Events" },
 ];
 
 export default function MediaCoverage() {
@@ -133,7 +125,6 @@ export default function MediaCoverage() {
 
   const visibleCards = useMemo(() => {
     if (activeTab === "money-expo") return MONEY_EXPO_CARDS;
-    if (activeTab === "future-events") return FUTURE_EVENTS;
     return MONEY_EXPO_CARDS;
   }, [activeTab]);
 
@@ -284,26 +275,6 @@ export default function MediaCoverage() {
             </motion.section>
 
           </>
-        )}
-
-        {activeTab === "future-events" && (
-          <motion.section {...fadeUp} className="mb-20 grid md:grid-cols-2 xl:grid-cols-4 gap-6">
-            {FUTURE_EVENTS.map((event, index) => (
-              <article
-                key={`${event.title}-${index}`}
-                className="rounded-[24px] border border-white/10 bg-white/[0.03] p-6"
-              >
-                <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-brand mb-3">{event.date}</p>
-                <h3 className="font-display text-2xl font-bold text-white leading-snug">{event.title}</h3>
-                <span className="mt-5 inline-block rounded-full border border-white/15 bg-black/30 px-3 py-1.5 font-mono text-[9px] uppercase tracking-[0.18em] text-zinc-300">
-                  {event.tag}
-                </span>
-                <p className="mt-5 text-sm text-zinc-400 leading-relaxed">
-                  This upcoming event slot is ready for a new media story, award update, or campaign highlight.
-                </p>
-              </article>
-            ))}
-          </motion.section>
         )}
 
         {activeTab === "all" && (
