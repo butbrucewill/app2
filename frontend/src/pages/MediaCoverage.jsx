@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
+import { Play } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
@@ -106,7 +107,7 @@ const MONEY_EXPO_CARDS = [
   },
 ];
 
-const MONEY_EXPO_VIDEO = "/Money Expo Event OSA.mp4";
+const MONEY_EXPO_VIDEO_ID = "osm5FYzzLH0";
 
 const fadeUp = {
   initial: { opacity: 0, y: 36, filter: "blur(6px)" },
@@ -122,6 +123,7 @@ const tabs = [
 
 export default function MediaCoverage() {
   const [activeTab, setActiveTab] = useState("all");
+  const [videoPlaying, setVideoPlaying] = useState(false);
 
   const visibleCards = useMemo(() => {
     if (activeTab === "money-expo") return MONEY_EXPO_CARDS;
@@ -253,13 +255,34 @@ export default function MediaCoverage() {
             >
               <div className="grid lg:grid-cols-[1.2fr_0.8fr] gap-0">
                 <div className="min-h-[320px] bg-black p-4 sm:p-6">
-                  <video
-                    src={MONEY_EXPO_VIDEO}
-                    controls
-                    playsInline
-                    preload="metadata"
-                    className="h-[320px] w-full rounded-[22px] bg-[#111] object-contain sm:h-[420px]"
-                  />
+                  <div className="relative h-[320px] overflow-hidden rounded-[22px] bg-[#111] sm:h-[420px]">
+                    {videoPlaying ? (
+                      <iframe
+                        src={`https://www.youtube-nocookie.com/embed/${MONEY_EXPO_VIDEO_ID}?autoplay=1&playsinline=1&rel=0&modestbranding=1`}
+                        title="One Stock Academy at Money Expo"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                        className="h-full w-full"
+                      />
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => setVideoPlaying(true)}
+                        aria-label="Play One Stock Academy Money Expo video"
+                        className="group relative block h-full w-full text-left"
+                      >
+                        <img
+                          src={`https://i.ytimg.com/vi/${MONEY_EXPO_VIDEO_ID}/hqdefault.jpg`}
+                          alt="One Stock Academy at Money Expo"
+                          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
+                        <div className="absolute inset-0 bg-black/30 transition-colors group-hover:bg-black/20" />
+                        <span className="absolute left-1/2 top-1/2 flex h-16 w-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white shadow-[0_0_40px_rgba(255,255,255,0.3)] transition-transform duration-300 group-hover:scale-110">
+                          <Play className="ml-1 h-6 w-6 fill-black text-black" />
+                        </span>
+                      </button>
+                    )}
+                  </div>
                 </div>
 
                 <div className="flex flex-col justify-center p-7 sm:p-10">
