@@ -713,21 +713,21 @@ export default function Navbar() {
             >
               <a
                 href="https://course.onestockacademy.com"
-                data-testid="mobile-menu-enroll-btn"
-                onClick={() => setOpen(false)}
+                data-testid="nav-enroll-btn"
                 className="
-                  block
-                  text-center
-                  bg-white
-                  text-black
-                  font-mono
-                  text-xs
-                  uppercase
-                  tracking-[0.2em]
-                  px-6
-                  py-4
-                  rounded-full
-                "
+    block
+    whitespace-nowrap
+    bg-paper
+    text-ink
+    font-mono
+    text-[10px] sm:text-[11px]
+    uppercase
+    tracking-[0.12em] sm:tracking-[0.18em]
+    px-3 py-2 sm:px-5 sm:py-2.5
+    hover:bg-white
+    transition-colors
+    rounded-full
+  "
               >
                 Enroll Now
               </a>
