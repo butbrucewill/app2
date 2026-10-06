@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import Magnetic from "./Magnetic";
 
+
 const LINKS = [
   { label: "Why Us", href: "/#why" },
   { label: "Mentors", href: "/#mentor" },
@@ -12,7 +13,7 @@ const LINKS = [
   { label: "Global Market", href: "/global-market" },
   { label: "Media Coverage", href: "/media-coverage" },
   { label: "Reviews", href: "/#reviews" },
-  { label: "FAQ", href: "/#faq" },
+  { label: "ABOUT US", href: "/about-us" },
   { label: "Contact Us", href: "/#contact" },
 ];
 
@@ -35,7 +36,7 @@ export default function Navbar() {
           <a href="/#mentor" data-testid="nav-link-mentor" className="hover:text-paper transition-colors">Mentor</a>
           <Link to="/global-market" data-testid="nav-link-global-market" className="hover:text-paper transition-colors">Global Market</Link>
           <a href="/media-coverage" data-testid="nav-link-media-coverage" className="hover:text-paper transition-colors">Media Coverage</a>
-          <a href="/#faq" data-testid="nav-link-faq" className="hover:text-paper transition-colors">FAQ</a>
+          <Link to="/about" data-testid="nav-link-about" className="hover:text-paper transition-colors">ABOUT US</Link>
           <a href="/#contact" data-testid="nav-link-contact" className="hover:text-paper transition-colors">Contact Us</a>
         </nav>
         <div className="flex items-center gap-3">
