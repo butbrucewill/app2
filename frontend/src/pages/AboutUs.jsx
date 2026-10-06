@@ -6,7 +6,7 @@ export default function AboutUs() {
     <div data-testid="about-page" className="bg-[#050505] text-paper min-h-screen">
       <Navbar />
       <main className="max-w-4xl mx-auto px-6 sm:px-10 pt-36 pb-24">
-        <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-brand mb-4">About Us</p>
+        <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-brand mb-4">Story</p>
         <h1 className="font-display text-4xl sm:text-5xl font-bold tracking-tight text-white mb-10">
           The story behind One Stock Academy
         </h1>

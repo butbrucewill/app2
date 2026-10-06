@@ -1,7 +1,6 @@
 import "@/App.css";
 import { useEffect } from "react";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
-import { AnimatePresence } from "framer-motion";
 import Lenis from "lenis";
 import { Toaster } from "@/components/ui/sonner";
 import PageWipe from "@/components/PageWipe";
@@ -11,6 +10,8 @@ import MediaCoverage from "@/pages/MediaCoverage";
 import GlobalMarket from "@/pages/GlobalMarket";
 import Admin from "@/pages/Admin";
 import AboutUs from "@/pages/AboutUs";
+import Blog from "@/pages/blog";
+import Buniyaad from "@/pages/buniyaad";
 import PrivacyPolicy from "@/pages/PrivacyPolicy";
 
 function SeoMetadata() {
@@ -37,16 +38,16 @@ function SeoMetadata() {
 function AnimatedRoutes() {
   const location = useLocation();
   return (
-    <AnimatePresence mode="wait">
-      <Routes location={location} key={location.pathname}>
-        <Route path="/" element={<PageWipe><Home /></PageWipe>} />
-        <Route path="/media-coverage" element={<PageWipe><MediaCoverage /></PageWipe>} />
-        <Route path="/global-market" element={<PageWipe><GlobalMarket /></PageWipe>} />
-        <Route path="/about" element={<PageWipe><AboutUs /></PageWipe>} />
-        <Route path="/privacy-policy" element={<PageWipe><PrivacyPolicy /></PageWipe>} />
-        <Route path="/admin" element={<PageWipe><Admin /></PageWipe>} />
-      </Routes>
-    </AnimatePresence>
+    <Routes location={location}>
+      <Route path="/" element={<PageWipe><Home /></PageWipe>} />
+      <Route path="/media-coverage" element={<PageWipe><MediaCoverage /></PageWipe>} />
+      <Route path="/global-market" element={<PageWipe><GlobalMarket /></PageWipe>} />
+      <Route path="/about" element={<PageWipe><AboutUs /></PageWipe>} />
+      <Route path="/blog" element={<PageWipe><Blog /></PageWipe>} />
+      <Route path="/buniyaad" element={<PageWipe><Buniyaad /></PageWipe>} />
+      <Route path="/privacy-policy" element={<PageWipe><PrivacyPolicy /></PageWipe>} />
+      <Route path="/admin" element={<PageWipe><Admin /></PageWipe>} />
+    </Routes>
   );
 }
 
