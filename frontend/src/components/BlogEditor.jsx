@@ -73,7 +73,7 @@ export const BlogEditor = ({
         <Divider />
 
         <Btn active={editor.isActive("paragraph")} onClick={run((c) => c.setParagraph())}>P</Btn>
-        {[1, 2, 3].map((level) => (
+        {[2, 3].map((level) => (
           <Btn
             key={level}
             active={editor.isActive("heading", { level })}

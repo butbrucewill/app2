@@ -22,6 +22,26 @@ DATABASE_BACKEND = os.environ.get("DATABASE_BACKEND", "").strip().lower()
 
 USE_MYSQL = bool(MYSQL_HOST and MYSQL_USER and MYSQL_DATABASE)
 
+# SEO columns added to the blogs table (MySQL). Created/migrated automatically.
+BLOG_SEO_COLUMNS = {
+    "h1": "VARCHAR(250)",
+    "meta_title": "VARCHAR(250)",
+    "meta_description": "VARCHAR(500)",
+    "focus_keyword": "VARCHAR(200)",
+    "secondary_keywords": "VARCHAR(500)",
+    "cover_alt": "VARCHAR(300)",
+    "category": "VARCHAR(100)",
+    "tags": "VARCHAR(500)",
+    "canonical_url": "VARCHAR(500)",
+    "author": "VARCHAR(120)",
+    "published_at": "VARCHAR(40)",
+    "index_status": "VARCHAR(10)",
+    "schema_type": "VARCHAR(20)",
+    "og_title": "VARCHAR(250)",
+    "og_description": "VARCHAR(500)",
+    "og_image": "VARCHAR(2000)",
+}
+
 
 class MemoryStore:
     def __init__(self):
@@ -147,11 +167,15 @@ class MySQLStore:
                     await cur.execute(s)
                 # Migrations for tables that already existed before these columns were added.
                 # "duplicate column" errors are expected and ignored.
-                for s in (
+                migrations = [
                     "ALTER TABLE leads ADD COLUMN age INT NULL",
                     "ALTER TABLE leads ADD COLUMN trading_experience VARCHAR(40) NULL",
                     "ALTER TABLE blogs ADD COLUMN sort_order INT NOT NULL DEFAULT 0",
-                ):
+                ] + [
+                    f"ALTER TABLE blogs ADD COLUMN {col} {typ} NOT NULL DEFAULT ''"
+                    for col, typ in BLOG_SEO_COLUMNS.items()
+                ]
+                for s in migrations:
                     try:
                         await cur.execute(s)
                     except Exception as exc:
@@ -215,10 +239,10 @@ class MySQLStore:
 
     async def insert_blog(self, doc):
         cols = ["blog_id", "slug", "title", "excerpt", "cover_image", "content",
-                "status", "sort_order", "created_at", "updated_at"]
+                "status", "sort_order", "created_at", "updated_at", *BLOG_SEO_COLUMNS]
         await self._execute(
             f"INSERT INTO blogs ({','.join(cols)}) VALUES ({','.join(['%s'] * len(cols))})",
-            [doc.get(c) for c in cols],
+            [doc.get(c, "" if c in BLOG_SEO_COLUMNS else None) for c in cols],
         )
 
     async def get_blog_by_slug(self, slug):
@@ -239,7 +263,8 @@ class MySQLStore:
 
     async def list_blogs(self, published_only=True):
         # content is deliberately NOT selected: cards don't need the (large) body
-        q = ("SELECT blog_id, slug, title, excerpt, cover_image, status, sort_order, "
+        q = ("SELECT blog_id, slug, title, excerpt, cover_image, cover_alt, category, author, "
+             "published_at, index_status, canonical_url, status, sort_order, "
              "created_at, updated_at FROM blogs")
         if published_only:
             q += " WHERE status = 'published'"
@@ -313,4 +338,4 @@ elif USE_MYSQL:
     logger.info("Database backend: MySQL")
 else:
     store = MongoStore()
-    logger.info("Database backend: MongoDB") 
+    logger.info("Database backend: MongoDB")

@@ -2,15 +2,25 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import useSeo from "@/hooks/useSeo";
 
 const API = `${process.env.REACT_APP_BACKEND_URL || ""}/api`;
+
+// Constant object: the hook only re-applies when this content changes.
+const BLOG_INDEX_SEO = {
+  title: "Stock Market & Trading Blog | One Stock Academy",
+  description:
+    "Learn stock market fundamentals, technical analysis, trading psychology and risk management with practical articles from One Stock Academy.",
+  robots: "index, follow",
+};
 
 export default function Blog() {
   const [blogs, setBlogs] = useState([]);
   const [state, setState] = useState("loading"); // loading | ready | error
 
+  useSeo(BLOG_INDEX_SEO);
+
   useEffect(() => {
-    document.title = "Blog | One Stock Academy";
     fetch(`${API}/blogs`)
       .then((r) => (r.ok ? r.json() : Promise.reject()))
       .then((d) => { setBlogs(d.blogs); setState("ready"); })
@@ -45,7 +55,7 @@ export default function Blog() {
             >
               <div className="aspect-[16/9] overflow-hidden bg-white/5">
                 {b.cover_image ? (
-                  <img src={b.cover_image} alt={b.title} loading="lazy"
+                  <img src={b.cover_image} alt={b.cover_alt || b.title} loading="lazy"
                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center font-mono text-xs uppercase tracking-[0.3em] text-paper/30">
@@ -55,7 +65,8 @@ export default function Blog() {
               </div>
               <div className="flex flex-col flex-1 p-6">
                 <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-brand mb-3">
-                  {new Date(b.created_at).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}
+                  {b.category && <>{b.category} · </>}
+                  {new Date(b.published_at || b.created_at).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}
                 </p>
                 <h2 className="font-display text-xl text-white leading-snug mb-3">{b.title}</h2>
                 {b.excerpt && <p className="text-sm text-paper/60 leading-relaxed line-clamp-3 mb-5">{b.excerpt}</p>}

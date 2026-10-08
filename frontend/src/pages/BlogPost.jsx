@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useEditor, EditorContent } from "@tiptap/react";
 import { ArrowLeft, Link2 } from "lucide-react";
@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { getBlogExtensions } from "@/components/BlogExtension";
+import useSeo, { SITE_URL, SITE_NAME, absUrl } from "@/hooks/useSeo";
 
 import "@/components/BlogEditor.css";
 import "@/components/BlogReader.css";
@@ -32,11 +33,64 @@ function BlogContent({ html }) {
   return <EditorContent editor={editor} />;
 }
 
+// Builds every SEO tag + the JSON-LD schema from the blog's admin fields.
+function buildSeo(blog) {
+  if (!blog) return null;
+  const url = blog.canonical_url || `${SITE_URL}/blog/${blog.slug}`;
+  const title = blog.meta_title || `${blog.title} | ${SITE_NAME}`;
+  const description = blog.meta_description || blog.excerpt || "";
+  const image = absUrl(blog.og_image || blog.cover_image);
+  const published = blog.published_at || blog.created_at;
+  const modified = blog.updated_at || published;
+  const keywords = [...new Set(
+    [blog.focus_keyword, ...(blog.secondary_keywords || "").split(","), ...(blog.tags || "").split(",")]
+      .map((k) => (k || "").trim()).filter(Boolean)
+  )].join(", ");
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": blog.schema_type || "BlogPosting",
+    mainEntityOfPage: { "@type": "WebPage", "@id": url },
+    headline: (blog.h1 || blog.title).slice(0, 110),
+    description,
+    ...(image ? { image: [image] } : {}),
+    author: { "@type": "Person", name: blog.author || SITE_NAME },
+    publisher: {
+      "@type": "Organization",
+      name: SITE_NAME,
+      logo: { "@type": "ImageObject", url: `${SITE_URL}/logo-brand.png` },
+    },
+    datePublished: published,
+    dateModified: modified,
+    ...(keywords ? { keywords } : {}),
+    ...(blog.category ? { articleSection: blog.category } : {}),
+  };
+
+  return {
+    title,
+    description,
+    canonical: url,
+    robots: (blog.index_status || "index") === "noindex" ? "noindex, follow" : "index, follow",
+    image,
+    type: "article",
+    ogTitle: blog.og_title || title,
+    ogDescription: blog.og_description || description,
+    publishedTime: published,
+    modifiedTime: modified,
+    author: blog.author || SITE_NAME,
+    section: blog.category,
+    jsonLd,
+  };
+}
+
 export default function BlogPost() {
   const { slug } = useParams();
   const [blog, setBlog] = useState(null);
   const [more, setMore] = useState([]);
   const [state, setState] = useState("loading"); // loading | ready | notfound
+
+  const seo = useMemo(() => buildSeo(blog), [blog]);
+  useSeo(seo);
 
   useEffect(() => {
     setState("loading");
@@ -45,11 +99,7 @@ export default function BlogPost() {
 
     fetch(`${API}/blogs/${slug}`)
       .then((r) => (r.ok ? r.json() : Promise.reject()))
-      .then((d) => {
-        setBlog(d.blog);
-        setState("ready");
-        document.title = `${d.blog.title} | One Stock Academy`;
-      })
+      .then((d) => { setBlog(d.blog); setState("ready"); })
       .catch(() => setState("notfound"));
 
     fetch(`${API}/blogs`)
@@ -66,6 +116,11 @@ export default function BlogPost() {
       toast.error("Couldn't copy the link");
     }
   };
+
+  const published = blog && (blog.published_at || blog.created_at);
+  const showUpdated =
+    blog && blog.updated_at && published &&
+    new Date(blog.updated_at) - new Date(published) > 24 * 3600 * 1000;
 
   return (
     <div data-testid="blog-post-page" className="bg-[#050505] text-paper min-h-screen">
@@ -91,32 +146,45 @@ export default function BlogPost() {
 
         {state === "ready" && blog && (
           <article className="mt-10" data-testid="blog-article">
-            {/* Header */}
             <header className="mb-10">
               <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-brand mb-5">
-                {fmtDate(blog.created_at)} · {readingTime(blog.content)} min read
+                {blog.category && <>{blog.category} · </>}
+                {fmtDate(published)} · {readingTime(blog.content)} min read
               </p>
+              {/* The ONLY h1 on the page */}
               <h1 className="font-display text-4xl sm:text-5xl font-bold tracking-tight text-white leading-[1.1] mb-6">
-                {blog.title}
+                {blog.h1 || blog.title}
               </h1>
               {blog.excerpt && (
                 <p className="text-xl text-paper/70 leading-relaxed">{blog.excerpt}</p>
               )}
+              <p className="mt-5 font-mono text-[11px] uppercase tracking-[0.18em] text-paper/50">
+                By {blog.author || SITE_NAME}
+                {showUpdated && <> · Updated {fmtDate(blog.updated_at)}</>}
+              </p>
             </header>
 
             {blog.cover_image && (
               <img
                 src={blog.cover_image}
-                alt={blog.title}
+                alt={blog.cover_alt || blog.title}
                 className="w-full aspect-[16/9] object-cover border border-white/10 mb-12"
               />
             )}
 
-            {/* Body (key remounts the reader when navigating between posts) */}
             <BlogContent key={blog.blog_id + blog.updated_at} html={blog.content} />
 
-            {/* Footer */}
-            <footer className="mt-16 pt-6 border-t border-white/10">
+            {blog.tags && (
+              <p className="mt-10 flex flex-wrap gap-2">
+                {blog.tags.split(",").map((t) => t.trim()).filter(Boolean).map((t) => (
+                  <span key={t} className="border border-white/15 px-3 py-1 font-mono text-[11px] uppercase tracking-widest text-paper/60">
+                    {t}
+                  </span>
+                ))}
+              </p>
+            )}
+
+            <footer className="mt-12 pt-6 border-t border-white/10">
               <div className="flex items-center justify-between gap-4 mb-6">
                 <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-paper/50">
                   One Stock Academy
@@ -152,7 +220,7 @@ export default function BlogPost() {
                   className="group border border-white/10 bg-white/[0.02] hover:border-brand/60 transition-colors p-6 flex flex-col"
                 >
                   <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-paper/50 mb-3">
-                    {fmtDate(b.created_at, "short")}
+                    {fmtDate(b.published_at || b.created_at, "short")}
                   </p>
                   <h3 className="font-display text-lg text-white leading-snug mb-3">{b.title}</h3>
                   {b.excerpt && (
