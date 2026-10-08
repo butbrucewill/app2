@@ -17,7 +17,7 @@ from html.parser import HTMLParser
 from urllib.parse import urlparse
 from pathlib import Path
 from pydantic import BaseModel, Field, EmailStr
-from typing import Optional
+from typing import Literal, Optional
 from datetime import datetime, timezone, timedelta
 
 ROOT_DIR = Path(__file__).parent
@@ -419,6 +419,114 @@ async def admin_leads(request: Request):
     docs = await store.list_leads()
     return {"leads": docs}
 
+
+def slugify(text: str) -> str:
+    s = re.sub(r"[^a-z0-9]+", "-", text.lower()).strip("-")[:60].strip("-")
+    return s or "post"
+ 
+ 
+def _clean_cover(url: str) -> str:
+    url = (url or "").strip()
+    if url and not (url.startswith("https://") or url.startswith("http://") or url.startswith("/")):
+        raise HTTPException(status_code=400, detail="Cover image must be an http(s) URL")
+    return url
+ 
+ 
+class BlogIn(BaseModel):
+    title: str = Field(min_length=3, max_length=200)
+    excerpt: str = Field(default="", max_length=400)
+    cover_image: str = Field(default="", max_length=2000)
+    content: str = Field(default="", max_length=3_000_000)  # TipTap HTML
+    status: Literal["draft", "published"] = "draft"
+ 
+ 
+# ---------- Public ----------
+ 
+@api_router.get("/blogs")
+async def list_public_blogs():
+    """Cards for the /blog page (no body content)."""
+    return {"blogs": await store.list_blogs(published_only=True)}
+ 
+ 
+@api_router.get("/blogs/{slug}")
+async def get_public_blog(slug: str):
+    doc = await store.get_blog_by_slug(slug)
+    if not doc or doc["status"] != "published":
+        raise HTTPException(status_code=404, detail="Blog not found")
+    return {"blog": doc}
+ 
+ 
+# ---------- Admin ----------
+ 
+@api_router.get("/admin/blogs")
+async def admin_list_blogs(request: Request):
+    require_admin(request)
+    return {"blogs": await store.list_blogs(published_only=False)}
+ 
+ 
+@api_router.get("/admin/blogs/{blog_id}")
+async def admin_get_blog(blog_id: str, request: Request):
+    require_admin(request)
+    doc = await store.get_blog_by_id(blog_id)
+    if not doc:
+        raise HTTPException(status_code=404, detail="Blog not found")
+    return {"blog": doc}
+ 
+ 
+@api_router.post("/admin/blogs")
+async def admin_create_blog(payload: BlogIn, request: Request):
+    require_admin(request)
+    now = datetime.now(timezone.utc).isoformat()
+    doc = {
+        "blog_id": "BLOG-" + uuid.uuid4().hex[:10].upper(),
+        "slug": f"{slugify(payload.title)}-{uuid.uuid4().hex[:5]}",
+        "title": payload.title.strip(),
+        "excerpt": payload.excerpt.strip(),
+        "cover_image": _clean_cover(payload.cover_image),
+        "content": payload.content,
+        "status": payload.status,
+        "sort_order": (await store.min_sort_order()) - 1,
+        "created_at": now,
+        "updated_at": now,
+    }
+    await store.insert_blog(doc)
+    return {"blog": doc}
+ 
+ 
+@api_router.put("/admin/blogs/{blog_id}")
+async def admin_update_blog(blog_id: str, payload: BlogIn, request: Request):
+    require_admin(request)
+    if not await store.get_blog_by_id(blog_id):
+        raise HTTPException(status_code=404, detail="Blog not found")
+    await store.update_blog(blog_id, {
+        "title": payload.title.strip(),
+        "excerpt": payload.excerpt.strip(),
+        "cover_image": _clean_cover(payload.cover_image),
+        "content": payload.content,
+        "status": payload.status,
+        "updated_at": datetime.now(timezone.utc).isoformat(),
+    })  # slug is kept stable on purpose so shared links don't break
+    return {"blog": await store.get_blog_by_id(blog_id)}
+ 
+ 
+@api_router.delete("/admin/blogs/{blog_id}")
+async def admin_delete_blog(blog_id: str, request: Request):
+    require_admin(request)
+    await store.delete_blog(blog_id)
+    return {"status": "deleted"}
+ 
+
+class BlogOrderIn(BaseModel):
+    ids: list[str] = Field(min_length=1, max_length=500)  # blog_ids; first = shown first
+ 
+ 
+@api_router.put("/admin/blogs-order")
+async def admin_reorder_blogs(payload: BlogOrderIn, request: Request):
+    require_admin(request)
+    for position, blog_id in enumerate(payload.ids):
+        await store.update_blog(blog_id, {"sort_order": position})
+    return {"status": "ok"}
+ 
 
 app.include_router(api_router)
 

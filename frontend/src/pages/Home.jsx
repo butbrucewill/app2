@@ -263,7 +263,6 @@ export default function Home() {
                   Login
                 </a>
               </Magnetic>
-
               <a
                 href="#courses"
                 data-testid="hero-courses-link"
