@@ -46,4 +46,57 @@ function bootstrap(PDO $pdo) {
         created_at VARCHAR(40) NOT NULL,
         paid_at VARCHAR(40) NULL
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+    $pdo->exec("CREATE TABLE IF NOT EXISTS blogs (
+        blog_id VARCHAR(30) PRIMARY KEY,
+        slug VARCHAR(200) NOT NULL UNIQUE,
+        title VARCHAR(200) NOT NULL,
+        h1 VARCHAR(250) NOT NULL DEFAULT '',
+        excerpt VARCHAR(400) NOT NULL DEFAULT '',
+        cover_image VARCHAR(2000) NOT NULL DEFAULT '',
+        cover_alt VARCHAR(300) NOT NULL DEFAULT '',
+        category VARCHAR(100) NOT NULL DEFAULT '',
+        tags VARCHAR(500) NOT NULL DEFAULT '',
+        author VARCHAR(120) NOT NULL DEFAULT '',
+        published_at VARCHAR(40) NOT NULL DEFAULT '',
+        meta_title VARCHAR(250) NOT NULL DEFAULT '',
+        meta_description VARCHAR(500) NOT NULL DEFAULT '',
+        focus_keyword VARCHAR(200) NOT NULL DEFAULT '',
+        secondary_keywords VARCHAR(500) NOT NULL DEFAULT '',
+        canonical_url VARCHAR(500) NOT NULL DEFAULT '',
+        index_status VARCHAR(10) NOT NULL DEFAULT 'index',
+        schema_type VARCHAR(20) NOT NULL DEFAULT 'BlogPosting',
+        og_title VARCHAR(250) NOT NULL DEFAULT '',
+        og_description VARCHAR(500) NOT NULL DEFAULT '',
+        og_image VARCHAR(2000) NOT NULL DEFAULT '',
+        content LONGTEXT NOT NULL,
+        status VARCHAR(20) NOT NULL,
+        sort_order INT NOT NULL DEFAULT 0,
+        created_at VARCHAR(40) NOT NULL,
+        updated_at VARCHAR(40) NOT NULL
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+    $blogColumns = [
+        'h1' => "VARCHAR(250) NOT NULL DEFAULT ''",
+        'cover_alt' => "VARCHAR(300) NOT NULL DEFAULT ''",
+        'category' => "VARCHAR(100) NOT NULL DEFAULT ''",
+        'tags' => "VARCHAR(500) NOT NULL DEFAULT ''",
+        'author' => "VARCHAR(120) NOT NULL DEFAULT ''",
+        'published_at' => "VARCHAR(40) NOT NULL DEFAULT ''",
+        'meta_title' => "VARCHAR(250) NOT NULL DEFAULT ''",
+        'meta_description' => "VARCHAR(500) NOT NULL DEFAULT ''",
+        'focus_keyword' => "VARCHAR(200) NOT NULL DEFAULT ''",
+        'secondary_keywords' => "VARCHAR(500) NOT NULL DEFAULT ''",
+        'canonical_url' => "VARCHAR(500) NOT NULL DEFAULT ''",
+        'index_status' => "VARCHAR(10) NOT NULL DEFAULT 'index'",
+        'schema_type' => "VARCHAR(20) NOT NULL DEFAULT 'BlogPosting'",
+        'og_title' => "VARCHAR(250) NOT NULL DEFAULT ''",
+        'og_description' => "VARCHAR(500) NOT NULL DEFAULT ''",
+        'og_image' => "VARCHAR(2000) NOT NULL DEFAULT ''",
+        'sort_order' => 'INT NOT NULL DEFAULT 0',
+    ];
+    $existingBlogColumns = array_column($pdo->query('SHOW COLUMNS FROM blogs')->fetchAll(), 'Field');
+    foreach ($blogColumns as $column => $definition) {
+        if (!in_array($column, $existingBlogColumns, true)) {
+            $pdo->exec("ALTER TABLE blogs ADD COLUMN {$column} {$definition}");
+        }
+    }
 }

@@ -1,6 +1,8 @@
 # Map clean URLs to PHP files: /api/leads -> /api/leads.php, /api/admin/login -> /api/admin/login.php
 <IfModule mod_rewrite.c>
   RewriteEngine On
+  RewriteRule ^blogs/([^/]+)/?$ blogs.php?slug=$1 [QSA,L]
+  RewriteRule ^admin/blogs/([^/]+)/?$ admin/blogs.php?id=$1 [QSA,L]
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME}.php -f
   RewriteRule ^(.*)$ $1.php [L]

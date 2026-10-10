@@ -425,14 +425,6 @@ export default function Navbar() {
               </AnimatePresence>
             </div>
 
-            {/* Contact */}
-            <a
-              href="/#contact"
-              data-testid="nav-link-contact"
-              className="hover:text-paper transition-colors"
-            >
-              Contact Us
-            </a>
           </nav>
 
           {/* Right Side */}
