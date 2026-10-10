@@ -17,8 +17,11 @@ from html.parser import HTMLParser
 from urllib.parse import urlparse
 from pathlib import Path
 from pydantic import BaseModel, Field, EmailStr
-from typing import Optional
+from typing import Literal, Optional
 from datetime import datetime, timezone, timedelta
+from fastapi import FastAPI, APIRouter, HTTPException, Request, UploadFile, File
+from fastapi.responses import StreamingResponse, Response
+from fastapi.staticfiles import StaticFiles
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -420,7 +423,248 @@ async def admin_leads(request: Request):
     return {"leads": docs}
 
 
+def slugify(text: str) -> str:
+    s = re.sub(r"[^a-z0-9]+", "-", text.lower()).strip("-")[:60].strip("-")
+    return s or "post"
+ 
+UPLOAD_DIR = ROOT_DIR / "uploads"
+UPLOAD_DIR.mkdir(exist_ok=True)
+SITE_BASE = SITE_URL or "https://onestockacademy.com"
+ 
+ 
+# ---------- helpers ----------
+ 
+def slugify(text: str, max_len: int = 90) -> str:
+    s = re.sub(r"[^a-z0-9]+", "-", (text or "").lower()).strip("-")[:max_len].strip("-")
+    return s or "post"
+ 
+ 
+def _clean_slug(raw: str) -> str:
+    """Accepts 'my-post', '/blog/my-post' or a full URL and returns a clean slug ('' if empty)."""
+    raw = (raw or "").strip().lower()
+    raw = re.sub(r"^https?://[^/]+", "", raw)
+    raw = raw.replace("/blog/", "").strip("/")
+    return slugify(raw) if raw else ""
+ 
+ 
+async def _unique_slug(base: str) -> str:
+    slug, n = base, 2
+    while await store.get_blog_by_slug(slug):
+        slug = f"{base}-{n}"
+        n += 1
+    return slug
+ 
+ 
+def _clean_url(url: str, field: str = "URL", allow_relative: bool = True) -> str:
+    url = (url or "").strip()
+    ok = url.startswith(("https://", "http://")) or (allow_relative and url.startswith("/"))
+    if url and not ok:
+        raise HTTPException(status_code=400, detail=f"{field} must be an http(s) URL")
+    return url
+ 
+ 
+def _csv(text: str) -> str:
+    return ", ".join(t.strip() for t in (text or "").split(",") if t.strip())
+ 
+ 
+class BlogIn(BaseModel):
+    title: str = Field(min_length=3, max_length=200)
+    h1: str = Field(default="", max_length=250)
+    slug: str = Field(default="", max_length=200)
+    excerpt: str = Field(default="", max_length=400)
+    content: str = Field(default="", max_length=3_000_000)  # TipTap HTML
+    cover_image: str = Field(default="", max_length=2000)
+    cover_alt: str = Field(default="", max_length=300)
+    category: str = Field(default="", max_length=100)
+    tags: str = Field(default="", max_length=500)             # comma separated
+    author: str = Field(default="", max_length=120)
+    published_at: str = Field(default="", max_length=40)      # YYYY-MM-DD or ISO datetime
+    meta_title: str = Field(default="", max_length=250)
+    meta_description: str = Field(default="", max_length=500)
+    focus_keyword: str = Field(default="", max_length=200)
+    secondary_keywords: str = Field(default="", max_length=500)
+    canonical_url: str = Field(default="", max_length=500)
+    index_status: Literal["index", "noindex"] = "index"
+    schema_type: Literal["BlogPosting", "Article"] = "BlogPosting"
+    og_title: str = Field(default="", max_length=250)
+    og_description: str = Field(default="", max_length=500)
+    og_image: str = Field(default="", max_length=2000)
+    status: Literal["draft", "published"] = "draft"
+ 
+ 
+def _blog_fields(p: BlogIn) -> dict:
+    published_at = p.published_at.strip()
+    if published_at:
+        try:
+            datetime.fromisoformat(published_at.replace("Z", "+00:00"))
+        except ValueError:
+            raise HTTPException(status_code=400, detail="Invalid publish date")
+    elif p.status == "published":
+        published_at = datetime.now(timezone.utc).date().isoformat()
+    return {
+        "title": p.title.strip(),
+        "h1": p.h1.strip(),
+        "excerpt": p.excerpt.strip(),
+        "content": p.content,
+        "cover_image": _clean_url(p.cover_image, "Featured image"),
+        "cover_alt": p.cover_alt.strip(),
+        "category": p.category.strip(),
+        "tags": _csv(p.tags),
+        "author": p.author.strip(),
+        "published_at": published_at,
+        "meta_title": p.meta_title.strip(),
+        "meta_description": p.meta_description.strip(),
+        "focus_keyword": p.focus_keyword.strip(),
+        "secondary_keywords": _csv(p.secondary_keywords),
+        "canonical_url": _clean_url(p.canonical_url, "Canonical URL", allow_relative=False),
+        "index_status": p.index_status,
+        "schema_type": p.schema_type,
+        "og_title": p.og_title.strip(),
+        "og_description": p.og_description.strip(),
+        "og_image": _clean_url(p.og_image, "OG image"),
+        "status": p.status,
+    }
+ 
+ 
+# ---------- Public ----------
+ 
+@api_router.get("/blogs")
+async def list_public_blogs():
+    """Cards for the /blog page (no body content), in the admin-chosen order."""
+    return {"blogs": await store.list_blogs(published_only=True)}
+ 
+ 
+@api_router.get("/blogs/{slug}")
+async def get_public_blog(slug: str):
+    doc = await store.get_blog_by_slug(slug)
+    if not doc or doc["status"] != "published":
+        raise HTTPException(status_code=404, detail="Blog not found")
+    return {"blog": doc}
+ 
+ 
+@api_router.get("/sitemap.xml")
+async def sitemap_xml():
+    """Dynamic sitemap: static pages + every published, indexable blog post."""
+    static_paths = ["/", "/about", "/media-coverage", "/global-market", "/buniyaad", "/blog", "/privacy-policy"]
+    entries = [f"<url><loc>{escape(SITE_BASE + p)}</loc></url>" for p in static_paths]
+    for b in await store.list_blogs(published_only=True):
+        if (b.get("index_status") or "index") == "noindex":
+            continue
+        own_url = f"{SITE_BASE}/blog/{b['slug']}"
+        canon = (b.get("canonical_url") or "").strip()
+        if canon and canon.rstrip("/") != own_url:
+            continue  # canonicalised elsewhere: only the canonical URL belongs in a sitemap
+        lastmod = str(b.get("updated_at") or b.get("created_at") or "")[:10]
+        entries.append(
+            f"<url><loc>{escape(own_url)}</loc>"
+            + (f"<lastmod>{escape(lastmod)}</lastmod>" if lastmod else "")
+            + "</url>"
+        )
+    xml = ('<?xml version="1.0" encoding="UTF-8"?>'
+           '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' + "".join(entries) + "</urlset>")
+    return Response(content=xml, media_type="application/xml")
+ 
+ 
+# ---------- Admin ----------
+ 
+@api_router.get("/admin/blogs")
+async def admin_list_blogs(request: Request):
+    require_admin(request)
+    return {"blogs": await store.list_blogs(published_only=False)}
+ 
+ 
+@api_router.get("/admin/blogs/{blog_id}")
+async def admin_get_blog(blog_id: str, request: Request):
+    require_admin(request)
+    doc = await store.get_blog_by_id(blog_id)
+    if not doc:
+        raise HTTPException(status_code=404, detail="Blog not found")
+    return {"blog": doc}
+ 
+ 
+@api_router.post("/admin/blogs")
+async def admin_create_blog(payload: BlogIn, request: Request):
+    require_admin(request)
+    now = datetime.now(timezone.utc).isoformat()
+    base = _clean_slug(payload.slug) or slugify(payload.title)
+    doc = {
+        "blog_id": "BLOG-" + uuid.uuid4().hex[:10].upper(),
+        "slug": await _unique_slug(base),
+        **_blog_fields(payload),
+        "sort_order": (await store.min_sort_order()) - 1,
+        "created_at": now,
+        "updated_at": now,
+    }
+    await store.insert_blog(doc)
+    return {"blog": doc}
+ 
+ 
+@api_router.put("/admin/blogs/{blog_id}")
+async def admin_update_blog(blog_id: str, payload: BlogIn, request: Request):
+    require_admin(request)
+    current = await store.get_blog_by_id(blog_id)
+    if not current:
+        raise HTTPException(status_code=404, detail="Blog not found")
+    fields = _blog_fields(payload)
+    if not payload.published_at.strip() and current.get("published_at"):
+        fields["published_at"] = current["published_at"]  # keep the original publish date
+    new_slug = _clean_slug(payload.slug)
+    if new_slug and new_slug != current["slug"]:
+        clash = await store.get_blog_by_slug(new_slug)
+        if clash and clash["blog_id"] != blog_id:
+            raise HTTPException(status_code=409, detail="That URL slug is already used by another post")
+        fields["slug"] = new_slug
+    fields["updated_at"] = datetime.now(timezone.utc).isoformat()
+    await store.update_blog(blog_id, fields)
+    return {"blog": await store.get_blog_by_id(blog_id)}
+ 
+ 
+@api_router.delete("/admin/blogs/{blog_id}")
+async def admin_delete_blog(blog_id: str, request: Request):
+    require_admin(request)
+    await store.delete_blog(blog_id)
+    return {"status": "deleted"}
+ 
+ 
+class BlogOrderIn(BaseModel):
+    ids: list[str] = Field(min_length=1, max_length=500)  # blog_ids; first = shown first
+ 
+ 
+@api_router.put("/admin/blogs-order")
+async def admin_reorder_blogs(payload: BlogOrderIn, request: Request):
+    require_admin(request)
+    for position, blog_id in enumerate(payload.ids):
+        await store.update_blog(blog_id, {"sort_order": position})
+    return {"status": "ok"}
+ 
+ 
+# ---------- Image upload (featured / OG images) ----------
+ 
+_IMG_TYPES = {"image/jpeg": ".jpg", "image/png": ".png", "image/webp": ".webp", "image/gif": ".gif"}
+ 
+ 
+def _looks_like_image(data: bytes) -> bool:
+    return (data[:3] == b"\xff\xd8\xff" or data[:8] == b"\x89PNG\r\n\x1a\n"
+            or data[:4] == b"GIF8" or (data[:4] == b"RIFF" and data[8:12] == b"WEBP"))
+ 
+ 
+@api_router.post("/admin/upload")
+async def admin_upload(request: Request, file: UploadFile = File(...)):
+    require_admin(request)
+    ext = _IMG_TYPES.get(file.content_type or "")
+    data = await file.read()
+    if not ext or not _looks_like_image(data):
+        raise HTTPException(status_code=400, detail="Upload a JPG, PNG, WebP or GIF image")
+    if len(data) > 5 * 1024 * 1024:
+        raise HTTPException(status_code=400, detail="Image must be under 5 MB")
+    name = uuid.uuid4().hex + ext
+    (UPLOAD_DIR / name).write_bytes(data)
+    base = os.environ.get("PUBLIC_API_URL", "").rstrip("/") or str(request.base_url).rstrip("/")
+    return {"url": f"{base}/uploads/{name}"}
+ 
+
 app.include_router(api_router)
+app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
 
 app.add_middleware(
     CORSMiddleware,

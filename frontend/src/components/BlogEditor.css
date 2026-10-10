@@ -1,0 +1,511 @@
+.blog-editor {
+  width: 100%;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+/* Toolbar */
+
+.blog-editor-toolbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 10px;
+  border-bottom: 1px solid #e5e7eb;
+  background: #fafafa;
+}
+
+.blog-editor-toolbar button {
+  min-width: 34px;
+  height: 34px;
+  padding: 0 9px;
+
+  border: 1px solid transparent;
+  border-radius: 6px;
+
+  background: transparent;
+  color: #222;
+
+  font-size: 14px;
+  font-weight: 500;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.blog-editor-toolbar button:hover {
+  background: #eeeeee;
+}
+
+.blog-editor-toolbar button.active {
+  background: #111827;
+  color: white;
+}
+
+.blog-editor-toolbar button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.toolbar-divider {
+  width: 1px;
+  height: 24px;
+  margin: 0 4px;
+  background: #d1d5db;
+}
+
+/* Editor */
+
+.blog-editor-content {
+  min-height: 500px;
+
+  padding: 32px;
+
+  outline: none;
+
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  font-size: 17px;
+  line-height: 1.75;
+  color: #1f2937;
+}
+
+/* Headings */
+
+.blog-editor-content h1 {
+  margin-top: 0;
+  margin-bottom: 24px;
+
+  font-size: 38px;
+  line-height: 1.15;
+  font-weight: 700;
+}
+
+.blog-editor-content h2 {
+  margin-top: 32px;
+  margin-bottom: 16px;
+
+  font-size: 30px;
+  line-height: 1.25;
+  font-weight: 700;
+}
+
+.blog-editor-content h3 {
+  margin-top: 26px;
+  margin-bottom: 12px;
+
+  font-size: 24px;
+  line-height: 1.3;
+  font-weight: 600;
+}
+
+/* Paragraph */
+
+.blog-editor-content p {
+  margin: 0 0 18px;
+}
+
+/* Lists */
+
+.blog-editor-content ul,
+.blog-editor-content ol {
+  margin: 0 0 20px;
+  padding-left: 28px;
+}
+
+.blog-editor-content li {
+  margin-bottom: 8px;
+}
+
+/* Links */
+
+.blog-editor-content a {
+  color: #2563eb;
+  text-decoration: underline;
+}
+
+/* Quote */
+
+.blog-editor-content blockquote {
+  margin: 24px 0;
+  padding: 16px 20px;
+
+  border-left: 4px solid #111827;
+
+  background: #f9fafb;
+
+  font-style: italic;
+}
+
+
+
+/* Keep floated images inside the editor box */
+.blog-editor-content::after {
+  content: "";
+  display: block;
+  clear: both;
+}
+ 
+/* Headings start below any floated image instead of getting squeezed */
+.blog-editor-content h1,
+.blog-editor-content h2,
+.blog-editor-content h3,
+.blog-editor-content hr {
+  clear: both;
+}
+ 
+/* ---------- A) Plain <img> (no resize wrapper) ---------- */
+ 
+.blog-editor-content img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 24px auto;
+  border-radius: 10px;
+  cursor: pointer;
+}
+ 
+/* Width */
+.blog-editor-content img[data-width="25%"]  { width: 25%; }
+.blog-editor-content img[data-width="50%"]  { width: 50%; }
+.blog-editor-content img[data-width="75%"]  { width: 75%; }
+.blog-editor-content img[data-width="100%"] { width: 100%; }
+ 
+/* Center = normal block image, no wrapping */
+.blog-editor-content img[data-alignment="center"] {
+  margin-left: auto;
+  margin-right: auto;
+}
+ 
+/* Left / Right at full width = nothing to wrap, stay a block */
+.blog-editor-content img[data-alignment="left"][data-width="100%"]  { margin-left: 0; margin-right: auto; }
+.blog-editor-content img[data-alignment="right"][data-width="100%"] { margin-left: auto; margin-right: 0; }
+ 
+/* Left / Right narrower than 100% = FLOAT, text flows around it */
+.blog-editor-content img[data-alignment="right"]:not([data-width="100%"]) {
+  float: right;
+  margin: 6px 0 16px 28px;
+}
+.blog-editor-content img[data-alignment="left"]:not([data-width="100%"]) {
+  float: left;
+  margin: 6px 28px 16px 0;
+}
+ 
+/* ---------- B) With the TipTap resize wrapper ----------
+   (Image `resize` option wraps each <img> in [data-resize-container].
+   Float/width must go on the wrapper, and the img fills it.
+   If your DOM uses a different wrapper, inspect it and swap the selector.) */
+ 
+.blog-editor-content [data-resize-container] {
+  display: block;
+  margin: 24px auto;
+}
+.blog-editor-content [data-resize-container] img {
+  width: 100%;
+  margin: 0;
+  float: none;
+}
+ 
+.blog-editor-content [data-resize-container]:has(img[data-width="25%"])  { width: 25%; }
+.blog-editor-content [data-resize-container]:has(img[data-width="50%"])  { width: 50%; }
+.blog-editor-content [data-resize-container]:has(img[data-width="75%"])  { width: 75%; }
+.blog-editor-content [data-resize-container]:has(img[data-width="100%"]) { width: 100%; }
+ 
+.blog-editor-content [data-resize-container]:has(img[data-alignment="left"][data-width="100%"])  { margin-left: 0; margin-right: auto; }
+.blog-editor-content [data-resize-container]:has(img[data-alignment="right"][data-width="100%"]) { margin-left: auto; margin-right: 0; }
+ 
+.blog-editor-content [data-resize-container]:has(img[data-alignment="right"]:not([data-width="100%"])) {
+  float: right;
+  margin: 6px 0 16px 28px;
+}
+.blog-editor-content [data-resize-container]:has(img[data-alignment="left"]:not([data-width="100%"])) {
+  float: left;
+  margin: 6px 28px 16px 0;
+}
+ 
+/* ---------- Mobile: no side-by-side, image goes full width ---------- */
+@media (max-width: 640px) {
+  .blog-editor-content img[data-alignment],
+  .blog-editor-content [data-resize-container] {
+    float: none !important;
+    width: 100% !important;
+    margin: 20px 0 !important;
+  }
+}
+ 
+/* =========================================================
+   POST / SAVE DRAFT FOOTER  (append to BlogEditor.css)
+   ========================================================= */
+.blog-editor-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 12px 16px;
+  border-top: 1px solid #e5e7eb;
+  background: #fafafa;
+}
+.blog-editor-footer button {
+  height: 40px;
+  padding: 0 22px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s ease, background 0.2s ease;
+}
+.blog-editor-draft-btn {
+  background: #ffffff;
+  color: #111827;
+  border: 1px solid #d1d5db;
+}
+.blog-editor-draft-btn:hover { background: #f3f4f6; }
+.blog-editor-post-btn {
+  background: #111827;
+  color: #ffffff;
+  border: 1px solid #111827;
+}
+.blog-editor-post-btn:hover { opacity: 0.9; }
+.blog-editor-footer button:disabled { opacity: 0.4; cursor: not-allowed; }
+ 
+.blog-editor-footer-hint {
+  margin-right: auto;
+  align-self: center;
+  font-size: 12px;
+  color: #b45309;
+}
+ 
+/* =========================================
+   IMAGE CONTEXT TOOLBAR
+   ========================================= */
+
+.blog-image-toolbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+
+  padding: 8px 12px;
+
+  background: #111827;
+  border-bottom: 1px solid #374151;
+
+  color: #ffffff;
+}
+
+
+/* Image label */
+
+.blog-image-toolbar-label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+
+  margin-right: 6px;
+
+  color: #ffffff;
+
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+
+/* Small image icon */
+
+.blog-image-toolbar-label::before {
+  content: "▧";
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 22px;
+  height: 22px;
+
+  border-radius: 5px;
+
+  background: #374151;
+
+  color: #ffffff;
+
+  font-size: 13px;
+}
+
+
+/* Toolbar buttons */
+
+.blog-image-toolbar button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 30px;
+
+  padding: 0 10px;
+
+  border: 1px solid #4b5563;
+  border-radius: 6px;
+
+  background: #1f2937;
+  color: #e5e7eb;
+
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 500;
+
+  cursor: pointer;
+
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+
+.blog-image-toolbar button:hover {
+  background: #374151;
+  border-color: #6b7280;
+  color: #ffffff;
+}
+
+
+/* Active alignment button */
+
+.blog-image-toolbar button.active {
+  background: #ffffff;
+  border-color: #ffffff;
+  color: #111827;
+}
+
+
+/* Divider */
+
+.blog-image-toolbar .toolbar-divider {
+  width: 1px;
+  height: 22px;
+
+  margin: 0 5px;
+
+  background: #4b5563;
+}
+
+
+/* Width control */
+
+.blog-image-toolbar label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+
+  margin-left: 2px;
+
+  color: #d1d5db;
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+
+/* Width select */
+
+.blog-image-toolbar select {
+  appearance: none;
+  -webkit-appearance: none;
+
+  height: 30px;
+  min-width: 72px;
+
+  padding: 0 25px 0 9px;
+
+  border: 1px solid #4b5563;
+  border-radius: 6px;
+
+  background:
+    #1f2937
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23d1d5db' stroke-width='1.5'/%3E%3C/svg%3E")
+    no-repeat
+    right 9px
+    center;
+
+  color: #ffffff;
+
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 500;
+
+  cursor: pointer;
+  outline: none;
+}
+
+
+.blog-image-toolbar select:hover {
+  background-color: #374151;
+  border-color: #6b7280;
+}
+
+
+.blog-image-toolbar select:focus {
+  border-color: #9ca3af;
+}
+
+
+/* Dropdown options */
+
+.blog-image-toolbar select option {
+  background: #1f2937;
+  color: #ffffff;
+}
+/* Horizontal rule */
+
+.blog-editor-content hr {
+  margin: 32px 0;
+  border: 0;
+  border-top: 1px solid #e5e7eb;
+}
+
+/* Mobile */
+
+@media (max-width: 768px) {
+  .blog-editor-toolbar {
+    gap: 4px;
+    padding: 8px;
+  }
+
+  .blog-editor-toolbar button {
+    min-width: 32px;
+    height: 32px;
+    padding: 0 7px;
+    font-size: 13px;
+  }
+
+  .blog-editor-content {
+    min-height: 400px;
+    padding: 20px;
+    font-size: 16px;
+  }
+
+  .blog-editor-content h1 {
+    font-size: 30px;
+  }
+
+  .blog-editor-content h2 {
+    font-size: 25px;
+  }
+
+  .blog-editor-content h3 {
+    font-size: 21px;
+  }
+}
