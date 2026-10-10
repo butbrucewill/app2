@@ -32,6 +32,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
+
 const fadeUp = {
   initial: { opacity: 0, y: 36, filter: "blur(6px)" },
   whileInView: { opacity: 1, y: 0, filter: "blur(0px)" },
