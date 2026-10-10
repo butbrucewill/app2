@@ -12,7 +12,7 @@ const MONEY_EXPO_CARDS = [
     featured: true,
     hideCaption: false,
     image:
-      "/_MG_4313.JPG (1).jpeg",
+      "stagepic.jpeg",
     text: "One Stock Academy won the award for Best Trading School at the Money Expo, recognising our commitment to practical, disciplined trading education.",
   },
   {

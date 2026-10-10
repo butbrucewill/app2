@@ -29,7 +29,6 @@ const LINKS = [
     href: "/about",
     dropdown: ABOUT_LINKS,
   },
-  { label: "Reviews", href: "/#reviews" },
   { label: "Contact Us", href: "/#contact" },
 ];
 
@@ -427,13 +426,6 @@ export default function Navbar() {
             </div>
 
             {/* Contact */}
-            <a
-              href="/#reviews"
-              data-testid="nav-link-reviews"
-              className="hover:text-paper transition-colors"
-            >
-              Reviews
-            </a>
             <a
               href="/#contact"
               data-testid="nav-link-contact"
