@@ -1,14 +1,23 @@
-import { useEffect, useState } from "react";
+
+import { useEffect, useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { motion } from "framer-motion";
-import { Lock, Loader2, LogOut, RefreshCcw, ArrowLeft } from "lucide-react";
+import {
+  Lock,
+  Loader2,
+  LogOut,
+  RefreshCcw,
+  ArrowLeft,
+} from "lucide-react";
 import { toast } from "sonner";
 import BlogAdminPannel from "@/components/BlogAdminPannel";
 import RedirectLinkManager from "@/components/RedirectLinkManager";
 
 const API = `${process.env.REACT_APP_BACKEND_URL || ""}/api`;
-const inr = (n) => "₹" + Number(n).toLocaleString("en-IN");
+
+const inr = (n) =>
+  "₹" + Number(n ?? 0).toLocaleString("en-IN");
 
 const HEADINGS = {
   enrollments: ["Registered Students", "Enrollments"],
@@ -17,46 +26,91 @@ const HEADINGS = {
 };
 
 export default function Admin() {
-  const [token, setToken] = useState(() => sessionStorage.getItem("osa_admin") || "");
+  const [token, setToken] = useState(
+    () => sessionStorage.getItem("osa_admin") || ""
+  );
+
   const [password, setPassword] = useState("");
   const [rows, setRows] = useState(null);
   const [leads, setLeads] = useState(null);
   const [loading, setLoading] = useState(false);
   const [loginErr, setLoginErr] = useState("");
-  const [tab, setTab] = useState("enrollments"); // "enrollments" | "blogs" | "links"
+  const [tab, setTab] = useState("enrollments");
 
-  const load = async (t) => {
+  // Incrementing these keys remounts only the relevant child component.
+  const [blogRefreshKey, setBlogRefreshKey] = useState(0);
+  const [linksRefreshKey, setLinksRefreshKey] = useState(0);
+
+  const load = useCallback(async (t, showToast = false) => {
+    if (!t) return;
+
     setLoading(true);
+
     try {
       const [enr, lds] = await Promise.all([
-        axios.get(`${API}/admin/enrollments`, { headers: { Authorization: `Bearer ${t}` } }),
-        axios.get(`${API}/admin/leads`, { headers: { Authorization: `Bearer ${t}` } }),
+        axios.get(`${API}/admin/enrollments`, {
+          headers: { Authorization: `Bearer ${t}` },
+        }),
+        axios.get(`${API}/admin/leads`, {
+          headers: { Authorization: `Bearer ${t}` },
+        }),
       ]);
+
       setRows(enr.data.enrollments);
       setLeads(lds.data.leads);
-    } catch {
-      sessionStorage.removeItem("osa_admin");
-      setToken("");
-      setRows(null);
-      setLeads(null);
+
+      if (showToast) {
+        toast.success("Enrollments and leads refreshed");
+      }
+    } catch (err) {
+      console.error("Failed to load admin data:", err);
+
+      const status = err.response?.status;
+
+      if (status === 401 || status === 403) {
+        sessionStorage.removeItem("osa_admin");
+        setToken("");
+        setRows(null);
+        setLeads(null);
+
+        toast.error(
+          "Your session has expired or access was denied. Please sign in again."
+        );
+      } else {
+        toast.error(
+          err.response?.data?.detail ||
+            "Could not load dashboard data. Please try again."
+        );
+      }
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
-    if (token) load(token);
-  }, [token]);
+    if (token) {
+      load(token);
+    }
+  }, [token, load]);
 
   const login = async (e) => {
     e.preventDefault();
+
     setLoading(true);
+    setLoginErr("");
+
     try {
-      const res = await axios.post(`${API}/admin/login`, { password });
+      const res = await axios.post(`${API}/admin/login`, {
+        password,
+      });
+
       sessionStorage.setItem("osa_admin", res.data.token);
       setToken(res.data.token);
+      setPassword("");
     } catch (err) {
-      const msg = err.response?.data?.detail || "Login failed";
+      const msg =
+        err.response?.data?.detail || "Login failed";
+
       setLoginErr(msg);
       toast.error(msg);
       setLoading(false);
@@ -69,20 +123,58 @@ export default function Admin() {
     setRows(null);
     setLeads(null);
     setTab("enrollments");
+    setPassword("");
   };
 
-  const paid = rows?.filter((r) => r.status === "paid").length ?? 0;
-  const revenue = rows?.filter((r) => r.status === "paid").reduce((s, r) => s + r.amount_inr, 0) ?? 0;
-  const [eyebrow, heading] = HEADINGS[tab] || HEADINGS.enrollments;
+  // Refresh only the active tab.
+  const handleRefresh = async () => {
+    if (!token || loading) return;
+
+    if (tab === "enrollments") {
+      await load(token, true);
+      return;
+    }
+
+    if (tab === "blogs") {
+      setBlogRefreshKey((key) => key + 1);
+      toast.success("Refreshing blog manager...");
+      return;
+    }
+
+    if (tab === "links") {
+      setLinksRefreshKey((key) => key + 1);
+      toast.success("Refreshing redirect links...");
+    }
+  };
+
+  const paid =
+    rows?.filter((r) => r.status === "paid").length ?? 0;
+
+  const revenue =
+    rows
+      ?.filter((r) => r.status === "paid")
+      .reduce((sum, r) => sum + Number(r.amount_inr || 0), 0) ??
+    0;
+
+  const [eyebrow, heading] =
+    HEADINGS[tab] || HEADINGS.enrollments;
 
   return (
     <div className="bg-[#050505] text-zinc-200 min-h-screen flex flex-col">
       <header className="border-b border-white/10 bg-[#050505]/90 backdrop-blur">
         <div className="max-w-6xl mx-auto px-6 sm:px-10 h-16 flex items-center justify-between">
-          <Link to="/" data-testid="admin-back-link" className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.18em] text-zinc-400 hover:text-white transition-colors">
-            <ArrowLeft className="w-4 h-4" /> One Stock Academy
+          <Link
+            to="/"
+            data-testid="admin-back-link"
+            className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.18em] text-zinc-400 hover:text-white transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            One Stock Academy
           </Link>
-          <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-zinc-500">Admin</span>
+
+          <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-zinc-500">
+            Admin
+          </span>
         </div>
       </header>
 
@@ -96,8 +188,15 @@ export default function Admin() {
             data-testid="admin-login-form"
           >
             <Lock className="w-6 h-6 text-zinc-500 mb-5" strokeWidth={1.5} />
-            <h1 className="font-display text-3xl font-bold text-white mb-2">Admin access</h1>
-            <p className="text-zinc-400 text-sm mb-8">Enter the admin password to view registered students.</p>
+
+            <h1 className="font-display text-3xl font-bold text-white mb-2">
+              Admin access
+            </h1>
+
+            <p className="text-zinc-400 text-sm mb-8">
+              Enter the admin password to view registered students.
+            </p>
+
             <input
               type="password"
               data-testid="admin-password-input"
@@ -107,16 +206,27 @@ export default function Admin() {
               required
               className="w-full border border-white/15 bg-white/5 px-4 py-3 text-white placeholder:text-zinc-600 focus:outline-none focus:border-white/60 rounded-none mb-4"
             />
+
             {loginErr && (
-              <p data-testid="admin-login-error" className="text-red-400 text-xs mb-4 -mt-2">{loginErr}</p>
+              <p
+                data-testid="admin-login-error"
+                className="text-red-400 text-xs mb-4 -mt-2"
+              >
+                {loginErr}
+              </p>
             )}
+
             <button
               type="submit"
               data-testid="admin-login-btn"
               disabled={loading}
               className="w-full bg-white text-black font-mono text-xs uppercase tracking-[0.18em] px-6 py-4 hover:bg-zinc-200 transition-colors disabled:opacity-60 flex items-center justify-center gap-2"
             >
-              {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Lock className="w-4 h-4" />}
+              {loading ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <Lock className="w-4 h-4" />
+              )}
               Sign in
             </button>
           </motion.form>
@@ -127,29 +237,41 @@ export default function Admin() {
                 <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-brand mb-2">
                   {eyebrow}
                 </p>
+
                 <h1 className="font-display text-4xl sm:text-5xl font-bold tracking-tight text-white">
                   {heading}
                 </h1>
               </div>
+
               <div className="flex gap-3">
                 <button
-                  onClick={() => load(token)}
+                  type="button"
+                  onClick={handleRefresh}
                   data-testid="admin-refresh-btn"
-                  className="flex items-center gap-2 border border-white/20 text-white font-mono text-[11px] uppercase tracking-[0.18em] px-5 py-3 hover:border-white transition-colors"
+                  disabled={loading}
+                  className="flex items-center gap-2 border border-white/20 text-white font-mono text-[11px] uppercase tracking-[0.18em] px-5 py-3 hover:border-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <RefreshCcw className="w-3.5 h-3.5" /> Refresh
+                  <RefreshCcw
+                    className={`w-3.5 h-3.5 ${
+                      loading ? "animate-spin" : ""
+                    }`}
+                  />
+                  {loading ? "Refreshing..." : "Refresh"}
                 </button>
+
                 <button
+                  type="button"
                   onClick={logout}
                   data-testid="admin-logout-btn"
                   className="flex items-center gap-2 border border-white/20 text-zinc-400 font-mono text-[11px] uppercase tracking-[0.18em] px-5 py-3 hover:border-red-500 hover:text-red-500 transition-colors"
                 >
-                  <LogOut className="w-3.5 h-3.5" /> Logout
+                  <LogOut className="w-3.5 h-3.5" />
+                  Logout
                 </button>
               </div>
             </div>
 
-            {/* ---- Tabs ---- */}
+            {/* Tabs */}
             <div className="flex gap-2 mb-10 border-b border-white/10 overflow-x-auto">
               {[
                 ["enrollments", "Enrollments & Leads"],
@@ -158,6 +280,7 @@ export default function Admin() {
               ].map(([key, label]) => (
                 <button
                   key={key}
+                  type="button"
                   onClick={() => setTab(key)}
                   data-testid={`admin-tab-${key}`}
                   className={`px-5 py-3 whitespace-nowrap font-mono text-[11px] uppercase tracking-[0.18em] border-b-2 -mb-px transition-colors ${
@@ -171,13 +294,23 @@ export default function Admin() {
               ))}
             </div>
 
-            {/* ---- Blogs tab ---- */}
-            {tab === "blogs" && <BlogAdminPannel token={token} />}
+            {/* Blogs: remount only the blog manager on refresh */}
+            {tab === "blogs" && (
+              <BlogAdminPannel
+                key={blogRefreshKey}
+                token={token}
+              />
+            )}
 
-            {/* ---- Links tab ---- */}
-            {tab === "links" && <RedirectLinkManager token={token} />}
+            {/* Links: remount only the redirect manager on refresh */}
+            {tab === "links" && (
+              <RedirectLinkManager
+                key={linksRefreshKey}
+                token={token}
+              />
+            )}
 
-            {/* ---- Enrollments & Leads tab ---- */}
+            {/* Enrollments and leads */}
             {tab === "enrollments" && (
               <>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-10">
@@ -187,9 +320,20 @@ export default function Admin() {
                     ["Leads", leads?.length ?? 0],
                     ["Revenue (demo)", inr(revenue)],
                   ].map(([label, val]) => (
-                    <div key={label} className="border border-white/10 bg-white/[0.04] backdrop-blur-xl p-5 sm:p-6" data-testid={`stat-${label.toLowerCase().replace(/[^a-z]/g, "-")}`}>
-                      <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-500 mb-2">{label}</p>
-                      <p className="font-mono text-xl sm:text-2xl font-semibold text-white">{val}</p>
+                    <div
+                      key={label}
+                      className="border border-white/10 bg-white/[0.04] backdrop-blur-xl p-5 sm:p-6"
+                      data-testid={`stat-${label
+                        .toLowerCase()
+                        .replace(/[^a-z]/g, "-")}`}
+                    >
+                      <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-500 mb-2">
+                        {label}
+                      </p>
+
+                      <p className="font-mono text-xl sm:text-2xl font-semibold text-white">
+                        {val}
+                      </p>
                     </div>
                   ))}
                 </div>
@@ -197,7 +341,9 @@ export default function Admin() {
                 {loading && !rows ? (
                   <div className="flex items-center gap-3 text-zinc-500 py-16 justify-center">
                     <Loader2 className="w-5 h-5 animate-spin" />
-                    <span className="font-mono text-xs uppercase tracking-[0.18em]">Loading…</span>
+                    <span className="font-mono text-xs uppercase tracking-[0.18em]">
+                      Loading...
+                    </span>
                   </div>
                 ) : (
                   <div className="border border-white/10 bg-white/[0.03] backdrop-blur-xl overflow-x-auto">
@@ -213,17 +359,32 @@ export default function Admin() {
                           <th className="px-5 py-4">Date</th>
                         </tr>
                       </thead>
+
                       <tbody>
                         {rows?.map((r) => (
-                          <tr key={r.order_ref} className="border-b border-white/5 hover:bg-white/[0.04] transition-colors" data-testid={`row-${r.order_ref}`}>
-                            <td className="px-5 py-4 text-white whitespace-nowrap">{r.order_ref}</td>
-                            <td className="px-5 py-4 text-white">{r.name}</td>
+                          <tr
+                            key={r.order_ref}
+                            className="border-b border-white/5 hover:bg-white/[0.04] transition-colors"
+                            data-testid={`row-${r.order_ref}`}
+                          >
+                            <td className="px-5 py-4 text-white whitespace-nowrap">
+                              {r.order_ref}
+                            </td>
+                            <td className="px-5 py-4 text-white">
+                              {r.name}
+                            </td>
                             <td className="px-5 py-4 text-zinc-400">
                               <div>{r.email}</div>
-                              <div className="text-zinc-600 text-xs">{r.phone}</div>
+                              <div className="text-zinc-600 text-xs">
+                                {r.phone}
+                              </div>
                             </td>
-                            <td className="px-5 py-4 text-zinc-400 whitespace-nowrap">{r.course_id === "online" ? "Online" : "Offline"}</td>
-                            <td className="px-5 py-4 text-white text-right">{inr(r.amount_inr)}</td>
+                            <td className="px-5 py-4 text-zinc-400 whitespace-nowrap">
+                              {r.course_id === "online" ? "Online" : "Offline"}
+                            </td>
+                            <td className="px-5 py-4 text-white text-right">
+                              {inr(r.amount_inr)}
+                            </td>
                             <td className="px-5 py-4">
                               <span
                                 className={`text-[10px] uppercase tracking-[0.15em] px-2.5 py-1 border ${
@@ -238,7 +399,15 @@ export default function Admin() {
                               </span>
                             </td>
                             <td className="px-5 py-4 text-zinc-500 whitespace-nowrap text-xs">
-                              {new Date(r.created_at).toLocaleDateString("en-IN", { day: "2-digit", month: "short" })}
+                              {r.created_at
+                                ? new Date(r.created_at).toLocaleDateString(
+                                    "en-IN",
+                                    {
+                                      day: "2-digit",
+                                      month: "short",
+                                    }
+                                  )
+                                : "-"}
                             </td>
                           </tr>
                         ))}
@@ -252,8 +421,12 @@ export default function Admin() {
                     <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-brand mb-4 mt-14">
                       Chat With Us — Leads
                     </p>
+
                     <div className="border border-white/10 bg-white/[0.03] backdrop-blur-xl overflow-x-auto">
-                      <table className="w-full text-sm font-mono" data-testid="admin-leads-table">
+                      <table
+                        className="w-full text-sm font-mono"
+                        data-testid="admin-leads-table"
+                      >
                         <thead>
                           <tr className="border-b border-white/10 text-left text-[10px] uppercase tracking-[0.18em] text-zinc-500">
                             <th className="px-5 py-4">Lead</th>
@@ -267,23 +440,50 @@ export default function Admin() {
                             <th className="px-5 py-4">Date</th>
                           </tr>
                         </thead>
+
                         <tbody>
                           {leads.map((l) => (
-                            <tr key={l.lead_id} className="border-b border-white/5 hover:bg-white/[0.04] transition-colors" data-testid={`lead-row-${l.lead_id}`}>
-                              <td className="px-5 py-4 text-white whitespace-nowrap">{l.lead_id}</td>
-                              <td className="px-5 py-4 text-white">{l.name}</td>
-                              <td className="px-5 py-4 text-zinc-400">+91 {l.whatsapp}</td>
-                              <td className="px-5 py-4 text-zinc-400">{l.email}</td>
-                              <td className="px-5 py-4 text-zinc-400">{l.age || "-"}</td>
-                              <td className="px-5 py-4 text-zinc-400">{l.city}</td>
-                              <td className="px-5 py-4 text-zinc-400 whitespace-nowrap">{l.trading_experience || "-"}</td>
+                            <tr
+                              key={l.lead_id}
+                              className="border-b border-white/5 hover:bg-white/[0.04] transition-colors"
+                              data-testid={`lead-row-${l.lead_id}`}
+                            >
+                              <td className="px-5 py-4 text-white whitespace-nowrap">
+                                {l.lead_id}
+                              </td>
+                              <td className="px-5 py-4 text-white">
+                                {l.name}
+                              </td>
+                              <td className="px-5 py-4 text-zinc-400">
+                                +91 {l.whatsapp}
+                              </td>
+                              <td className="px-5 py-4 text-zinc-400">
+                                {l.email}
+                              </td>
+                              <td className="px-5 py-4 text-zinc-400">
+                                {l.age || "-"}
+                              </td>
+                              <td className="px-5 py-4 text-zinc-400">
+                                {l.city}
+                              </td>
+                              <td className="px-5 py-4 text-zinc-400 whitespace-nowrap">
+                                {l.trading_experience || "-"}
+                              </td>
                               <td className="px-5 py-4">
                                 <span className="text-[10px] uppercase tracking-[0.15em] px-2.5 py-1 border border-brand/40 text-brand">
                                   {l.interest}
                                 </span>
                               </td>
                               <td className="px-5 py-4 text-zinc-500 whitespace-nowrap text-xs">
-                                {new Date(l.created_at).toLocaleDateString("en-IN", { day: "2-digit", month: "short" })}
+                                {l.created_at
+                                  ? new Date(l.created_at).toLocaleDateString(
+                                      "en-IN",
+                                      {
+                                        day: "2-digit",
+                                        month: "short",
+                                      }
+                                    )
+                                  : "-"}
                               </td>
                             </tr>
                           ))}
