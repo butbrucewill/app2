@@ -9,6 +9,8 @@ if ($slug !== '') {
     $stmt->execute([$slug]);
     $blog = $stmt->fetch();
     if (!$blog) json_error('Blog not found', 404);
+    $faqs = json_decode($blog['faqs'] ?? '[]', true);
+    $blog['faqs'] = is_array($faqs) ? $faqs : [];
     json_out(['blog' => $blog]);
 }
 

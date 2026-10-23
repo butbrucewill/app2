@@ -174,6 +174,38 @@ export default function BlogPost() {
 
             <BlogContent key={blog.blog_id + blog.updated_at} html={blog.content} />
 
+            {Array.isArray(blog.faqs) && blog.faqs.length > 0 && (
+              <>
+                <section className="mt-14 border-t border-white/10 pt-8" aria-labelledby="blog-faq-heading">
+                  <h2 id="blog-faq-heading" className="font-display text-2xl text-white mb-6">
+                    Frequently asked questions
+                  </h2>
+                  <div className="divide-y divide-white/10">
+                    {blog.faqs.map((faq, index) => (
+                      <details key={`${faq.question}-${index}`} className="py-4">
+                        <summary className="cursor-pointer text-base text-white marker:text-brand">
+                          {faq.question}
+                        </summary>
+                        <p className="pt-3 text-sm leading-relaxed text-paper/70">{faq.answer}</p>
+                      </details>
+                    ))}
+                  </div>
+                </section>
+                <script
+                  type="application/ld+json"
+                  dangerouslySetInnerHTML={{ __html: JSON.stringify({
+                    "@context": "https://schema.org",
+                    "@type": "FAQPage",
+                    mainEntity: blog.faqs.map((faq) => ({
+                      "@type": "Question",
+                      name: faq.question,
+                      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+                    })),
+                  }).replace(/</g, "\\u003c") }}
+                />
+              </>
+            )}
+
             {blog.tags && (
               <p className="mt-10 flex flex-wrap gap-2">
                 {blog.tags.split(",").map((t) => t.trim()).filter(Boolean).map((t) => (

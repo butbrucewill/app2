@@ -14,7 +14,7 @@ const EMPTY = {
   meta_title: "", meta_description: "", focus_keyword: "", secondary_keywords: "",
   canonical_url: "", index_status: "index", schema_type: "BlogPosting",
   og_title: "", og_description: "", og_image: "",
-  content: "", status: "draft",
+  content: "", faqs: [], status: "draft",
 };
 
 // Turns whatever the API returns (null / "" / missing fields on old posts) into a safe form state.
@@ -25,6 +25,11 @@ const normalize = (b) => {
   out.author = b.author || EMPTY.author;
   out.index_status = b.index_status || "index";
   out.schema_type = b.schema_type || "BlogPosting";
+  if (typeof b.faqs === "string") {
+    try { out.faqs = JSON.parse(b.faqs); } catch { out.faqs = []; }
+  } else {
+    out.faqs = Array.isArray(b.faqs) ? b.faqs : [];
+  }
   out.published_at = String(b.published_at || b.created_at || EMPTY.published_at).slice(0, 10);
   return out;
 };
@@ -342,6 +347,49 @@ export default function BlogAdminPanel({ token }) {
             postLabel={draft.status === "published" ? "Update post" : "Post blog"}
             busy={saving}
           />
+        </Section>
+
+        <Section title="6 · FAQs" hint="Add up to 30 question-and-answer pairs. They appear below this article.">
+          {draft.faqs.map((faq, index) => (
+            <div key={index} className="grid gap-3 border-b border-white/10 pb-4 sm:grid-cols-[1fr_1fr_auto] sm:items-start">
+              <Field label={`Question ${index + 1}`}>
+                <input
+                  className={inputCls}
+                  maxLength={300}
+                  value={faq.question}
+                  onChange={(event) => set("faqs", draft.faqs.map((item, i) =>
+                    i === index ? { ...item, question: event.target.value } : item
+                  ))}
+                />
+              </Field>
+              <Field label="Answer">
+                <textarea
+                  className={inputCls}
+                  rows={3}
+                  maxLength={5000}
+                  value={faq.answer}
+                  onChange={(event) => set("faqs", draft.faqs.map((item, i) =>
+                    i === index ? { ...item, answer: event.target.value } : item
+                  ))}
+                />
+              </Field>
+              <button
+                type="button"
+                onClick={() => set("faqs", draft.faqs.filter((_, i) => i !== index))}
+                className="border border-red-500/40 px-3 py-2 font-mono text-xs uppercase tracking-widest text-red-400 sm:mt-6"
+              >
+                Remove
+              </button>
+            </div>
+          ))}
+          <button
+            type="button"
+            disabled={draft.faqs.length >= 30}
+            onClick={() => set("faqs", [...draft.faqs, { question: "", answer: "" }])}
+            className="border border-white/20 px-4 py-2 font-mono text-xs uppercase tracking-widest text-paper hover:border-white disabled:opacity-40"
+          >
+            Add FAQ
+          </button>
         </Section>
       </div>
     );

@@ -8,8 +8,14 @@ $blogColumns = [
     'title', 'h1', 'slug', 'excerpt', 'cover_image', 'cover_alt', 'category', 'tags', 'author',
     'published_at', 'meta_title', 'meta_description', 'focus_keyword', 'secondary_keywords',
     'canonical_url', 'index_status', 'schema_type', 'og_title', 'og_description', 'og_image',
-    'content', 'status',
+    'content', 'faqs', 'status',
 ];
+
+function normalize_blog_faqs(array $blog): array {
+    $faqs = json_decode($blog['faqs'] ?? '[]', true);
+    $blog['faqs'] = is_array($faqs) ? $faqs : [];
+    return $blog;
+}
 
 function blog_input(array $input, array $columns): array {
     $title = trim($input['title'] ?? '');
@@ -22,8 +28,24 @@ function blog_input(array $input, array $columns): array {
     $slug = trim(substr(preg_replace('/[^a-z0-9]+/', '-', $slug ?: $title), 0, 90), '-');
     if ($slug === '') $slug = 'post';
 
+    $faqs = $input['faqs'] ?? [];
+    if (!is_array($faqs) || count($faqs) > 30) json_error('FAQs must be a list of up to 30 items', 422);
+    $cleanFaqs = [];
+    foreach ($faqs as $faq) {
+        if (!is_array($faq)) json_error('Each FAQ must include a question and answer', 422);
+        $question = trim((string) ($faq['question'] ?? ''));
+        $answer = trim((string) ($faq['answer'] ?? ''));
+        if ($question === '' || $answer === '' || strlen($question) > 300 || strlen($answer) > 5000) {
+            json_error('Each FAQ needs a question (up to 300 characters) and answer (up to 5000 characters)', 422);
+        }
+        $cleanFaqs[] = ['question' => $question, 'answer' => $answer];
+    }
+
     $values = [];
-    foreach ($columns as $column) $values[$column] = trim((string) ($input[$column] ?? ''));
+    foreach ($columns as $column) {
+        if ($column !== 'faqs') $values[$column] = trim((string) ($input[$column] ?? ''));
+    }
+    $values['faqs'] = json_encode($cleanFaqs, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
     $values['title'] = $title;
     $values['slug'] = $slug;
     $values['tags'] = implode(', ', array_filter(array_map('trim', explode(',', $values['tags']))));
@@ -52,7 +74,7 @@ if ($method === 'GET') {
         $stmt->execute([$blogId]);
         $blog = $stmt->fetch();
         if (!$blog) json_error('Blog not found', 404);
-        json_out(['blog' => $blog]);
+        json_out(['blog' => normalize_blog_faqs($blog)]);
     }
     $rows = db()->query('SELECT blog_id, slug, title, excerpt, cover_image, cover_alt, category, author,
         published_at, index_status, canonical_url, status, sort_order, created_at, updated_at
@@ -73,7 +95,7 @@ if ($method === 'POST' && $blogId === '') {
     $stmt->execute(array_map(fn($column) => $input[$column], $columns));
     $stmt = $pdo->prepare('SELECT * FROM blogs WHERE blog_id = ?');
     $stmt->execute([$input['blog_id']]);
-    json_out(['blog' => $stmt->fetch()], 201);
+    json_out(['blog' => normalize_blog_faqs($stmt->fetch())], 201);
 }
 
 if ($method === 'PUT' && $blogId !== '') {
@@ -82,7 +104,9 @@ if ($method === 'PUT' && $blogId !== '') {
     $stmt->execute([$blogId]);
     $current = $stmt->fetch();
     if (!$current) json_error('Blog not found', 404);
-    $input = blog_input(read_json_body(), $blogColumns);
+    $body = read_json_body();
+    $input = blog_input($body, $blogColumns);
+    if (!array_key_exists('faqs', $body)) $input['faqs'] = $current['faqs'] ?? '[]';
     $input['slug'] = unique_blog_slug($pdo, $input['slug'], $blogId);
     if ($input['published_at'] === '' && $current['published_at'] !== '') $input['published_at'] = $current['published_at'];
     $input['updated_at'] = gmdate('c');
@@ -91,7 +115,7 @@ if ($method === 'PUT' && $blogId !== '') {
     $stmt->execute(array_merge(array_map(fn($column) => $input[$column] ?? $input['updated_at'], array_merge($blogColumns, ['updated_at'])), [$blogId]));
     $stmt = $pdo->prepare('SELECT * FROM blogs WHERE blog_id = ?');
     $stmt->execute([$blogId]);
-    json_out(['blog' => $stmt->fetch()]);
+    json_out(['blog' => normalize_blog_faqs($stmt->fetch())]);
 }
 
 if ($method === 'DELETE' && $blogId !== '') {

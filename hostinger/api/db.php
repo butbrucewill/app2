@@ -69,6 +69,7 @@ function bootstrap(PDO $pdo) {
         og_description VARCHAR(500) NOT NULL DEFAULT '',
         og_image VARCHAR(2000) NOT NULL DEFAULT '',
         content LONGTEXT NOT NULL,
+        faqs LONGTEXT NULL,
         status VARCHAR(20) NOT NULL,
         sort_order INT NOT NULL DEFAULT 0,
         created_at VARCHAR(40) NOT NULL,
@@ -92,6 +93,7 @@ function bootstrap(PDO $pdo) {
         'og_description' => "VARCHAR(500) NOT NULL DEFAULT ''",
         'og_image' => "VARCHAR(2000) NOT NULL DEFAULT ''",
         'sort_order' => 'INT NOT NULL DEFAULT 0',
+        'faqs' => 'LONGTEXT NULL',
     ];
     $existingBlogColumns = array_column($pdo->query('SHOW COLUMNS FROM blogs')->fetchAll(), 'Field');
     foreach ($blogColumns as $column => $definition) {
