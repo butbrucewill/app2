@@ -1,6 +1,6 @@
 import "@/App.css";
-import { useEffect } from "react";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { BrowserRouter, Routes, Route, useLocation, useParams } from "react-router-dom";
 import Lenis from "lenis";
 import { Toaster } from "@/components/ui/sonner";
 import PageWipe from "@/components/PageWipe";
@@ -36,6 +36,29 @@ function SeoMetadata() {
   return null;
 }
 
+function RedirectLink() {
+  const { slug } = useParams();
+  const [notFound, setNotFound] = useState(false);
+
+  useEffect(() => {
+    let active = true;
+    const api = `${process.env.REACT_APP_BACKEND_URL || ""}/api`;
+    fetch(`${api}/go/${encodeURIComponent(slug)}/check`)
+      .then((response) => {
+        if (!response.ok) throw new Error("Link not found");
+        if (active) window.location.replace(`${api}/go/${encodeURIComponent(slug)}`);
+      })
+      .catch(() => { if (active) setNotFound(true); });
+    return () => { active = false; };
+  }, [slug]);
+
+  return notFound ? (
+    <div className="min-h-screen bg-[#050505] text-white flex items-center justify-center">
+      <h1 className="font-display text-3xl">Link not found</h1>
+    </div>
+  ) : null;
+}
+
 function AnimatedRoutes() {
   const location = useLocation();
   return (
@@ -46,6 +69,7 @@ function AnimatedRoutes() {
       <Route path="/about" element={<PageWipe><AboutUs /></PageWipe>} />
       <Route path="/blog" element={<PageWipe><Blog /></PageWipe>} />
       <Route path="/blog/:slug" element={<PageWipe><BlogPost /></PageWipe>} />
+      <Route path="/go/:slug" element={<RedirectLink />} />
       <Route path="/privacy-policy" element={<PageWipe><PrivacyPolicy /></PageWipe>} />
       <Route path="/buniyaad" element={<PageWipe><Buniyaad/></PageWipe>}/>
       <Route path="/admin" element={<PageWipe><Admin /></PageWipe>} />

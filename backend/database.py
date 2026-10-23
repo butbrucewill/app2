@@ -48,6 +48,7 @@ class MemoryStore:
         self.enrollments = {}
         self.leads = {}
         self.blogs = {}
+        self.links = {}
 
     async def insert_enrollment(self, doc):
         self.enrollments[doc["order_ref"]] = dict(doc)
@@ -101,6 +102,36 @@ class MemoryStore:
 
     async def min_sort_order(self):
         return min([d.get("sort_order", 0) for d in self.blogs.values()], default=0)
+
+    async def insert_link(self, doc):
+        self.links[doc["link_id"]] = dict(doc)
+
+    async def get_link_by_slug(self, slug):
+        doc = next((doc for doc in self.links.values() if doc["slug"] == slug), None)
+        return dict(doc) if doc else None
+
+    async def get_link_by_id(self, link_id):
+        doc = self.links.get(link_id)
+        return dict(doc) if doc else None
+
+    async def update_link(self, link_id, fields):
+        if link_id in self.links:
+            self.links[link_id].update(fields)
+
+    async def delete_link(self, link_id):
+        self.links.pop(link_id, None)
+
+    async def list_links(self):
+        docs = [dict(doc) for doc in self.links.values()]
+        docs.sort(key=lambda doc: doc.get("created_at", ""), reverse=True)
+        return docs[:500]
+
+    async def increment_link_clicks(self, slug):
+        doc = next((doc for doc in self.links.values() if doc["slug"] == slug and doc["is_active"]), None)
+        if not doc:
+            return False
+        doc["clicks"] += 1
+        return True
 
 
 # ---------------- MySQL backend ----------------
@@ -157,6 +188,19 @@ class MySQLStore:
                 content LONGTEXT NOT NULL,
                 status VARCHAR(20) NOT NULL,
                 sort_order INT NOT NULL DEFAULT 0,
+                created_at VARCHAR(40) NOT NULL,
+                updated_at VARCHAR(40) NOT NULL
+            )""",
+            """CREATE TABLE IF NOT EXISTS links (
+                link_id VARCHAR(30) PRIMARY KEY,
+                title VARCHAR(200) NOT NULL,
+                slug VARCHAR(100) NOT NULL UNIQUE,
+                destination_url VARCHAR(2000) NOT NULL,
+                page VARCHAR(120) NOT NULL DEFAULT '',
+                section VARCHAR(120) NOT NULL DEFAULT '',
+                button_label VARCHAR(200) NOT NULL DEFAULT '',
+                is_active BOOLEAN NOT NULL DEFAULT TRUE,
+                clicks INT NOT NULL DEFAULT 0,
                 created_at VARCHAR(40) NOT NULL,
                 updated_at VARCHAR(40) NOT NULL
             )""",
@@ -275,6 +319,43 @@ class MySQLStore:
         row = await self._fetchone("SELECT MIN(sort_order) AS m FROM blogs", ())
         return int((row or {}).get("m") or 0)
 
+    # ---- redirect links ----
+
+    async def insert_link(self, doc):
+        cols = ["link_id", "title", "slug", "destination_url", "page", "section",
+                "button_label", "is_active", "clicks", "created_at", "updated_at"]
+        await self._execute(
+            f"INSERT INTO links ({','.join(cols)}) VALUES ({','.join(['%s'] * len(cols))})",
+            [doc.get(col) for col in cols],
+        )
+
+    async def get_link_by_slug(self, slug):
+        return await self._fetchone("SELECT * FROM links WHERE slug = %s", (slug,))
+
+    async def get_link_by_id(self, link_id):
+        return await self._fetchone("SELECT * FROM links WHERE link_id = %s", (link_id,))
+
+    async def update_link(self, link_id, fields):
+        if fields:
+            sets = ",".join(f"{key} = %s" for key in fields)
+            await self._execute(f"UPDATE links SET {sets} WHERE link_id = %s", [*fields.values(), link_id])
+
+    async def delete_link(self, link_id):
+        await self._execute("DELETE FROM links WHERE link_id = %s", (link_id,))
+
+    async def list_links(self):
+        return await self._fetchall("SELECT * FROM links ORDER BY created_at DESC LIMIT 500")
+
+    async def increment_link_clicks(self, slug):
+        pool = await self._get_pool()
+        async with pool.acquire() as conn:
+            async with conn.cursor() as cur:
+                await cur.execute(
+                    "UPDATE links SET clicks = clicks + 1 WHERE slug = %s AND is_active = 1",
+                    (slug,),
+                )
+                return cur.rowcount > 0
+
 
 # ---------------- MongoDB backend ----------------
 
@@ -283,6 +364,12 @@ class MongoStore:
         from motor.motor_asyncio import AsyncIOMotorClient
         client = AsyncIOMotorClient(os.environ["MONGO_URL"])
         self.db = client[os.environ["DB_NAME"]]
+        self._links_index_ready = False
+
+    async def _ensure_link_indexes(self):
+        if not self._links_index_ready:
+            await self.db.links.create_index("slug", unique=True)
+            self._links_index_ready = True
 
     async def insert_enrollment(self, doc):
         await self.db.enrollments.insert_one(doc)
@@ -328,6 +415,39 @@ class MongoStore:
     async def min_sort_order(self):
         docs = await self.db.blogs.find({}, {"_id": 0, "sort_order": 1}).to_list(1000)
         return min([d.get("sort_order", 0) for d in docs], default=0)
+
+    # ---- redirect links ----
+
+    async def insert_link(self, doc):
+        await self._ensure_link_indexes()
+        await self.db.links.insert_one(dict(doc))
+
+    async def get_link_by_slug(self, slug):
+        await self._ensure_link_indexes()
+        return await self.db.links.find_one({"slug": slug}, {"_id": 0})
+
+    async def get_link_by_id(self, link_id):
+        await self._ensure_link_indexes()
+        return await self.db.links.find_one({"link_id": link_id}, {"_id": 0})
+
+    async def update_link(self, link_id, fields):
+        await self._ensure_link_indexes()
+        await self.db.links.update_one({"link_id": link_id}, {"$set": fields})
+
+    async def delete_link(self, link_id):
+        await self._ensure_link_indexes()
+        await self.db.links.delete_one({"link_id": link_id})
+
+    async def list_links(self):
+        await self._ensure_link_indexes()
+        return await self.db.links.find({}, {"_id": 0}).sort("created_at", -1).to_list(500)
+
+    async def increment_link_clicks(self, slug):
+        await self._ensure_link_indexes()
+        result = await self.db.links.update_one(
+            {"slug": slug, "is_active": True}, {"$inc": {"clicks": 1}}
+        )
+        return result.modified_count > 0
 
 
 if DATABASE_BACKEND == "memory":

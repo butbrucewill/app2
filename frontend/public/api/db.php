@@ -99,4 +99,17 @@ function bootstrap(PDO $pdo) {
             $pdo->exec("ALTER TABLE blogs ADD COLUMN {$column} {$definition}");
         }
     }
+    $pdo->exec("CREATE TABLE IF NOT EXISTS links (
+        link_id VARCHAR(30) PRIMARY KEY,
+        title VARCHAR(200) NOT NULL,
+        slug VARCHAR(100) NOT NULL UNIQUE,
+        destination_url VARCHAR(2000) NOT NULL,
+        page VARCHAR(120) NOT NULL DEFAULT '',
+        section VARCHAR(120) NOT NULL DEFAULT '',
+        button_label VARCHAR(200) NOT NULL DEFAULT '',
+        is_active TINYINT(1) NOT NULL DEFAULT 1,
+        clicks INT NOT NULL DEFAULT 0,
+        created_at VARCHAR(40) NOT NULL,
+        updated_at VARCHAR(40) NOT NULL
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
 }

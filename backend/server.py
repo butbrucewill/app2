@@ -1,5 +1,5 @@
 from fastapi import FastAPI, APIRouter, HTTPException, Request
-from fastapi.responses import StreamingResponse
+from fastapi.responses import StreamingResponse, RedirectResponse
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 import os
@@ -490,6 +490,54 @@ class BlogIn(BaseModel):
     og_description: str = Field(default="", max_length=500)
     og_image: str = Field(default="", max_length=2000)
     status: Literal["draft", "published"] = "draft"
+
+
+class RedirectLinkIn(BaseModel):
+    title: Optional[str] = Field(default=None, max_length=200)
+    slug: Optional[str] = Field(default=None, max_length=100)
+    destination_url: Optional[str] = Field(default=None, max_length=2000)
+    page: Optional[str] = Field(default=None, max_length=120)
+    section: Optional[str] = Field(default=None, max_length=120)
+    button_label: Optional[str] = Field(default=None, max_length=200)
+    is_active: Optional[bool] = None
+
+
+_LINK_SLUG = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+_RESERVED_LINK_SLUGS = {"admin", "api", "blog", "enroll", "login"}
+
+
+def _redirect_link_fields(payload: RedirectLinkIn, *, creating: bool) -> dict:
+    fields = payload.dict(exclude_unset=True)
+    if creating:
+        for required in ("title", "slug", "destination_url"):
+            if not fields.get(required):
+                raise HTTPException(status_code=400, detail=f"{required.replace('_', ' ').capitalize()} is required")
+        fields.setdefault("page", "")
+        fields.setdefault("section", "")
+        fields.setdefault("button_label", "")
+        fields.setdefault("is_active", True)
+
+    if "title" in fields:
+        fields["title"] = (fields["title"] or "").strip()
+        if len(fields["title"]) < 2:
+            raise HTTPException(status_code=400, detail="Title must be at least 2 characters")
+    if "slug" in fields:
+        slug = (fields["slug"] or "").strip()
+        if not _LINK_SLUG.fullmatch(slug):
+            raise HTTPException(status_code=400, detail="Slug must use lowercase letters, numbers, and hyphens")
+        if slug in _RESERVED_LINK_SLUGS:
+            raise HTTPException(status_code=400, detail="That slug is reserved")
+        fields["slug"] = slug
+    if "destination_url" in fields:
+        destination = (fields["destination_url"] or "").strip()
+        parsed = urlparse(destination)
+        if parsed.scheme not in {"http", "https"} or not parsed.netloc or not parsed.hostname:
+            raise HTTPException(status_code=400, detail="Destination URL must be an http(s) URL")
+        fields["destination_url"] = destination
+    for key in ("page", "section", "button_label"):
+        if key in fields:
+            fields[key] = (fields[key] or "").strip()
+    return fields
  
  
 def _blog_fields(p: BlogIn) -> dict:
@@ -527,6 +575,21 @@ def _blog_fields(p: BlogIn) -> dict:
  
  
 # ---------- Public ----------
+
+@api_router.get("/go/{slug}/check")
+async def check_redirect_link(slug: str):
+    doc = await store.get_link_by_slug(slug)
+    if not doc or not doc["is_active"]:
+        raise HTTPException(status_code=404, detail="Link not found")
+    return {"available": True}
+
+
+@api_router.get("/go/{slug}")
+async def redirect_link(slug: str):
+    doc = await store.get_link_by_slug(slug)
+    if not doc or not doc["is_active"] or not await store.increment_link_clicks(slug):
+        raise HTTPException(status_code=404, detail="Link not found")
+    return RedirectResponse(url=doc["destination_url"], status_code=302)
  
 @api_router.get("/blogs")
 async def list_public_blogs():
@@ -566,6 +629,68 @@ async def sitemap_xml():
  
  
 # ---------- Admin ----------
+
+def _is_duplicate_link_error(exc: Exception) -> bool:
+    return exc.__class__.__name__ in {"IntegrityError", "DuplicateKeyError"} or "duplicate" in str(exc).lower()
+
+
+@api_router.get("/admin/links")
+async def admin_list_links(request: Request):
+    require_admin(request)
+    return {"links": await store.list_links()}
+
+
+@api_router.post("/admin/links")
+async def admin_create_link(payload: RedirectLinkIn, request: Request):
+    require_admin(request)
+    fields = _redirect_link_fields(payload, creating=True)
+    if await store.get_link_by_slug(fields["slug"]):
+        raise HTTPException(status_code=409, detail="That slug is already in use")
+    now = datetime.now(timezone.utc).isoformat()
+    doc = {
+        "link_id": "LINK-" + uuid.uuid4().hex[:10].upper(),
+        **fields,
+        "clicks": 0,
+        "created_at": now,
+        "updated_at": now,
+    }
+    try:
+        await store.insert_link(doc)
+    except Exception as exc:
+        if _is_duplicate_link_error(exc):
+            raise HTTPException(status_code=409, detail="That slug is already in use")
+        raise
+    return {"link": doc}
+
+
+@api_router.put("/admin/links/{link_id}")
+async def admin_update_link(link_id: str, payload: RedirectLinkIn, request: Request):
+    require_admin(request)
+    current = await store.get_link_by_id(link_id)
+    if not current:
+        raise HTTPException(status_code=404, detail="Link not found")
+    fields = _redirect_link_fields(payload, creating=False)
+    if "slug" in fields and fields["slug"] != current["slug"]:
+        clash = await store.get_link_by_slug(fields["slug"])
+        if clash and clash["link_id"] != link_id:
+            raise HTTPException(status_code=409, detail="That slug is already in use")
+    fields["updated_at"] = datetime.now(timezone.utc).isoformat()
+    try:
+        await store.update_link(link_id, fields)
+    except Exception as exc:
+        if _is_duplicate_link_error(exc):
+            raise HTTPException(status_code=409, detail="That slug is already in use")
+        raise
+    return {"link": await store.get_link_by_id(link_id)}
+
+
+@api_router.delete("/admin/links/{link_id}")
+async def admin_delete_link(link_id: str, request: Request):
+    require_admin(request)
+    if not await store.get_link_by_id(link_id):
+        raise HTTPException(status_code=404, detail="Link not found")
+    await store.delete_link(link_id)
+    return {"status": "deleted"}
  
 @api_router.get("/admin/blogs")
 async def admin_list_blogs(request: Request):
